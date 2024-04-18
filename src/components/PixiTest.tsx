@@ -20,7 +20,7 @@ export const PixiTest = () => {
 			</Container>
 
 			<Container x={600} y={300}>
-				<Avatar seed={"a0101040c040903"} animationName="jump" />
+				<Avatar seed={"a0101040c040903"} animationName="jump" flipX={true} />
 			</Container>
 		</Stage>
 	);

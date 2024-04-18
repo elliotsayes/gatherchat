@@ -1,4 +1,4 @@
-import { Texture, Spritesheet, SCALE_MODES } from "pixi.js";
+import { Texture, Spritesheet, SCALE_MODES, Transform, Matrix } from "pixi.js";
 import { AnimatedSprite } from "@pixi/react";
 import { animationNames, generateSpriteData } from "../sprite/render";
 import { useEffect, useState } from "react";
@@ -9,7 +9,7 @@ type Props = {
 	flipX?: boolean;
 };
 
-export const Avatar = ({ seed, animationName }: Props) => {
+export const Avatar = ({ seed, animationName, flipX }: Props) => {
 	const [spritesheet, setSpritesheet] = useState<Spritesheet | undefined>();
 
 	useEffect(() => {
@@ -38,16 +38,20 @@ export const Avatar = ({ seed, animationName }: Props) => {
 
 	const textures = spritesheet.animations[animationName];
 
+	const scale = 5;
+	const transform = new Transform();
+	transform.setFromMatrix(new Matrix((flipX ? -1 : 1) * scale, 0, 0, scale, 0, 0));
+
 	return (
 		<AnimatedSprite
 			textures={textures}
 			anchor={{ x: 0.5, y: 0.5 }}
-			scale={5}
 			isPlaying={true}
 			animationSpeed={0.2}
 			filters={null}
 			isSprite={true}
 			autoUpdate={true}
+			transform={transform}
 		/>
 	);
 };
