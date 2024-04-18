@@ -1,5 +1,6 @@
-import { Stage, Container, Sprite } from "@pixi/react";
+import { Stage, Container } from "@pixi/react";
 import { Avatar } from "./Avatar";
+import { TileMap } from "./TileMap";
 
 type Props = {
 	seed: string;
@@ -8,6 +9,8 @@ type Props = {
 export const PixiTest = ({ seed }: Props) => {
 	return (
 		<Stage options={{ background: 0xffffff, width: 800, height: 600 }}>
+			<TileMap xOffset={0} yOffset={0} />
+
 			<Container x={200} y={300}>
 				<Avatar seed={"a100d050c080204"} animationName="idle" />
 			</Container>
