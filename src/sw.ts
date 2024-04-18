@@ -24,12 +24,12 @@ self.addEventListener("activate", (e) => {
 	e.waitUntil(
 		(async () => {
 			console.log("[Service Worker] Loading assets");
-			baseTex = await fetch('src/assets/sprite/base.png')
-				.then(r => r.blob())
-				.then(b => createImageBitmap(b));
-			partTex = await fetch('src/assets/sprite/parts.png')
-				.then(r => r.blob())
-				.then(b => createImageBitmap(b));
+			baseTex = await fetch("src/assets/sprite/base.png")
+				.then((r) => r.blob())
+				.then((b) => createImageBitmap(b));
+			partTex = await fetch("src/assets/sprite/parts.png")
+				.then((r) => r.blob())
+				.then((b) => createImageBitmap(b));
 		})(),
 	);
 });
@@ -40,7 +40,7 @@ self.addEventListener("fetch", (e) => {
 
 	event.respondWith(
 		(async () => {
-			const url = new URL(event.request.url)
+			const url = new URL(event.request.url);
 			console.log(url.pathname);
 			if (url.pathname.match(/^\/api\/sprite\/generate/)) {
 				console.log("[Service Worker] Generating sprite");

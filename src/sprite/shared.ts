@@ -3,7 +3,13 @@ export const SHAPE_OPTIONS = [
 	{ key: "head", y: 0, max: 44 }, //28 default
 ];
 
-export const colorCategories = ["eyes", "skin", "suit", "item", "hair"] as const;
+export const colorCategories = [
+	"eyes",
+	"skin",
+	"suit",
+	"item",
+	"hair",
+] as const;
 export type ColorSelections = Map<string, number>;
 
 export const itemOptions = [
@@ -78,5 +84,5 @@ export const colorThemes = [
 ];
 
 export function pad2(e: number) {
-  return ("00" + e.toString(16)).slice(-2);
+	return ("00" + e.toString(16)).slice(-2);
 }
