@@ -1,4 +1,4 @@
-const animationNames = ['no_anim', 'idle', 'run', 'jump'] as const;
+export const animationNames = ['no_anim', 'idle', 'run', 'jump'] as const;
 
 const ANIMATIONS: Record<typeof animationNames[number], { len: number, y: number }> = {
 	no_anim: { len: 1, y: 0 },

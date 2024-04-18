@@ -7,20 +7,20 @@ export const PixiTest = () => {
 			<Sprite
 				image="/api/sprite/generate?seed=a011b080d050300"
 				x={400}
-				y={270}
+				y={100}
 				anchor={{ x: 0.5, y: 0.5 }}
 				scale={2}
 			/>
-			<Container x={200} y={500}>
-				<Avatar seed={"a071f0108000801"} />
+			<Container x={200} y={300}>
+				<Avatar seed={"a0a070107050303"} animationName="idle" />
 			</Container>
 
-			<Container x={400} y={500}>
-				<Avatar seed={"a12290909050404"} />
+			<Container x={400} y={300}>
+				<Avatar seed={"a12290909050404"} animationName="run" />
 			</Container>
 
-			<Container x={600} y={500}>
-				<Avatar seed={"a0101040c040903"} />
+			<Container x={600} y={300}>
+				<Avatar seed={"a0101040c040903"} animationName="jump" />
 			</Container>
 		</Stage>
 	);
