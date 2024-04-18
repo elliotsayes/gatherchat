@@ -1,16 +1,17 @@
 import { Texture, Spritesheet } from "pixi.js";
 import { AnimatedSprite } from "@pixi/react";
-import { useQuery } from "@tanstack/react-query";
 import { generateSpriteData } from "../sprite/render";
+import { useEffect, useState } from "react";
 
 type Props = {
 	seed: string;
 };
 
 export const Avatar = ({ seed }: Props) => {
-	const { data } = useQuery({
-		queryKey: ["sprite", seed],
-		queryFn: async () => {
+	const [data, setData] = useState<Spritesheet | undefined>();
+
+	useEffect(() => {
+		(async () => {
 			// Define sprite layout
 			const spriteData = generateSpriteData(`/api/sprite/generate?seed=${seed}`);
 
@@ -23,29 +24,26 @@ export const Avatar = ({ seed }: Props) => {
 			// Generate all the Textures asynchronously
 			await spritesheet.parse();
 
-			return spritesheet;
-		},
-	});
+			setData(spritesheet);
+		})();
+	}, [seed, setData]);
 
 	if (!data) {
-		return (
-			<AnimatedSprite
-				images={[]}
-				anchor={{ x: 0.5, y: 0.5 }}
-				scale={1}
-				isPlaying={false}
-			/>
-		);
+		return null;
 	}
 
-	const ani = data.animations.enemy;
+	const ani = data.animations.jump;
 
 	return (
 		<AnimatedSprite
 			textures={ani}
 			anchor={{ x: 0.5, y: 0.5 }}
-			scale={1}
-			isPlaying={false}
+			scale={5}
+			isPlaying={true}
+			animationSpeed={0.2}
+			filters={null}
+			isSprite={true}
+			
 		/>
 	);
 };
