@@ -1,4 +1,4 @@
-import { Texture, Spritesheet } from "pixi.js";
+import { Texture, Spritesheet, SCALE_MODES } from "pixi.js";
 import { AnimatedSprite } from "@pixi/react";
 import { animationNames, generateSpriteData } from "../sprite/render";
 import { useEffect, useState } from "react";
@@ -19,7 +19,7 @@ export const Avatar = ({ seed, animationName }: Props) => {
 
 			// Create the SpriteSheet from data and image
 			const spritesheet = new Spritesheet(
-				Texture.from(spriteData.meta.image),
+				Texture.from(spriteData.meta.image, { scaleMode: SCALE_MODES.NEAREST }),
 				spriteData,
 			);
 
