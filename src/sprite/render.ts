@@ -1,6 +1,9 @@
-export const animationNames = ['no_anim', 'idle', 'run', 'jump'] as const;
+export const animationNames = ["no_anim", "idle", "run", "jump"] as const;
 
-const ANIMATIONS: Record<typeof animationNames[number], { len: number, y: number }> = {
+const ANIMATIONS: Record<
+	(typeof animationNames)[number],
+	{ len: number; y: number }
+> = {
 	no_anim: { len: 1, y: 0 },
 	idle: { len: 4, y: 1 },
 	run: { len: 4, y: 2 },
@@ -8,41 +11,41 @@ const ANIMATIONS: Record<typeof animationNames[number], { len: number, y: number
 };
 
 type Pos = {
-	x: number,
-	y: number,
-}
+	x: number;
+	y: number;
+};
 
 type Size = {
-	w: number,
-	h: number,
-}
+	w: number;
+	h: number;
+};
 
 type Rect = Pos & Size;
 
 type Meta = {
-	image: string,
-	format: string,
-	size: Size,
-	scale: number,
-}
+	image: string;
+	format: string;
+	size: Size;
+	scale: number;
+};
 
 type Frame = {
-	frame: Rect,
-	sourceSize: Size,
-	spriteSourceSize: Rect,
-}
+	frame: Rect;
+	sourceSize: Size;
+	spriteSourceSize: Rect;
+};
 
-type FrameName = string
+type FrameName = string;
 
-type Frames = Record<FrameName, Frame>
+type Frames = Record<FrameName, Frame>;
 
-type Animations = Record<string, string[]>
+type Animations = Record<string, string[]>;
 
 export type SpriteData = {
-	meta: Meta,
-	frames: Frames,
-	animations: Animations,
-}
+	meta: Meta;
+	frames: Frames;
+	animations: Animations;
+};
 
 const spriteSize: Size = { w: 16, h: 24 };
 
@@ -51,35 +54,40 @@ function generateFrameNames(prefix: string, count: number): FrameName[] {
 }
 
 function generateFrames(frameNames: string[], yOffset: number): Frames {
-	return frameNames.map((e, i) => ({
-		[e]: {
-			frame: {
-				x: i * spriteSize.w,
-				y: yOffset * spriteSize.h,
-				w: spriteSize.w,
-				h: spriteSize.h,
+	return frameNames
+		.map((e, i) => ({
+			[e]: {
+				frame: {
+					x: i * spriteSize.w,
+					y: yOffset * spriteSize.h,
+					w: spriteSize.w,
+					h: spriteSize.h,
+				},
+				sourceSize: spriteSize,
+				spriteSourceSize: {
+					x: 0,
+					y: 0,
+					w: spriteSize.w,
+					h: spriteSize.h,
+				},
 			},
-			sourceSize: spriteSize,
-			spriteSourceSize: {
-				x: 0,
-				y: 0,
-				w: spriteSize.w,
-				h: spriteSize.h,
-			}
-		}})).reduce((a, b) => ({...a,...b}), {});
+		}))
+		.reduce((a, b) => ({ ...a, ...b }), {});
 }
 
-const animations = animationNames.map((e) => {
-	const anim = ANIMATIONS[e];
-	const frameNames = generateFrameNames(e, anim.len);
-	return {
-		[e]: frameNames,
-	};
-}).reduce((a, b) => ({...a,...b}), {});
+const animations = animationNames
+	.map((e) => {
+		const anim = ANIMATIONS[e];
+		const frameNames = generateFrameNames(e, anim.len);
+		return {
+			[e]: frameNames,
+		};
+	})
+	.reduce((a, b) => ({ ...a, ...b }), {});
 
 const frames = animationNames
 	.map((e, i) => generateFrames(animations[e], i))
-	.reduce((a, b) => ({...a,...b}), {});
+	.reduce((a, b) => ({ ...a, ...b }), {});
 
 export function generateSpriteData(spriteSheetUrl: string): SpriteData {
 	return {

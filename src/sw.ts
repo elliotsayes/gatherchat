@@ -42,7 +42,7 @@ self.addEventListener("fetch", (e) => {
 	event.respondWith(
 		(async () => {
 			const url = new URL(event.request.url);
-			
+
 			if (url.pathname.match(/^\/api\/sprite\/generate/)) {
 				console.log("[Service Worker] Generating sprite");
 

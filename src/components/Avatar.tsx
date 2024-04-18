@@ -15,7 +15,9 @@ export const Avatar = ({ seed, animationName }: Props) => {
 	useEffect(() => {
 		(async () => {
 			// Define sprite layout
-			const spriteData = generateSpriteData(`/api/sprite/generate?seed=${seed}`);
+			const spriteData = generateSpriteData(
+				`/api/sprite/generate?seed=${seed}`,
+			);
 
 			// Create the SpriteSheet from data and image
 			const spritesheet = new Spritesheet(
