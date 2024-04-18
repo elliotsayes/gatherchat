@@ -6,11 +6,15 @@ import { useEffect, useState } from "react";
 type Props = {
 	seed: string;
 	animationName: (typeof animationNames)[number];
+	scale?: number;
 	flipX?: boolean;
 };
 
-export const Avatar = ({ seed, animationName, flipX }: Props) => {
+export const Avatar = ({ seed, animationName, scale, flipX }: Props) => {
+	scale = scale ?? 5;
+
 	const [spritesheet, setSpritesheet] = useState<Spritesheet | undefined>();
+	const [lastUpdated, setLastUpdated] = useState(0);
 
 	useEffect(() => {
 		(async () => {
@@ -29,6 +33,7 @@ export const Avatar = ({ seed, animationName, flipX }: Props) => {
 			await spritesheet.parse();
 
 			setSpritesheet(spritesheet);
+			setLastUpdated(Date.now());
 		})();
 	}, [seed, setSpritesheet]);
 
@@ -38,12 +43,12 @@ export const Avatar = ({ seed, animationName, flipX }: Props) => {
 
 	const textures = spritesheet.animations[animationName];
 
-	const scale = 5;
 	const transform = new Transform();
 	transform.setFromMatrix(new Matrix((flipX ? -1 : 1) * scale, 0, 0, scale, 0, 0));
 
 	return (
 		<AnimatedSprite
+			key={lastUpdated}
 			textures={textures}
 			anchor={{ x: 0.5, y: 0.5 }}
 			isPlaying={true}

@@ -1,26 +1,23 @@
 import { Stage, Container, Sprite } from "@pixi/react";
 import { Avatar } from "./Avatar";
 
-export const PixiTest = () => {
+type Props = {
+	seed: string;
+}
+
+export const PixiTest = ({ seed }: Props) => {
 	return (
 		<Stage options={{ background: 0xffffff, width: 800, height: 600 }}>
-			<Sprite
-				image="/api/sprite/generate?seed=a011b080d050300"
-				x={400}
-				y={100}
-				anchor={{ x: 0.5, y: 0.5 }}
-				scale={2}
-			/>
 			<Container x={200} y={300}>
-				<Avatar seed={"a0a070107050303"} animationName="idle" />
+				<Avatar seed={"a100d050c080204"} animationName="idle" />
 			</Container>
 
-			<Container x={400} y={300}>
-				<Avatar seed={"a12290909050404"} animationName="run" />
+			<Container x={400} y={270}>
+				<Avatar seed={seed} animationName="run" scale={8} />
 			</Container>
 
 			<Container x={600} y={300}>
-				<Avatar seed={"a0101040c040903"} animationName="jump" flipX={true} />
+				<Avatar seed={"a0820050c020602"} animationName="jump" flipX={true} />
 			</Container>
 		</Stage>
 	);

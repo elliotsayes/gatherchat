@@ -27,9 +27,9 @@ function Home() {
 				/>
 				<button onClick={() => setSeed(randomSeed())}>Random</button>
 				<br />
-				<img src={`/api/sprite/generate?seed=${seed}`}></img>
+				<img src={`/api/sprite/generate?seed=${seed}`} width={400} style={{"image-rendering": "pixelated"}}></img>
 				<br />
-				<PixiTest />
+				<PixiTest seed={seed} />
 			</div>
 			<p className="read-the-docs">
 				Click on the Vite and React logos to learn more
