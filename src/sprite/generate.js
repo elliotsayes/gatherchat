@@ -1,3 +1,8 @@
+// Source page:
+// https://masterpose.itch.io/pixelduuuuudesmaker
+// Source link:
+// https://html-classic.itch.zone/html/2463959/app.js
+
 var gHash = "";
 var gCanvas = document.getElementById("c");
 gCanvas.width = 16;
