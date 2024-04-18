@@ -1,7 +1,7 @@
 import { Texture, Spritesheet, SCALE_MODES, Transform, Matrix } from "pixi.js";
 import { AnimatedSprite } from "@pixi/react";
 import { animationNames, generateSpriteData } from "../sprite/render";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Props = {
 	seed: string;
@@ -14,7 +14,7 @@ export const Avatar = ({ seed, animationName, scale, flipX }: Props) => {
 	scale = scale ?? 5;
 
 	const [spritesheet, setSpritesheet] = useState<Spritesheet | undefined>();
-	const [lastUpdated, setLastUpdated] = useState(0);
+	const lastUpdated = useRef(0);
 
 	useEffect(() => {
 		(async () => {
@@ -33,9 +33,9 @@ export const Avatar = ({ seed, animationName, scale, flipX }: Props) => {
 			await spritesheet.parse();
 
 			setSpritesheet(spritesheet);
-			setLastUpdated(Date.now());
+			lastUpdated.current = Date.now();
 		})();
-	}, [seed, setSpritesheet]);
+	}, [seed, setSpritesheet, lastUpdated]);
 
 	if (!spritesheet) {
 		return null;
@@ -48,7 +48,7 @@ export const Avatar = ({ seed, animationName, scale, flipX }: Props) => {
 
 	return (
 		<AnimatedSprite
-			key={lastUpdated}
+			key={lastUpdated.current}
 			textures={textures}
 			anchor={{ x: 0.5, y: 0.5 }}
 			isPlaying={true}
