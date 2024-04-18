@@ -2,16 +2,10 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import { buildGenerator } from "./sprite/generate";
-
-const baseTex: HTMLImageElement = new Image();
-baseTex.src = "src/assets/sprite/base.png";
-const partTex: HTMLImageElement = new Image();
-partTex.src = "src/assets/sprite/parts.png";
-const generate = buildGenerator(baseTex, partTex);
+import { randomSeed } from "./sprite/edit"
 
 function App() {
-	const [count, setCount] = useState(0);
+	const [seed, setSeed] = useState("a011b080d050300");
 
 	return (
 		<>
@@ -25,17 +19,11 @@ function App() {
 			</div>
 			<h1>Vite + React</h1>
 			<div className="card">
-				<button
-					onClick={async () => {
-						const spriteBlob = await generate("a03240809000703");
-						console.log(spriteBlob);
-						const out = document.getElementById("out") as HTMLImageElement;
-						out.src = URL.createObjectURL(spriteBlob);
-					}}
-				>
-					count is {count}
-				</button>
-				<img id="out"></img>
+				<input type="text" value={seed} onChange={(e) => setSeed(e.target.value)} />
+				<button onClick={() => setSeed(randomSeed())}>Random</button><br />
+				{
+					<img src={`api/sprite/generate?seed=${seed}`}></img>
+				}
 				<p>
 					Edit <code>src/App.tsx</code> and save to test HMR
 				</p>
