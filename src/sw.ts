@@ -19,9 +19,10 @@ self.addEventListener("install", (e) => {
 });
 
 self.addEventListener("activate", (e) => {
+	const event = e as ExtendableEvent;
 	console.log("[Service Worker] Activate", e);
 
-	e.waitUntil(
+	event.waitUntil(
 		(async () => {
 			console.log("[Service Worker] Loading assets");
 			baseTex = await fetch("src/assets/sprite/base.png")
