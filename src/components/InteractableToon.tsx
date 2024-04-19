@@ -4,8 +4,8 @@ import { Spring } from "@react-spring/web";
 
 interface InteractableToonProps
 	extends Omit<React.ComponentProps<typeof NamedAvatar>, "scale"> {
-		scale: number;
-	}
+	scale: number;
+}
 
 const InteractableToon: React.FC<InteractableToonProps> = (
 	props: InteractableToonProps,

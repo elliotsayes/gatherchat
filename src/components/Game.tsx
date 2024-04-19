@@ -28,7 +28,11 @@ export const Game = ({ aoStateProp: aoState }: Props) => {
 	return (
 		<>
 			<Stage
-				options={{ background: 0xffffff, width: stageWidth, height: stageHeight }}
+				options={{
+					background: 0xffffff,
+					width: stageWidth,
+					height: stageHeight,
+				}}
 				style={{ outline: "none" }}
 				tabIndex={0}
 				onKeyDown={(e) => {
@@ -46,7 +50,7 @@ export const Game = ({ aoStateProp: aoState }: Props) => {
 						}}
 					>
 						{(props) => (
-							<Container anchor={{x: 0.5, y: 0.5}} {...props}>
+							<Container anchor={{ x: 0.5, y: 0.5 }} {...props}>
 								<Tilemap3 />
 								{current.hasTag("SHOW_OTHER_TOONS") &&
 									aoState.otherToons.map((toon) => (
@@ -59,10 +63,10 @@ export const Game = ({ aoStateProp: aoState }: Props) => {
 											animationName={"idle"}
 											animationSpeed={0.05}
 											isPlaying={true}
-                      scale={3}
-                      onclick={function () {
-                        send({ type: "TOON_SELECTED", toonId: toon.id });
-                      }}
+											scale={3}
+											onclick={function () {
+												send({ type: "TOON_SELECTED", toonId: toon.id });
+											}}
 										/>
 									))}
 							</Container>
@@ -74,7 +78,15 @@ export const Game = ({ aoStateProp: aoState }: Props) => {
 					<Container x={stageWidth / 2} y={stageHeight / 2}>
 						<Avatar
 							seed={aoState.user.avatarSeed}
-							animationName={"idle"}
+							animationName={
+								current.matches({
+									roaming: {
+										movement: "moving",
+									},
+								})
+									? "run"
+									: "idle"
+							}
 							scale={3}
 							isPlaying={true}
 						/>
