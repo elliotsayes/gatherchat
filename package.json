@@ -16,9 +16,11 @@
     "@pixi/tilemap": "4",
     "@react-spring/web": "^9.7.3",
     "@tanstack/react-query": "5.29.0",
+    "@xstate/react": "^4.1.1",
     "pixi.js": "7",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "xstate": "^5.11.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.7.0",
