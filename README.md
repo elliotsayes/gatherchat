@@ -1,3 +1,15 @@
+# Instructions
+
+- Install: `bun install`
+- Run: `bun run dev`
+- Lint: `bun run lint`
+- Build: `bun run build`
+- Test: `bun run test`
+
+# Original Readme Below
+
+---
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
