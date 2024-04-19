@@ -31,10 +31,10 @@ export const GameDemo = () => {
 		<Game
 			aoStateProp={demoState}
 			onSelectToon={function (toonId: string): void {
-				console.log({ toonId });
+				alert("onSelectToon: " + toonId);
 			}}
 			onViewFeed={function (): void {
-				console.log("onViewFeed");
+				alert("onViewFeed");
 			}}
 		/>
 	);

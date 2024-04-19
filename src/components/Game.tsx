@@ -9,6 +9,7 @@ import { useMachine } from "@xstate/react";
 import InteractableToon from "./InteractableToon";
 import NamedAvatar from "./NamedAvatar";
 import { useMemo } from "react";
+import InteractableSprite from "./InteractableSprite";
 
 const tileSizeX = 64;
 const tileSizeY = 64;
@@ -22,7 +23,7 @@ type Props = {
 	onViewFeed: () => void;
 };
 
-export const Game = ({ aoStateProp: aoState }: Props) => {
+export const Game = ({ aoStateProp: aoState, onSelectToon, onViewFeed }: Props) => {
 	const [current, send] = useMachine(gameMachine, {
 		id: "game",
 	});
@@ -67,6 +68,14 @@ export const Game = ({ aoStateProp: aoState }: Props) => {
 						{(props) => (
 							<Container anchor={{ x: 0.5, y: 0.5 }} {...props}>
 								<Tilemap3 />
+								<InteractableSprite
+									image={`assets/sprite/board.png`}
+									scale={2}
+									anchor={{ x: 0.5, y: 0.5 }}
+									onclick={() => onViewFeed()}
+									x={tileSizeX * 4.5}
+									y={tileSizeY * 0.5}
+								/>
 								{current.hasTag("SHOW_OTHER_TOONS") &&
 									aoState.otherToons.map((toon) => {
 										// check if within two tiles
@@ -94,9 +103,10 @@ export const Game = ({ aoStateProp: aoState }: Props) => {
 															? 0.3
 															: 0.1
 													}
-													onclick={() =>
+													onclick={() =>{
 														send({ type: "TOON_SELECTED", toonId: toon.id })
-													}
+														onSelectToon(toon.id);
+													}}
 												/>
 											);
 										} else {
