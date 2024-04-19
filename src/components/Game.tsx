@@ -14,14 +14,17 @@ import InteractableSprite from "./InteractableSprite";
 const tileSizeX = 64;
 const tileSizeY = 64;
 
-const stageWidth = tileSizeX * 12;
-const stageHeight = tileSizeY * 10;
+const stageTilesX = 12;
+const stageTilesY = 9;
+
+const stageWidth = tileSizeX * stageTilesX;
+const stageHeight = tileSizeY * stageTilesY;
 
 type Props = {
 	aoStateProp: AoState;
 	onSelectToon: (toonId: string) => void;
 	onViewFeed: () => void;
-	onSavePosition: () => Promise<boolean>;
+	onSavePosition: (position: { x: number; y: number }) => Promise<boolean>;
 };
 
 export const Game = ({
@@ -30,7 +33,11 @@ export const Game = ({
 	onViewFeed,
 	onSavePosition,
 }: Props) => {
-	const [current, send] = useMachine(gameMachine);
+	const [current, send] = useMachine(gameMachine, {
+		input: {
+			position: aoState.user.savedPosition,
+		},
+	});
 
 	const veryTransparent = useMemo(() => new AlphaFilter(0.3), []);
 	const slightlyTransparent = useMemo(() => new AlphaFilter(0.6), []);
@@ -56,16 +63,12 @@ export const Game = ({
 					<Spring
 						to={{
 							x:
-								-(
-									(current.context.currentPosition.x + 1) * tileSizeX -
-									stageWidth / 2
-								) +
+								stageWidth / 2 -
+								(current.context.currentPosition.x + 1) * tileSizeX +
 								tileSizeX / 2,
 							y:
-								-(
-									(current.context.currentPosition.y + 1) * tileSizeY -
-									stageHeight / 2
-								) +
+								stageHeight / 2 -
+								(current.context.currentPosition.y + 1) * tileSizeY +
 								tileSizeY / 2,
 						}}
 					>
@@ -176,7 +179,7 @@ export const Game = ({
 								scale={1.5}
 								onclick={async () => {
 									send({ type: "SAVE_START" });
-									await onSavePosition();
+									await onSavePosition(current.context.currentPosition);
 									send({ type: "SAVE_END" });
 								}}
 								anchor={{ x: 0.5, y: 0.5 }}

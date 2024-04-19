@@ -1,4 +1,10 @@
 import { setup, assign, and } from "xstate";
+import {
+	blockSpacingX,
+	blockSpacingY,
+	roomTilesX,
+	roomTilesY,
+} from "../../components/TileMap3";
 
 export const movementKeys = [
 	"ArrowUp",
@@ -36,11 +42,11 @@ function calculateNextPosition(
 const movementBounds = {
 	x: {
 		min: 1,
-		max: 9,
+		max: roomTilesX - 2,
 	},
 	y: {
 		min: 1,
-		max: 7,
+		max: roomTilesY - 2,
 	},
 } as const;
 
@@ -51,10 +57,16 @@ export function isValidPosition(position: { x: number; y: number }) {
 		position.y >= movementBounds.y.min &&
 		position.y <= movementBounds.y.max;
 
-	const onTile = position.x % 2 === 0 && position.y % 2 === 0;
+	const onTile =
+		position.x % blockSpacingX === 0 && position.y % blockSpacingY === 0;
 
 	return insideBounds && !onTile;
 }
+
+const defaultPosition = {
+	x: 1,
+	y: 1,
+};
 
 export const gameMachine = setup({
 	schemas: {
@@ -76,6 +88,12 @@ export const gameMachine = setup({
 					type: "TOON_SELECTED";
 					toonId: string;
 			  },
+		input: {} as {
+			position?: {
+				x: number;
+				y: number;
+			};
+		},
 	},
 	actions: {
 		queueMovement: assign({
@@ -129,12 +147,10 @@ export const gameMachine = setup({
 }).createMachine({
 	/** @xstate-layout N4IgpgJg5mDOIC5RQIYFswDoCWA7bALtigDYDEA2gAwC6ioADgPayHZO70gAeiAjAGYArJioBOAEwAWIVSoSJ8qgDYA7ABoQAT0QTZmIcr6KxVVSqpCAHMoC+tzagyZYYAgFcGlWl2asiHFy8CAICfJjGfIICUmbKQhJWmjoIelQGRiZmFtZ2DiBOWABOTOh4UJhoTABuYBi4BDgQJGBkANIAogCaAPoACgBKHQDKwx0AItR0SCB+bIEzwUZimALKoVIxEnxiVrvJiNYi26pSqqpWUlZyO-aO6MWlaOWVNXVgDU0t3tOMLPOcRaIZardYxLY7PZJbTA66YKSSBSqRRWMJiKR3AoPTAlMq4CpVWr1RqE8rtbr9IajCZTXz-AKA0DBPYSeGCBJUTYIxLKA4IIRnTDKGzSPhCASSKiCTGFHFPF6E96fUn4sjcWAEFAELAoABm2qKAApFFQAJRkWW457415Ej4kmrlWkzOYMoKIVR8ZSYKyqdae7Y2KxCPh88VWVZiATSaxSKSKBIy7FWl54A0oADGDNgX1aABUAPIFgByPTGABkOgBhPM0nwu+nsRk8YHIoVCVTWMTKTkXMR80ICTCqMRCcVrc58a5iVRJ5wpm1psBFTPZnANZersnqzXazB6g2GvhyM0W5PyxcbldZps5pfXoj451-fxN90IU4RhLCeShEfo3kYVSGxMBnaJZE5dFNjye55wvCpYBQWpyV6QYRjGSZ6xfAF33WEQ9l2LkNmUQCUmDVke0SAQ9k2UwJTnR48QQpCsAzJgmBICAmAAd1wNUNS1HV9WXY0IPNS14JcFjMDYjiuN459ZkbBYmUQSRVFAqdOSESRjAkUI+WDKQIioGJzgsCRJAEBi5SYqTalzMhhgAQQANQ6Ms82cgY80U103yBBBj2sCJv19AU9h2DQgKscJo0SbtPUuSwZBsxDqjJFz3J6Dpi0w34lNfFSWxCMIIm2aJYj9BJoRSE1h2EEjO3kM4FHsfJcCYCA4C4Qo6SK5tggAWlIxAhpEMRJqm6bJqsGwbLwNhSH6nDAvjPlpBWBRyJUcxtmUTY0rcTwVrdQL9PSMVNkHGdYsIjaEUwbaOTUeQvSuGyFygU6AtUhAuWHTkzmEdFR1igQ+SiVlozHKQxWFaJZ3yCS7MVYkfuK4IrlZcw41UEGEWsQQ+RkcJsio0zTl2IRPsktH7VzDHBsOAR0lx4GdMJ2K+R7EQjDkK5jGsZExFp1G3mJW1yiZ98RQiKx9M55Qo22CQecFbtxFMAiQ1F5Hzzs+8tw4eAGwG99xQm3ZPRnc5O3xyHJqFK5NgVmxxTosXrQqI2bxNxmzdWv7rCHWabbt+2IaAmIIx7eIWt9ZQkS91Mr2N3A7zTm98RlwKbC2i5TjUfSRyuAcdh9INdgEEck72FObXSsBc+D30fVmoiYhIvlqqe645FyHtgwb5iHNkzieObfzMcQa4hxS05pEuHS5sMhJh3MC53cm+Q9dgxjvfsrBsGaZvA7Ov7jyMH1exIqhgwOzs15xze5viHfLLSpDpfP36SoUYyEFTLdgOtRDYhkNJmGkJ2NQ4Ma4YnakAA */
 	id: "game",
-	context: {
-		currentPosition: {
-			x: 5,
-			y: 3,
-		},
-	},
+	context: ({ input }) => ({
+		currentPosition: input?.position ?? defaultPosition,
+		currentDirection: input?.direction ?? "right",
+	}),
 	initial: "initial",
 	states: {
 		initial: {

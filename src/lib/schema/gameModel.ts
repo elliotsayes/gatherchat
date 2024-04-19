@@ -1,14 +1,23 @@
-export type AoToon = {
+export type Position = {
+	x: number;
+	y: number;
+};
+
+export type AoToonBase = {
 	id: string;
 	avatarSeed: string;
 	displayName: string;
-	savedPosition: {
-		x: number;
-		y: number;
-	};
+};
+
+export type AoToonSaved = AoToonBase & {
+	savedPosition: Position;
+};
+
+export type AoToonMaybeSaved = AoToonBase & {
+	savedPosition?: Position;
 };
 
 export type AoState = {
-	user: AoToon;
-	otherToons: AoToon[];
+	user: AoToonMaybeSaved;
+	otherToons: AoToonSaved[];
 };

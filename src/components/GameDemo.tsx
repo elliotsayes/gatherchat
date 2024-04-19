@@ -19,8 +19,8 @@ const demoState = {
 		avatarSeed: randomSeed(),
 		displayName: "ME!!",
 		savedPosition: {
-			x: 0,
-			y: 0,
+			x: 7,
+			y: 3,
 		},
 	},
 	otherToons: Array.from(Array(4).keys()).map(generateOtherToon),
@@ -36,9 +36,9 @@ export const GameDemo = () => {
 			onViewFeed={() => {
 				alert("onViewFeed");
 			}}
-			onSavePosition={async () => {
+			onSavePosition={async (position) => {
 				await new Promise((resolve) => setTimeout(resolve, 2000));
-				return confirm("onSavePosition");
+				return confirm(`onSavePosition: ${JSON.stringify(position)}`);
 			}}
 		/>
 	);
