@@ -1,4 +1,4 @@
-import { setup, assign } from "xstate";
+import { setup, assign, and } from "xstate";
 
 export const movementKeys = [
 	"ArrowUp",
@@ -19,6 +19,26 @@ const keyToMovementMap: Record<MovementKey, MovementDirection> = {
 	ArrowDown: "down",
 	ArrowLeft: "left",
 	ArrowRight: "right",
+} as const;
+
+function calculateNextPosition(currentPosition: { x: number; y: number }, direction: MovementDirection) {
+	const xDelta = direction === "left"? -1 : direction === "right"? 1 : 0;
+	const yDelta = direction === "up"? -1 : direction === "down"? 1 : 0;
+	return {
+		x: currentPosition.x + xDelta,
+		y: currentPosition.y + yDelta,
+	};
+}
+
+const movementBounds = {
+	x: {
+		min: 1,
+		max: 9,
+	},
+	y: {
+		min: 1,
+		max: 7,
+	},
 } as const;
 
 export const gameMachine = setup({
@@ -47,18 +67,9 @@ export const gameMachine = setup({
 			queuedMovement: ({ event }) => keyToMovementMap[event.key as MovementKey],
 		}),
 		executeQueuedMovement: assign(({ context }) => {
-			const { queuedMovement } = context;
-			const xDelta =
-				queuedMovement === "left" ? -1 : queuedMovement === "right" ? 1 : 0;
-			const yDelta =
-				queuedMovement === "up" ? -1 : queuedMovement === "down" ? 1 : 0;
+			const { currentPosition, queuedMovement } = context;
 
-			const { x, y } = context.currentPosition;
-
-			const currentPosition = {
-				x: x + xDelta,
-				y: y + yDelta,
-			};
+			const nextPosition = calculateNextPosition(currentPosition, queuedMovement!);
 
 			const directionUpdate = faceDirections.includes(queuedMovement)
 				? { currentDirection: queuedMovement }
@@ -66,7 +77,7 @@ export const gameMachine = setup({
 
 			return {
 				...context,
-				currentPosition,
+				currentPosition: nextPosition,
 				...directionUpdate,
 				queuedMovement: undefined,
 			};
@@ -81,6 +92,19 @@ export const gameMachine = setup({
 	guards: {
 		isMovementInput: ({ event }) => {
 			return movementKeys.includes(event.key);
+		},
+		canMove: ({ context, event }) => {
+			const { currentPosition } = context;
+			const desiredDirection = keyToMovementMap[event.key as MovementKey];
+
+			const testPosition = calculateNextPosition(currentPosition, desiredDirection);
+
+			return (
+				testPosition.x >= movementBounds.x.min &&
+				testPosition.x <= movementBounds.x.max &&
+				testPosition.y >= movementBounds.y.min &&
+				testPosition.y <= movementBounds.y.max
+			);
 		},
 		isMovementQueued: ({ context }) => {
 			return context.queuedMovement !== undefined;
@@ -117,7 +141,7 @@ export const gameMachine = setup({
 							on: {
 								KEY_PRESSED: {
 									target: "moving",
-									guard: "isMovementInput",
+									guard: and(["isMovementInput", "canMove"]),
 									actions: "queueMovement",
 								},
 							},
@@ -131,6 +155,7 @@ export const gameMachine = setup({
 							on: {
 								KEY_PRESSED: {
 									target: "moving",
+									guard: and(["isMovementInput", "canMove"]),
 									actions: "queueMovement",
 								},
 							},
