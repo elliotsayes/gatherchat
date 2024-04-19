@@ -58,15 +58,16 @@ export const Game = ({ aoStateProp: aoState }: Props) => {
 											key={toon.id}
 											name={toon.displayName}
 											seed={toon.avatarSeed}
+											scale={3}
 											x={toon.savedPosition.x * tileSizeX + tileSizeX / 2}
 											y={toon.savedPosition.y * tileSizeY + tileSizeY / 2}
-											animationName={"idle"}
-											animationSpeed={0.05}
 											isPlaying={true}
-											scale={3}
-											onclick={function () {
-												send({ type: "TOON_SELECTED", toonId: toon.id });
-											}}
+											animationName={"idle"}
+											animationSpeed={current.context.selectedToonId === toon.id ? 1 : 0.05}
+											onclick={() => {
+                        console.log("clicked toon");
+                        send({ type: "TOON_SELECTED", toonId: toon.id })
+                      }}
 										/>
 									))}
 							</Container>
@@ -87,7 +88,7 @@ export const Game = ({ aoStateProp: aoState }: Props) => {
 									? "run"
 									: "idle"
 							}
-              flipX={current.context.currentDirection === "left"}
+							flipX={current.context.currentDirection === "left"}
 							scale={3}
 							isPlaying={true}
 						/>

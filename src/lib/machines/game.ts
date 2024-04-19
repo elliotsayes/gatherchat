@@ -28,42 +28,57 @@ export const gameMachine = setup({
 				x: number;
 				y: number;
 			};
-      currentDirection: FaceDirection,
+			currentDirection: FaceDirection;
 			queuedMovement: MovementDirection | undefined;
+			selectedToonId: string | undefined;
 		},
-		events: {} as {
-			type: "KEY_PRESSED";
-			key: string;
-		},
+		events: {} as
+			| {
+					type: "KEY_PRESSED";
+					key: string;
+			  }
+			| {
+					type: "TOON_SELECTED";
+					toonId: string;
+			  },
 	},
 	actions: {
 		queueMovement: assign({
 			queuedMovement: ({ event }) => keyToMovementMap[event.key as MovementKey],
 		}),
-		executeQueuedMovement: assign(({context}) => {
-      const { queuedMovement } = context;
-      const xDelta =
-        queuedMovement === "left" ? -1 : queuedMovement === "right" ? 1 : 0;
-      const yDelta =
-        queuedMovement === "up" ? -1 : queuedMovement === "down" ? 1 : 0;
+		executeQueuedMovement: assign(({ context }) => {
+			const { queuedMovement } = context;
+			const xDelta =
+				queuedMovement === "left" ? -1 : queuedMovement === "right" ? 1 : 0;
+			const yDelta =
+				queuedMovement === "up" ? -1 : queuedMovement === "down" ? 1 : 0;
 
-      const { x, y } = context.currentPosition;
+			const { x, y } = context.currentPosition;
 
-      const currentPosition = {
-        x: x + xDelta,
-        y: y + yDelta,
-      };
+			const currentPosition = {
+				x: x + xDelta,
+				y: y + yDelta,
+			};
 
-      const directionUpdate = faceDirections.includes(queuedMovement)
-        ? { currentDirection: queuedMovement }
-        : {};
+			const directionUpdate = faceDirections.includes(queuedMovement)
+				? { currentDirection: queuedMovement }
+				: {};
 
-      return {
-        ...context,
-        currentPosition,
-        ...directionUpdate,
-        queuedMovement: undefined,
-      }
+			return {
+				...context,
+				currentPosition,
+				...directionUpdate,
+				queuedMovement: undefined,
+			};
+		}),
+		assignSelectedToon: assign({
+			selectedToonId: ({ event }) => {
+        console.log({event});
+        return event.toonId;
+      },
+		}),
+		clearSelectedToon: assign({
+			selectedToonId: undefined,
 		}),
 	},
 	guards: {
@@ -125,6 +140,27 @@ export const gameMachine = setup({
 							after: {
 								200: "idle",
 							},
+						},
+					},
+				},
+				interactions: {
+					initial: "idle",
+					states: {
+						idle: {
+							on: {
+								TOON_SELECTED: {
+									target: "interacting",
+									action: "assignSelectedToon",
+								},
+							},
+						},
+						interacting: {
+							after: {
+								1000: {
+									target: "idle",
+								},
+							},
+              exit: "clearSelectedToon",
 						},
 					},
 				},
