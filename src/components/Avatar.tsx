@@ -63,7 +63,7 @@ export const Avatar = ({
 
 	return (
 		<AnimatedSprite
-			key={`${lastUpdated.current}-${animationName}`}
+			key={`${seed}-${animationName}-${lastUpdated.current}`}
 			textures={textures}
 			autoUpdate={true}
 			animationSpeed={0.2}

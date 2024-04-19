@@ -4,6 +4,14 @@ import { useCallback, useMemo, useState } from "react";
 import { deserialize } from "../sprite/generate";
 import { serialize } from "../sprite/edit";
 import { SHAPE_OPTIONS, colorCategories, colorThemes } from "../sprite/shared";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 interface CharacterCreatorProps {
@@ -43,45 +51,59 @@ export const CharacterCreator = ({
 	}, [setFaceIndex, setHeadIndex, setColorIndicies]);
 
 	return (
-		<div>
-			<AvatarStandalone
-				scale={10}
-				seed={currentSeed}
-				animationName={"idle"}
-				isPlaying={true}
-			/>
-			<div>
-				<Button onClick={randomize}>Randomize</Button>
-				<div>
-					<OptionSlider
-						label={"Face"}
-						valueCount={SHAPE_OPTIONS[0].max}
-						value={faceIndex}
-						onChange={setFaceIndex}
+		<Card className="w-[350px]">
+			<CardHeader>
+				<CardTitle>Edit Toon</CardTitle>
+				<CardDescription>Customise however you like.</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<div className="flex flex-row gap-4 items-center">
+					<AvatarStandalone
+						scale={10}
+						seed={currentSeed}
+						animationName={"idle"}
+						isPlaying={true}
 					/>
-					<OptionSlider
-						label={"Head"}
-						valueCount={SHAPE_OPTIONS[1].max}
-						value={headIndex}
-						onChange={setHeadIndex}
-					/>
+					<Button size={"icon"} onClick={randomize}>
+						🎲
+					</Button>
 				</div>
 				<div>
-					{colorCategories.map((category, index) => (
+					<div>
 						<OptionSlider
-							key={category}
-							label={category}
-							valueCount={colorMaxs[index]}
-							value={colorIndicies[index]}
-							onChange={(value) => {
-								const newColorIndicies = [...colorIndicies];
-								newColorIndicies[index] = value;
-								setColorIndicies(newColorIndicies);
-							}}
+							label={"Face"}
+							valueCount={SHAPE_OPTIONS[0].max}
+							value={faceIndex}
+							onChange={setFaceIndex}
 						/>
-					))}
+						<OptionSlider
+							label={"Head"}
+							valueCount={SHAPE_OPTIONS[1].max}
+							value={headIndex}
+							onChange={setHeadIndex}
+						/>
+					</div>
+					<div>
+						{colorCategories.map((category, index) => (
+							<OptionSlider
+								key={category}
+								label={category}
+								valueCount={colorMaxs[index]}
+								value={colorIndicies[index]}
+								onChange={(value) => {
+									const newColorIndicies = [...colorIndicies];
+									newColorIndicies[index] = value;
+									setColorIndicies(newColorIndicies);
+								}}
+							/>
+						))}
+					</div>
 				</div>
-			</div>
-		</div>
+			</CardContent>
+			<CardFooter className="flex justify-between">
+				<Button variant="outline">Cancel</Button>
+				<Button>Save</Button>
+			</CardFooter>
+		</Card>
 	);
 };
