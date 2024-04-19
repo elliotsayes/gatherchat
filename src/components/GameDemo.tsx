@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { randomSeed } from "../sprite/edit";
 import { CharacterCreator } from "./CharacterCreator";
 import { Game } from "./Game";
@@ -14,23 +15,27 @@ function generateOtherToon(i: number) {
 	};
 }
 
-const demoState = {
-	user: {
-		id: "me",
-		avatarSeed: randomSeed(),
-		displayName: "ME!!",
-		savedPosition: {
-			x: 7,
-			y: 3,
-		},
-	},
-	otherToons: Array.from(Array(4).keys()).map(generateOtherToon),
-};
+const otherToons = Array.from(Array(4).keys()).map(generateOtherToon);
 
 export const GameDemo = () => {
+	const [seed, setSeed] = useState(randomSeed());
+
+	const demoState = useMemo(() => ({
+		user: {
+			id: "me",
+			avatarSeed: seed,
+			displayName: "ME!!",
+			savedPosition: {
+				x: 7,
+				y: 3,
+			},
+		},
+		otherToons,
+	}), [seed]);
+
 	return (
 		<>
-			<CharacterCreator initialSeed="a09010903080a02" />
+			<CharacterCreator initialSeed={seed} onSeedChange={setSeed} />
 			<Game
 				aoStateProp={demoState}
 				onSelectToon={(toonId) => {
