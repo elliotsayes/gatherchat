@@ -35,7 +35,7 @@ export const Game = ({ aoStateProp: aoState, onSelectToon, onViewFeed }: Props) 
 		<>
 			<Stage
 				options={{
-					background: 0xffffff,
+					background: 0xAAAAAA,
 					width: stageWidth,
 					height: stageHeight,
 				}}
