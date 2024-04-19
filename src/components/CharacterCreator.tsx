@@ -22,6 +22,7 @@ interface CharacterCreatorProps {
 
 const colorMaxs = colorCategories.map(
 	(category) =>
+		// biome-ignore lint/style/noNonNullAssertion: Static analysis
 		colorThemes.find((theme) => theme.key === category)!.options.length,
 );
 
@@ -49,7 +50,7 @@ export const CharacterCreator = ({
 		setFaceIndex(Math.floor(Math.random() * SHAPE_OPTIONS[0].max));
 		setHeadIndex(Math.floor(Math.random() * SHAPE_OPTIONS[1].max));
 		setColorIndicies(colorMaxs.map((max) => Math.floor(Math.random() * max)));
-	}, [setFaceIndex, setHeadIndex, setColorIndicies]);
+	}, []);
 
 	return (
 		<Card className="w-[350px]">
@@ -85,19 +86,22 @@ export const CharacterCreator = ({
 						/>
 					</div>
 					<div>
-						{colorCategories.map((category, index) => (
-							<OptionSlider
-								key={category}
-								label={toTitleCase(category)}
-								valueCount={colorMaxs[index]}
-								value={colorIndicies[index]}
-								onChange={(value) => {
-									const newColorIndicies = [...colorIndicies];
-									newColorIndicies[index] = value;
-									setColorIndicies(newColorIndicies);
-								}}
-							/>
-						))}
+						{colorCategories.map((category, index) => {
+							if (category === "item") return null;
+							return (
+								<OptionSlider
+									key={category}
+									label={toTitleCase(category)}
+									valueCount={colorMaxs[index]}
+									value={colorIndicies[index]}
+									onChange={(value) => {
+										const newColorIndicies = [...colorIndicies];
+										newColorIndicies[index] = value;
+										setColorIndicies(newColorIndicies);
+									}}
+								/>
+							);
+						})}
 					</div>
 				</div>
 			</CardContent>

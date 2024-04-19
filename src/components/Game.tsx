@@ -3,7 +3,7 @@ import { Stage } from "@pixi/react";
 import { Container } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
 import { Tilemap3 } from "./TileMap3";
-import { AoState } from "../lib/schema/gameModel";
+import type { AoState } from "../lib/schema/gameModel";
 import { gameMachine } from "../lib/machines/game";
 import { useMachine } from "@xstate/react";
 import InteractableToon from "./InteractableToon";
@@ -53,7 +53,7 @@ export const Game = ({
 				style={{ outline: "none" }}
 				tabIndex={0}
 				onKeyDown={(e) => {
-					if (e.key != "Tab") {
+					if (e.key !== "Tab") {
 						e.preventDefault();
 						send({ type: "KEY_PRESSED", key: e.key });
 					}
@@ -123,6 +123,7 @@ export const Game = ({
 													}}
 												/>
 											);
+										// biome-ignore lint/style/noUselessElse: Readability
 										} else {
 											const veryFar = distance < 6;
 											return (
