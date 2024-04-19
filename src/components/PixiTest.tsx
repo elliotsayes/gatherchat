@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const PixiTest = ({ seed }: Props) => {
-	const [xOffset, setXOffset] = useState(100);
+	const [xOffset, setXOffset] = useState(50);
 
 	return (
 		<>
@@ -23,15 +23,11 @@ export const PixiTest = ({ seed }: Props) => {
 				<p>X Offset: {xOffset}</p>
 			</div>
 			<Stage options={{ background: 0xffffff, width: 800, height: 600 }}>
-				{/* <TileMap xOffset={xOffset} yOffset={100} /> */}
-
-				{/* <Container x={100} y={270}>
-					<TileMap2 />
-				</Container> */}
-
-				<Container x={xOffset} y={270}>
+				<Container x={xOffset} y={10}>
 					<Tilemap3 />
-					<Avatar seed={"a100d050c080204"} animationName="idle" />
+					<Container x={100} y={80}>
+						<Avatar seed={"a100d050c080204"} animationName="idle" />
+					</Container>
 				</Container>
 
 				<Container x={xOffset} y={300}></Container>
