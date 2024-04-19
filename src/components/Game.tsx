@@ -8,7 +8,7 @@ import { gameMachine } from "../lib/machines/game";
 import { useMachine } from "@xstate/react";
 import InteractableToon from "./InteractableToon";
 import NamedAvatar from "./NamedAvatar";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import InteractableSprite from "./InteractableSprite";
 
 const tileSizeX = 64;
@@ -39,6 +39,11 @@ export const Game = ({
 		},
 	});
 
+	const [targetOffset, setTargetOffset] = useState({
+		x: 0,
+		y: 0,
+	});
+
 	const veryTransparent = useMemo(() => new AlphaFilter(0.3), []);
 	const slightlyTransparent = useMemo(() => new AlphaFilter(0.6), []);
 
@@ -58,135 +63,176 @@ export const Game = ({
 						send({ type: "KEY_PRESSED", key: e.key });
 					}
 				}}
+				onMouseMove={(e) => {
+					const position = e.currentTarget.getBoundingClientRect();
+					const mousePosition = {
+						x: e.clientX - position.left,
+						y: e.clientY - position.top,
+					};
+					const fromCenter = {
+						x: mousePosition.x - stageWidth / 2,
+						y: mousePosition.y - stageHeight / 2,
+					};
+					const targetOffset = {
+						x: (fromCenter.x > 0 ? -1 : -0) * Math.floor(Math.log(Math.abs(fromCenter.x / 2))) * 10,
+						y: (fromCenter.y > 0 ? -1 : -0) * Math.floor(Math.log(Math.abs(fromCenter.y / 2))) * 10,
+					};
+					setTargetOffset(targetOffset);
+				}}
 			>
-				{current.hasTag("SHOW_WORLD") && (
-					<Spring
-						to={{
-							x:
-								stageWidth / 2 -
-								(current.context.currentPosition.x + 1) * tileSizeX +
-								tileSizeX / 2,
-							y:
-								stageHeight / 2 -
-								(current.context.currentPosition.y + 1) * tileSizeY +
-								tileSizeY / 2,
-						}}
-					>
-						{(props) => (
-							<Container
-								anchor={{ x: 0.5, y: 0.5 }}
-								filters={current.matches("saving") ? [slightlyTransparent] : []}
-								{...props}
-							>
-								<Tilemap3 />
-								{current.hasTag("SHOW_OBJECTS") && (
-									<InteractableSprite
-										image="assets/sprite/board.png"
-										scale={2}
-										anchor={{ x: 0.5, y: 0.5 }}
-										onclick={() => onViewFeed()}
-										x={tileSizeX * 4.5}
-										y={tileSizeY * 0.5}
-									/>
-								)}
-								{current.hasTag("SHOW_OTHER_TOONS") &&
-									aoState.otherToons.map((toon) => {
-										// check if within two tiles
-										const { x: selfX, y: selfY } =
-											current.context.currentPosition;
-										const { x: otherX, y: otherY } = toon.savedPosition;
-
-										const distance =
-											Math.abs(selfX - otherX) + Math.abs(selfY - otherY);
-
-										const withinThreeTiles = distance <= 3;
-
-										if (withinThreeTiles) {
-											return (
-												<InteractableToon
-													key={toon.id}
-													name={toon.displayName}
-													seed={toon.avatarSeed}
-													scale={3}
-													x={toon.savedPosition.x * tileSizeX + tileSizeX / 2}
-													y={toon.savedPosition.y * tileSizeY + tileSizeY / 2}
-													isPlaying={true}
-													animationName={"idle"}
-													animationSpeed={
-														current.context.selectedToonId === toon.id
-															? 0.3
-															: 0.1
-													}
-													onclick={() => {
-														send({ type: "TOON_SELECTED", toonId: toon.id });
-														onSelectToon(toon.id);
-													}}
+				<Spring to={{ ...targetOffset }}>
+					{(props) => (
+						<Container {...props}>
+							{current.hasTag("SHOW_WORLD") && (
+								<Spring
+									to={{
+										x:
+											stageWidth / 2 -
+											(current.context.currentPosition.x + 1) * tileSizeX +
+											tileSizeX / 2,
+										y:
+											stageHeight / 2 -
+											(current.context.currentPosition.y + 1) * tileSizeY +
+											tileSizeY / 2,
+									}}
+								>
+									{(props) => (
+										<Container
+											anchor={{ x: 0.5, y: 0.5 }}
+											filters={
+												current.matches("saving") ? [slightlyTransparent] : []
+											}
+											{...props}
+										>
+											<Tilemap3 />
+											{current.hasTag("SHOW_OBJECTS") && (
+												<InteractableSprite
+													image="assets/sprite/board.png"
+													scale={2}
+													anchor={{ x: 0.5, y: 0.5 }}
+													onclick={() => onViewFeed()}
+													x={tileSizeX * 4.5}
+													y={tileSizeY * 0.5}
 												/>
-											);
-										// biome-ignore lint/style/noUselessElse: Readability
-										} else {
-											const veryFar = distance < 6;
-											return (
-												<NamedAvatar
-													key={toon.id}
-													name={toon.displayName}
-													seed={toon.avatarSeed}
-													scale={3}
-													x={toon.savedPosition.x * tileSizeX + tileSizeX / 2}
-													y={toon.savedPosition.y * tileSizeY + tileSizeY / 2}
-													isPlaying={true}
-													animationName={"idle"}
-													animationSpeed={0.05}
-													filters={
-														veryFar ? [slightlyTransparent] : [veryTransparent]
+											)}
+											{current.hasTag("SHOW_OTHER_TOONS") &&
+												aoState.otherToons.map((toon) => {
+													// check if within two tiles
+													const { x: selfX, y: selfY } =
+														current.context.currentPosition;
+													const { x: otherX, y: otherY } = toon.savedPosition;
+
+													const distance =
+														Math.abs(selfX - otherX) + Math.abs(selfY - otherY);
+
+													const withinThreeTiles = distance <= 3;
+
+													if (withinThreeTiles) {
+														return (
+															<InteractableToon
+																key={toon.id}
+																name={toon.displayName}
+																seed={toon.avatarSeed}
+																scale={3}
+																x={
+																	toon.savedPosition.x * tileSizeX +
+																	tileSizeX / 2
+																}
+																y={
+																	toon.savedPosition.y * tileSizeY +
+																	tileSizeY / 2
+																}
+																isPlaying={true}
+																animationName={"idle"}
+																animationSpeed={
+																	current.context.selectedToonId === toon.id
+																		? 0.3
+																		: 0.1
+																}
+																onclick={() => {
+																	send({
+																		type: "TOON_SELECTED",
+																		toonId: toon.id,
+																	});
+																	onSelectToon(toon.id);
+																}}
+															/>
+														);
+														// biome-ignore lint/style/noUselessElse: Readability
+													} else {
+														const veryFar = distance < 6;
+														return (
+															<NamedAvatar
+																key={toon.id}
+																name={toon.displayName}
+																seed={toon.avatarSeed}
+																scale={3}
+																x={
+																	toon.savedPosition.x * tileSizeX +
+																	tileSizeX / 2
+																}
+																y={
+																	toon.savedPosition.y * tileSizeY +
+																	tileSizeY / 2
+																}
+																isPlaying={true}
+																animationName={"idle"}
+																animationSpeed={0.05}
+																filters={
+																	veryFar
+																		? [slightlyTransparent]
+																		: [veryTransparent]
+																}
+															/>
+														);
 													}
-												/>
-											);
+												})}
+										</Container>
+									)}
+								</Spring>
+							)}
+
+							{current.hasTag("SHOW_TOON") && (
+								<Container x={stageWidth / 2} y={stageHeight / 2}>
+									<NamedAvatar
+										name={aoState.user.displayName}
+										seed={aoState.user.avatarSeed}
+										animationName={
+											current.matches({
+												roaming: {
+													movement: "moving",
+												},
+											})
+												? "run"
+												: "idle"
 										}
-									})}
-							</Container>
-						)}
-					</Spring>
-				)}
-
-				{current.hasTag("SHOW_TOON") && (
-					<Container x={stageWidth / 2} y={stageHeight / 2}>
-						<NamedAvatar
-							name={aoState.user.displayName}
-							seed={aoState.user.avatarSeed}
-							animationName={
-								current.matches({
-									roaming: {
-										movement: "moving",
-									},
-								})
-									? "run"
-									: "idle"
-							}
-							flipX={current.context.currentDirection === "left"}
-							scale={3}
-							isPlaying={true}
-						/>
-						{current.matches({
-							roaming: {
-								save: "idle",
-							},
-						}) && (
-							<InteractableSprite
-								image="assets/sprite/save.png"
-								scale={1.5}
-								onclick={async () => {
-									send({ type: "SAVE_START" });
-									await onSavePosition(current.context.currentPosition);
-									send({ type: "SAVE_END" });
-								}}
-								anchor={{ x: 0.5, y: 0.5 }}
-								filters={[slightlyTransparent]}
-								y={20}
-							/>
-						)}
-					</Container>
-				)}
+										flipX={current.context.currentDirection === "left"}
+										scale={3}
+										isPlaying={true}
+									/>
+									{current.matches({
+										roaming: {
+											save: "idle",
+										},
+									}) && (
+										<InteractableSprite
+											image="assets/sprite/save.png"
+											scale={1.5}
+											onclick={async () => {
+												send({ type: "SAVE_START" });
+												await onSavePosition(current.context.currentPosition);
+												send({ type: "SAVE_END" });
+											}}
+											anchor={{ x: 0.5, y: 0.5 }}
+											filters={[slightlyTransparent]}
+											y={20}
+										/>
+									)}
+								</Container>
+							)}
+						</Container>
+					)}
+				</Spring>
 			</Stage>
 		</>
 	);
