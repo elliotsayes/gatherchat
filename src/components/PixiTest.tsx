@@ -23,6 +23,8 @@ export const PixiTest = ({ seed }: Props) => {
 	const [xOffset, setXOffset] = useState(50);
 	const [yOffset, setYOffset] = useState(10);
 
+	const [emphasis, setEmphasis] = useState(false);
+
 	return (
 		<>
 			<Stage
@@ -68,12 +70,23 @@ export const PixiTest = ({ seed }: Props) => {
 					{(props) => (
 						<Container {...props}>
 							<Tilemap3 />
-							<Container x={100} y={80}>
+							<Container x={100} y={50}>
 								<NamedAvatar
 									name="Joooooooohn Cena"
 									seed={"a100d050c080204"}
 									animationName="idle"
 									isPlaying={true}
+									eventMode={"dynamic"}
+									onclick={(e) => {
+										alert("It's JOHN CENA!!!")
+									}}
+									onmouseenter={(e) => {
+										setEmphasis(true);
+									}}
+									onmouseleave={(e) => {
+										setEmphasis(false);
+									}}
+									scale={emphasis? 5 : 4}
 								/>
 							</Container>
 						</Container>
