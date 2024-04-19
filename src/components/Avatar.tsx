@@ -1,7 +1,7 @@
 import { Texture, Spritesheet, SCALE_MODES, Transform, Matrix } from "pixi.js";
-import { AnimatedSprite } from "@pixi/react";
+import { Sprite, AnimatedSprite } from "@pixi/react";
 import { animationNames, generateSpriteData } from "../sprite/render";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type Props = {
 	seed: string;
@@ -11,12 +11,19 @@ type Props = {
 };
 
 export const Avatar = ({ seed, animationName, scale, flipX }: Props) => {
-	scale = scale ?? 5;
+	scale = scale ?? 4;
+
+	const transform = useMemo(() => {
+		const transform = new Transform();
+		transform.setFromMatrix(new Matrix((flipX ? -1 : 1) * scale, 0, 0, scale, 0, 0));
+		return transform;
+	}, [flipX]);
 
 	const [spritesheet, setSpritesheet] = useState<Spritesheet | undefined>();
 	const lastUpdated = useRef(0);
 
 	useEffect(() => {
+		console.log("Updating spritesheet");
 		(async () => {
 			// Define sprite layout
 			const spriteData = generateSpriteData(
@@ -43,8 +50,16 @@ export const Avatar = ({ seed, animationName, scale, flipX }: Props) => {
 
 	const textures = spritesheet.animations[animationName];
 
-	const transform = new Transform();
-	transform.setFromMatrix(new Matrix((flipX ? -1 : 1) * scale, 0, 0, scale, 0, 0));
+	if (animationName === "no_anim") {
+		return (
+			<Sprite
+				key={lastUpdated.current}
+				texture={textures[0]}
+				anchor={{ x: 0.5, y: 0.5 }}
+				transform={transform}
+			/>
+		)
+	}
 
 	return (
 		<AnimatedSprite
@@ -53,8 +68,7 @@ export const Avatar = ({ seed, animationName, scale, flipX }: Props) => {
 			anchor={{ x: 0.5, y: 0.5 }}
 			isPlaying={true}
 			animationSpeed={0.2}
-			filters={null}
-			isSprite={true}
+			// isSprite={false}
 			autoUpdate={true}
 			transform={transform}
 		/>
