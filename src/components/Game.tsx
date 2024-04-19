@@ -27,8 +27,8 @@ export const Game = ({ aoStateProp: aoState }: Props) => {
 		id: "game",
 	});
 
-  const veryTransparent = useMemo(() => new AlphaFilter(0.3), []);
-  const slightlyTransparent = useMemo(() => new AlphaFilter(0.6), []);
+	const veryTransparent = useMemo(() => new AlphaFilter(0.3), []);
+	const slightlyTransparent = useMemo(() => new AlphaFilter(0.6), []);
 
 	return (
 		<>
@@ -50,8 +50,18 @@ export const Game = ({ aoStateProp: aoState }: Props) => {
 				{current.hasTag("SHOW_WORLD") && (
 					<Spring
 						to={{
-							x: -((current.context.currentPosition.x + 1) * tileSizeX - stageWidth / 2) + tileSizeX / 2,
-							y: -((current.context.currentPosition.y + 1) * tileSizeY - stageHeight / 2) + tileSizeY / 2,
+							x:
+								-(
+									(current.context.currentPosition.x + 1) * tileSizeX -
+									stageWidth / 2
+								) +
+								tileSizeX / 2,
+							y:
+								-(
+									(current.context.currentPosition.y + 1) * tileSizeY -
+									stageHeight / 2
+								) +
+								tileSizeY / 2,
 						}}
 					>
 						{(props) => (
@@ -90,10 +100,10 @@ export const Game = ({ aoStateProp: aoState }: Props) => {
 												/>
 											);
 										} else {
-                      const withinFiveTiles =
-                        Math.abs(selfX - otherX) <= 5 &&
-                        Math.abs(selfY - otherY) <= 5;
-                      return (
+											const withinFiveTiles =
+												Math.abs(selfX - otherX) <= 5 &&
+												Math.abs(selfY - otherY) <= 5;
+											return (
 												<NamedAvatar
 													key={toon.id}
 													name={toon.displayName}
@@ -104,7 +114,11 @@ export const Game = ({ aoStateProp: aoState }: Props) => {
 													isPlaying={true}
 													animationName={"idle"}
 													animationSpeed={0.05}
-                          filters={withinFiveTiles ? [slightlyTransparent] : [veryTransparent]}
+													filters={
+														withinFiveTiles
+															? [slightlyTransparent]
+															: [veryTransparent]
+													}
 												/>
 											);
 										}
