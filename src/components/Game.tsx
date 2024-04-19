@@ -96,9 +96,11 @@ export const Game = ({
 											current.context.currentPosition;
 										const { x: otherX, y: otherY } = toon.savedPosition;
 
-										const withinThreeTiles =
-											Math.abs(selfX - otherX) <= 3 &&
-											Math.abs(selfY - otherY) <= 3;
+										const distance = 
+											Math.abs(selfX - otherX) +
+											Math.abs(selfY - otherY);
+
+										const withinThreeTiles = distance <= 3;
 
 										if (withinThreeTiles) {
 											return (
@@ -123,9 +125,7 @@ export const Game = ({
 												/>
 											);
 										} else {
-											const withinFiveTiles =
-												Math.abs(selfX - otherX) <= 5 &&
-												Math.abs(selfY - otherY) <= 5;
+											const veryFar = distance < 6;
 											return (
 												<NamedAvatar
 													key={toon.id}
@@ -138,7 +138,7 @@ export const Game = ({
 													animationName={"idle"}
 													animationSpeed={0.05}
 													filters={
-														withinFiveTiles
+														veryFar
 															? [slightlyTransparent]
 															: [veryTransparent]
 													}
