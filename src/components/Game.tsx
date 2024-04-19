@@ -172,7 +172,7 @@ export const Game = ({
 							},
 						}) && (
 							<InteractableSprite
-								image={`assets/sprite/save.png`}
+								image="assets/sprite/save.png"
 								scale={1.5}
 								onclick={async () => {
 									send({ type: "SAVE_START" });
