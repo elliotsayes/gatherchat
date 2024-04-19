@@ -7,8 +7,8 @@ function generateOtherToon(i: number) {
 		avatarSeed: randomSeed(),
 		displayName: "Toon #" + i,
 		savedPosition: {
-			x: i,
-			y: i,
+			x: i * 2 + 1,
+			y: i * 2 + 1,
 		},
 	};
 }
@@ -23,7 +23,7 @@ const demoState = {
 			y: 0,
 		},
 	},
-	otherToons: Array.from(Array(10).keys()).map(generateOtherToon),
+	otherToons: Array.from(Array(4).keys()).map(generateOtherToon),
 };
 
 export const GameDemo = () => {
