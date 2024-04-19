@@ -21,9 +21,12 @@ const keyToMovementMap: Record<MovementKey, MovementDirection> = {
 	ArrowRight: "right",
 } as const;
 
-function calculateNextPosition(currentPosition: { x: number; y: number }, direction: MovementDirection) {
-	const xDelta = direction === "left"? -1 : direction === "right"? 1 : 0;
-	const yDelta = direction === "up"? -1 : direction === "down"? 1 : 0;
+function calculateNextPosition(
+	currentPosition: { x: number; y: number },
+	direction: MovementDirection,
+) {
+	const xDelta = direction === "left" ? -1 : direction === "right" ? 1 : 0;
+	const yDelta = direction === "up" ? -1 : direction === "down" ? 1 : 0;
 	return {
 		x: currentPosition.x + xDelta,
 		y: currentPosition.y + yDelta,
@@ -69,7 +72,10 @@ export const gameMachine = setup({
 		executeQueuedMovement: assign(({ context }) => {
 			const { currentPosition, queuedMovement } = context;
 
-			const nextPosition = calculateNextPosition(currentPosition, queuedMovement!);
+			const nextPosition = calculateNextPosition(
+				currentPosition,
+				queuedMovement!,
+			);
 
 			const directionUpdate = faceDirections.includes(queuedMovement)
 				? { currentDirection: queuedMovement }
@@ -97,18 +103,18 @@ export const gameMachine = setup({
 			const { currentPosition } = context;
 			const desiredDirection = keyToMovementMap[event.key as MovementKey];
 
-			const testPosition = calculateNextPosition(currentPosition, desiredDirection);
+			const testPosition = calculateNextPosition(
+				currentPosition,
+				desiredDirection,
+			);
 
-			const insideBounds = (
+			const insideBounds =
 				testPosition.x >= movementBounds.x.min &&
 				testPosition.x <= movementBounds.x.max &&
 				testPosition.y >= movementBounds.y.min &&
-				testPosition.y <= movementBounds.y.max
-			);
+				testPosition.y <= movementBounds.y.max;
 
-			const onTile = (
-				(testPosition.x % 2 === 0) && (testPosition.y % 2 === 0)
-			);
+			const onTile = testPosition.x % 2 === 0 && testPosition.y % 2 === 0;
 
 			return insideBounds && !onTile;
 		},

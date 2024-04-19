@@ -23,7 +23,11 @@ type Props = {
 	onViewFeed: () => void;
 };
 
-export const Game = ({ aoStateProp: aoState, onSelectToon, onViewFeed }: Props) => {
+export const Game = ({
+	aoStateProp: aoState,
+	onSelectToon,
+	onViewFeed,
+}: Props) => {
 	const [current, send] = useMachine(gameMachine, {
 		id: "game",
 	});
@@ -35,7 +39,7 @@ export const Game = ({ aoStateProp: aoState, onSelectToon, onViewFeed }: Props) 
 		<>
 			<Stage
 				options={{
-					background: 0xAAAAAA,
+					background: 0xaaaaaa,
 					width: stageWidth,
 					height: stageHeight,
 				}}
@@ -103,8 +107,8 @@ export const Game = ({ aoStateProp: aoState, onSelectToon, onViewFeed }: Props) 
 															? 0.3
 															: 0.1
 													}
-													onclick={() =>{
-														send({ type: "TOON_SELECTED", toonId: toon.id })
+													onclick={() => {
+														send({ type: "TOON_SELECTED", toonId: toon.id });
 														onSelectToon(toon.id);
 													}}
 												/>
