@@ -1,4 +1,3 @@
-import { Avatar } from "./Avatar";
 import { Stage } from "@pixi/react";
 import { Container } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
@@ -7,6 +6,7 @@ import { AoState } from "../lib/schema/gameModel";
 import { gameMachine } from "../lib/machines/game";
 import { useMachine } from "@xstate/react";
 import InteractableToon from "./InteractableToon";
+import NamedAvatar from "./NamedAvatar";
 
 const tileSizeX = 64;
 const tileSizeY = 64;
@@ -78,7 +78,8 @@ export const Game = ({ aoStateProp: aoState }: Props) => {
 
 				{current.hasTag("SHOW_TOON") && (
 					<Container x={stageWidth / 2} y={stageHeight / 2}>
-						<Avatar
+						<NamedAvatar
+              name={aoState.user.displayName}
 							seed={aoState.user.avatarSeed}
 							animationName={
 								current.matches({
