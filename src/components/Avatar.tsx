@@ -6,26 +6,27 @@ import { useEffect, useMemo, useRef, useState } from "react";
 interface Props extends React.ComponentProps<typeof AnimatedSprite> {
 	seed: string;
 	animationName: (typeof animationNames)[number];
-	scale?: number;
 	flipX?: boolean;
 }
 
 export const Avatar = ({
 	seed,
 	animationName,
-	scale,
 	flipX,
 	...animatedSpriteProps
 }: Props) => {
-	scale = scale ?? 4;
-
 	const transform = useMemo(() => {
-		const transform = new Transform();
-		transform.setFromMatrix(
-			new Matrix((flipX ? -1 : 1) * scale, 0, 0, scale, 0, 0),
-		);
-		return transform;
-	}, [scale, flipX]);
+		if (flipX) {
+			const scale = typeof animatedSpriteProps?.scale === "number"
+				? animatedSpriteProps.scale : 4;
+
+			const transform = new Transform();
+			transform.setFromMatrix(
+				new Matrix((flipX ? -1 : 1) * scale, 0, 0, scale, 0, 0),
+			);
+			return transform;
+		}
+	}, [animatedSpriteProps?.scale, flipX]);
 
 	const lastUpdated = useRef(0);
 
@@ -68,7 +69,7 @@ export const Avatar = ({
 			animationSpeed={0.2}
 			// isSprite={false}
 			autoUpdate={true}
-			transform={transform}
+			{...(transform === undefined? {} : {transform})}
 			{...animatedSpriteProps}
 		/>
 	);
