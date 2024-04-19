@@ -11,6 +11,14 @@ export const movementKeys = [
 	"ArrowDown",
 	"ArrowLeft",
 	"ArrowRight",
+	"w",
+	"s",
+	"a",
+	"d",
+	"W",
+	"S",
+	"A",
+	"D",
 ] as const;
 export type MovementKey = (typeof movementKeys)[number];
 
@@ -25,6 +33,14 @@ const keyToMovementMap: Record<MovementKey, MovementDirection> = {
 	ArrowDown: "down",
 	ArrowLeft: "left",
 	ArrowRight: "right",
+	w: "up",
+	s: "down",
+	a: "left",
+	d: "right",
+	W: "up",
+	S: "down",
+	A: "left",
+	D: "right",
 } as const;
 
 function calculateNextPosition(
