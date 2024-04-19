@@ -20,7 +20,7 @@ export const Avatar = ({
 			const scale =
 				typeof animatedSpriteProps?.scale === "number"
 					? animatedSpriteProps.scale
-					: 4;
+					: 1;
 
 			const transform = new Transform();
 			transform.setFromMatrix(
@@ -56,7 +56,7 @@ export const Avatar = ({
 
 	const textures = useMemo(() => {
 		if (!spritesheet) return;
-		return spritesheet.animations[animationName]
+		return spritesheet.animations[animationName];
 	}, [spritesheet, animationName]);
 
 	if (!textures) return null;
@@ -65,10 +65,9 @@ export const Avatar = ({
 		<AnimatedSprite
 			key={`${lastUpdated.current}-${animationName}`}
 			textures={textures}
-			anchor={{ x: 0.5, y: 0.5 }}
-			animationSpeed={0.2}
-			// isSprite={false}
 			autoUpdate={true}
+			animationSpeed={0.2}
+			anchor={{ x: 0.5, y: 0.7 }}
 			{...(transform === undefined ? {} : { transform })}
 			{...animatedSpriteProps}
 		/>

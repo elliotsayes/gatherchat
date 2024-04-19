@@ -6,13 +6,26 @@ interface NamedAvatarProps extends React.ComponentProps<typeof Avatar> {
 	name: string;
 }
 
-const NamedAvatar: React.FC<NamedAvatarProps> = ({ name, ...props }) => {
+const NamedAvatar: React.FC<NamedAvatarProps> = ({ name, x, y, ...props }) => {
 	return (
-		<Container anchor={{ x: 0.5, y: 0.5 }}>
-			<Text text={name} anchor={{ x: 0.5, y: 1.5 }} />
-			<Container y={10}>
+		<Container x={x} y={y}>
+			<Container>
 				<Avatar {...props} />
 			</Container>
+			<Text
+				text={name}
+				anchor={{ x: 0.5, y: 0.5 }}
+				y={-25}
+				// style={{
+				// 	dropShadow: true,
+				// 	dropShadowColor: "white",
+				// 	dropShadowBlur: 2,
+				// 	dropShadowAngle: 45,
+				// 	dropShadowDistance: 2,
+				// 	fontSize: 18,
+				// 	fontWeight: "bold",
+				// }}
+			/>
 		</Container>
 	);
 };
