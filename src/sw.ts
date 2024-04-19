@@ -11,12 +11,36 @@ self.addEventListener(
 	false,
 );
 
-let baseTex: ImageBitmap;
-let partTex: ImageBitmap;
-
 self.addEventListener("install", (e) => {
 	console.log("[Service Worker] Install", e);
 });
+
+const assetsCacheName = "assets_v1";
+
+async function cacheAssets(assets: string[]) {
+	try {
+		const cache = await caches.open(assetsCacheName);
+		console.log("[Service Worker] Caching assets");
+		for (const asset of assets) {
+			const res = await fetch(asset);
+			await cache.put(asset, res);
+		}
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+async function retrieveAssets(assets: string[]) {
+	const cache = await caches.open(assetsCacheName);
+	const requests = assets.map((asset) => cache.match(asset)!);
+	return await Promise.all(requests);
+}
+
+async function responseToBitmap(response: Response) {
+	const blob = await response.blob();
+	const bitmap = await createImageBitmap(blob);
+	return bitmap;
+}
 
 self.addEventListener("activate", (e) => {
 	const event = e as ExtendableEvent;
@@ -24,13 +48,8 @@ self.addEventListener("activate", (e) => {
 
 	event.waitUntil(
 		(async () => {
-			console.log("[Service Worker] Loading assets");
-			baseTex = await fetch("assets/sprite/base.png")
-				.then((r) => r.blob())
-				.then((b) => createImageBitmap(b));
-			partTex = await fetch("assets/sprite/parts.png")
-				.then((r) => r.blob())
-				.then((b) => createImageBitmap(b));
+			await cacheAssets(["assets/sprite/base.png", "assets/sprite/parts.png"]);
+			console.log("[Service Worker] Cached assets");
 		})(),
 	);
 });
@@ -47,7 +66,15 @@ self.addEventListener("fetch", (e) => {
 				console.log("[Service Worker] Generating sprite");
 
 				const seed = url.searchParams.get("seed")!;
+
+				const assets = await retrieveAssets([
+					"assets/sprite/base.png",
+					"assets/sprite/parts.png",
+				]);
+				const baseTex = await responseToBitmap(assets[0]!);
+				const partTex = await responseToBitmap(assets[1]!);
 				const spriteBlob = await buildGenerator(baseTex, partTex)(seed);
+
 				return new Response(spriteBlob, {
 					headers: {
 						"Content-Type": "image/png",
