@@ -1,4 +1,4 @@
-import { Assets } from "pixi.js";
+import { Assets, Container } from "pixi.js";
 import { CompositeTilemap } from "@pixi/tilemap";
 import { useApp } from "@pixi/react";
 import { useEffect } from "react";
@@ -13,10 +13,13 @@ export const TileMap = ({ xOffset, yOffset }: Props) => {
 	// yOffset = yOffset ?? 0;
 
 	const app = useApp();
+	const container = new Container();
 
 	useEffect(() => {
+		app.stage.addChild(container);
+
 		const tilemap = new CompositeTilemap();
-		app.stage.addChild(tilemap);
+		container.addChild(tilemap);
 
 		// Set up tilemap
 		(async () => {
@@ -42,10 +45,16 @@ export const TileMap = ({ xOffset, yOffset }: Props) => {
 		})();
 
 		return () => {
-			app.stage.removeChild(tilemap);
+			app.stage?.removeChild(container);
 			tilemap.destroy();
 		};
 	}, [app]);
+
+	useEffect(() => {
+		container.x = xOffset;
+		container.y = yOffset;
+		app.render();
+	}, [xOffset, yOffset]);
 
 	return null;
 };
