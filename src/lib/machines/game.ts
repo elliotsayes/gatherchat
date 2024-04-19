@@ -44,6 +44,18 @@ const movementBounds = {
 	},
 } as const;
 
+export function isValidPosition(position: { x: number; y: number }) {
+	const insideBounds =
+		position.x >= movementBounds.x.min &&
+		position.x <= movementBounds.x.max &&
+		position.y >= movementBounds.y.min &&
+		position.y <= movementBounds.y.max;
+
+	const onTile = position.x % 2 === 0 && position.y % 2 === 0;
+
+	return insideBounds && !onTile;
+}
+
 export const gameMachine = setup({
 	schemas: {
 		context: {} as {
@@ -108,15 +120,7 @@ export const gameMachine = setup({
 				desiredDirection,
 			);
 
-			const insideBounds =
-				testPosition.x >= movementBounds.x.min &&
-				testPosition.x <= movementBounds.x.max &&
-				testPosition.y >= movementBounds.y.min &&
-				testPosition.y <= movementBounds.y.max;
-
-			const onTile = testPosition.x % 2 === 0 && testPosition.y % 2 === 0;
-
-			return insideBounds && !onTile;
+			return isValidPosition(testPosition);
 		},
 		isMovementQueued: ({ context }) => {
 			return context.queuedMovement !== undefined;
