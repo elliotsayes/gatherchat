@@ -27,7 +27,7 @@ function Home() {
 				/>
 				<button onClick={() => setSeed(randomSeed())}>Random</button>
 				<br />
-				<img src={`/api/sprite/generate?seed=${seed}`} width={400} style={{"image-rendering": "pixelated"}}></img>
+				<img src={`/api/sprite/generate?seed=${seed}`} width={400} style={{"imageRendering": "pixelated"}}></img>
 				<br />
 				<PixiTest seed={seed} />
 			</div>
