@@ -24,25 +24,22 @@ export const TileMap = ({ xOffset, yOffset }: Props) => {
 
 		// Set up tilemap
 		(async () => {
-			Assets.add({ alias: 'atlas', src: 'src/assets/tiles/atlas.json' });
-			await Assets.load(['atlas']);
+			Assets.add({ alias: "atlas", src: "src/assets/tiles/atlas.json" });
+			await Assets.load(["atlas"]);
 
 			tilemap.clear();
 
 			const size = 32;
 			// if you are too lazy, just specify filename and pixi will find it in cache
-			for (let i = 0; i < 7; i++)
-				{
-						for (let j = 0; j < 5; j++)
-						{
-								tilemap.tile('grass.png', i * size, j * size);
+			for (let i = 0; i < 7; i++) {
+				for (let j = 0; j < 5; j++) {
+					tilemap.tile("grass.png", i * size, j * size);
 
-								if (i % 2 === 1 && j % 2 === 1)
-								{
-										tilemap.tile('tough.png', i * size, j * size);
-								}
-						}
+					if (i % 2 === 1 && j % 2 === 1) {
+						tilemap.tile("tough.png", i * size, j * size);
+					}
 				}
+			}
 		})();
 
 		return () => {

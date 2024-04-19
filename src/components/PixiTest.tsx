@@ -5,7 +5,7 @@ import { Tilemap3 } from "./TileMap3";
 
 type Props = {
 	seed: string;
-}
+};
 
 export const PixiTest = ({ seed }: Props) => {
 	const [xOffset, setXOffset] = useState(100);
@@ -13,7 +13,13 @@ export const PixiTest = ({ seed }: Props) => {
 	return (
 		<>
 			<div>
-				<input type="range" min={0} max={200} value={xOffset} onChange={(e) => setXOffset(parseInt(e.target.value))} />
+				<input
+					type="range"
+					min={0}
+					max={200}
+					value={xOffset}
+					onChange={(e) => setXOffset(parseInt(e.target.value))}
+				/>
 				<p>X Offset: {xOffset}</p>
 			</div>
 			<Stage options={{ background: 0xffffff, width: 800, height: 600 }}>
@@ -28,8 +34,7 @@ export const PixiTest = ({ seed }: Props) => {
 					<Avatar seed={"a100d050c080204"} animationName="idle" />
 				</Container>
 
-				<Container x={xOffset} y={300}>
-				</Container>
+				<Container x={xOffset} y={300}></Container>
 
 				<Container x={400} y={270}>
 					<Avatar seed={seed} animationName="run" scale={6} />

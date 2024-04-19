@@ -15,7 +15,9 @@ export const Avatar = ({ seed, animationName, scale, flipX }: Props) => {
 
 	const transform = useMemo(() => {
 		const transform = new Transform();
-		transform.setFromMatrix(new Matrix((flipX ? -1 : 1) * scale, 0, 0, scale, 0, 0));
+		transform.setFromMatrix(
+			new Matrix((flipX ? -1 : 1) * scale, 0, 0, scale, 0, 0),
+		);
 		return transform;
 	}, [scale, flipX]);
 
@@ -58,7 +60,7 @@ export const Avatar = ({ seed, animationName, scale, flipX }: Props) => {
 				anchor={{ x: 0.5, y: 0.5 }}
 				transform={transform}
 			/>
-		)
+		);
 	}
 
 	return (
