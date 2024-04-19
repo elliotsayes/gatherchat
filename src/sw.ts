@@ -25,10 +25,10 @@ self.addEventListener("activate", (e) => {
 	event.waitUntil(
 		(async () => {
 			console.log("[Service Worker] Loading assets");
-			baseTex = await fetch("src/assets/sprite/base.png")
+			baseTex = await fetch("assets/sprite/base.png")
 				.then((r) => r.blob())
 				.then((b) => createImageBitmap(b));
-			partTex = await fetch("src/assets/sprite/parts.png")
+			partTex = await fetch("assets/sprite/parts.png")
 				.then((r) => r.blob())
 				.then((b) => createImageBitmap(b));
 		})(),

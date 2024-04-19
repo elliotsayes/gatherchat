@@ -13,7 +13,7 @@ export const Tilemap3 = PixiComponent("TileMap3", {
 		return new CompositeTilemap();
 	},
 	didMount: async (instance) => {
-		Assets.add({ alias: "atlas", src: "src/assets/tiles/atlas.json" });
+		Assets.add({ alias: "atlas", src: "assets/tiles/atlas.json" });
 		await Assets.load(["atlas"]);
 
 		instance.clear();
