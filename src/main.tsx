@@ -4,7 +4,7 @@ import App from "./App.tsx";
 import "./index.css";
 import { loadSw } from "./loadSw";
 
-await loadSw();
+loadSw();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>

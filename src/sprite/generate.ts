@@ -40,7 +40,7 @@ export function buildGenerator(
 	function deserialize(e: string) {
 		return e
 			.slice(1)
-			.match(/.{1,2}/g)
+			.match(/.{1,2}/g)!
 			.map((e) => parseInt(e, 16));
 	}
 
@@ -69,16 +69,13 @@ export function buildGenerator(
 		let c = false;
 		if (t == 4 && r == 2) {
 			if (a == 1) {
-				if (a == 2 && e == 2) {
-					draw16(ctx, e * 16, a * 24 + 0, partTex, 4, 4);
-					c = true;
-				} else if (a == 1 && e == 1) {
+				if (e == 1) {
 					draw16(ctx, e * 16, a * 24 + 1, partTex, 4, 4);
 					c = true;
-				} else if (a == 1 && e == 2) {
+				} else if (e == 2) {
 					draw16(ctx, e * 16, a * 24 + 2, partTex, 5, 4);
 					c = true;
-				} else if (a == 1 && e == 3) {
+				} else if (e == 3) {
 					draw16(ctx, e * 16, a * 24 + 1, partTex, 4, 4);
 					c = true;
 				}
@@ -147,7 +144,7 @@ export function buildGenerator(
 	function recalcVal(
 		ctx: OffscreenCanvasRenderingContext2D,
 		selectionIndex: number,
-		a: number,
+		_: number,
 		t: number,
 		r: number[][],
 	) {
