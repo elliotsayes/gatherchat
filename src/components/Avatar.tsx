@@ -17,8 +17,10 @@ export const Avatar = ({
 }: Props) => {
 	const transform = useMemo(() => {
 		if (flipX) {
-			const scale = typeof animatedSpriteProps?.scale === "number"
-				? animatedSpriteProps.scale : 4;
+			const scale =
+				typeof animatedSpriteProps?.scale === "number"
+					? animatedSpriteProps.scale
+					: 4;
 
 			const transform = new Transform();
 			transform.setFromMatrix(
@@ -69,7 +71,7 @@ export const Avatar = ({
 			animationSpeed={0.2}
 			// isSprite={false}
 			autoUpdate={true}
-			{...(transform === undefined? {} : {transform})}
+			{...(transform === undefined ? {} : { transform })}
 			{...animatedSpriteProps}
 		/>
 	);

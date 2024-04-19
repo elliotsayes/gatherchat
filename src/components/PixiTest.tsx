@@ -80,7 +80,7 @@ export const PixiTest = ({ seed }: Props) => {
 											isPlaying={true}
 											eventMode={"dynamic"}
 											onclick={() => {
-												alert("It's JOHN CENA!!!")
+												alert("It's JOHN CENA!!!");
 											}}
 											onmouseenter={() => {
 												setEmphasis(true);
