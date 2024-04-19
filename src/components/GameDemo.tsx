@@ -1,4 +1,5 @@
 import { randomSeed } from "../sprite/edit";
+import { CharacterCreator } from "./CharacterCreator";
 import { Game } from "./Game";
 
 function generateOtherToon(i: number) {
@@ -28,18 +29,21 @@ const demoState = {
 
 export const GameDemo = () => {
 	return (
-		<Game
-			aoStateProp={demoState}
-			onSelectToon={(toonId) => {
-				console.info("onSelectToon", toonId);
-			}}
-			onViewFeed={() => {
-				alert("onViewFeed");
-			}}
-			onSavePosition={async (position) => {
-				await new Promise((resolve) => setTimeout(resolve, 2000));
-				return confirm(`onSavePosition: ${JSON.stringify(position)}`);
-			}}
-		/>
+		<>
+			<CharacterCreator />
+			<Game
+				aoStateProp={demoState}
+				onSelectToon={(toonId) => {
+					console.info("onSelectToon", toonId);
+				}}
+				onViewFeed={() => {
+					alert("onViewFeed");
+				}}
+				onSavePosition={async (position) => {
+					await new Promise((resolve) => setTimeout(resolve, 2000));
+					return confirm(`onSavePosition: ${JSON.stringify(position)}`);
+				}}
+			/>
+		</>
 	);
 };
