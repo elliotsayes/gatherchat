@@ -19,6 +19,7 @@ export const TileMap = ({ xOffset, yOffset }: Props) => {
 		app.stage.addChild(container);
 
 		const tilemap = new CompositeTilemap();
+		tilemap.scale.set(2);
 		container.addChild(tilemap);
 
 		// Set up tilemap
@@ -53,7 +54,6 @@ export const TileMap = ({ xOffset, yOffset }: Props) => {
 	useEffect(() => {
 		container.x = xOffset;
 		container.y = yOffset;
-		app.render();
 	}, [xOffset, yOffset]);
 
 	return null;
