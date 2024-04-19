@@ -21,16 +21,16 @@ type Props = {
 	aoStateProp: AoState;
 	onSelectToon: (toonId: string) => void;
 	onViewFeed: () => void;
+	onSavePosition: () => Promise<boolean>;
 };
 
 export const Game = ({
 	aoStateProp: aoState,
 	onSelectToon,
 	onViewFeed,
+	onSavePosition,
 }: Props) => {
-	const [current, send] = useMachine(gameMachine, {
-		id: "game",
-	});
+	const [current, send] = useMachine(gameMachine);
 
 	const veryTransparent = useMemo(() => new AlphaFilter(0.3), []);
 	const slightlyTransparent = useMemo(() => new AlphaFilter(0.6), []);
@@ -70,7 +70,7 @@ export const Game = ({
 						}}
 					>
 						{(props) => (
-							<Container anchor={{ x: 0.5, y: 0.5 }} {...props}>
+							<Container anchor={{ x: 0.5, y: 0.5 }} filters={current.matches("saving") ? [slightlyTransparent] : []} {...props}>
 								<Tilemap3 />
 								<InteractableSprite
 									image={`assets/sprite/board.png`}
@@ -160,6 +160,24 @@ export const Game = ({
 							scale={3}
 							isPlaying={true}
 						/>
+						{current.matches({
+							roaming: {
+								save: "idle",
+							},
+						}) && (
+							<InteractableSprite
+								image={`assets/sprite/save.png`}
+								scale={1.5}
+								onclick={async () => {
+									send({ type: "SAVE_START" });
+									await onSavePosition();
+									send({ type: "SAVE_END" });
+								}}
+								anchor={{ x: 0.5, y: 0.5 }}
+								filters={[slightlyTransparent]}
+								y={20}
+							/>
+						)}
 					</Container>
 				)}
 			</Stage>

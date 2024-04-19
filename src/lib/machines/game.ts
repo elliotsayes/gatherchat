@@ -128,6 +128,7 @@ export const gameMachine = setup({
 	},
 }).createMachine({
 	/** @xstate-layout N4IgpgJg5mDOIC5QAoC2BDAxgCwJYDswBKAOgNwBdd0AbAYgG0AGAXUVAAcB7WS3L-OxAAPRAEYAzAFYSTAJwAmACxKJCgOxKAHFqUKAbABoQAT0RaFJfVJtz9a9XKdK5AX1fG0WPIVKwwFACuHIysQty8VAJCoghiUpYSYgpSTErqYkxJNgrGZggSeiRiSlJiWvaKLununhg4BMQkAE5c6KgEUCSoXABuYKhg+BRkEDRgdADSAKIAmgD6AAoAStMAymvTACLMbEggEXzR+7EKTDLWOlIS+lrnChJaEnmI6loy6uoKYvpKt7+lfS1EBeBq+FptDr4Lo9fqDYajcahPacHhHQQnRBnC5SK43O4JR7PUzmLRiWR-RQSRTJCRMMTA0E+Jqtdqdbp9AZDEawzpTOZLVYbba7cJoqIY0CxKTqfQkT4VfRMdS4hRPF4ITRaEjKeRSVRKeTpLSM+rM0isqEwznwnl9PnCWAUdAUMAkdAAM1dzWQZyYRDoTMaFsh7NhXIRvOhov2hwlMUQEnUEh1mTkqX0YmT+jV6g1ye1cnSckKbwMaQUpu8wYhbOhZGGYGaWAlsEREwAKgB5LsAOXmmwAMtMAMIdkVhWPi-iSkRYrLFZIqfRKxw0qQasQlSxZL5yeJJpy4qtglmh+sEb0tmdty9N6-QuiO52u91epvITJMf2Bs01y3snezaYK2DZXiBnQxqikQzgmCAaCm6TqEwGgVFcTArpueqpnSFgZDmJRAsC+BcBAcBCEGvhijBxxSogAC0ChyCQ+q-MqyopEktwavRMhOPxcgYd+CSpJWHggn+4LkFQtDUeicF6BqZIkGoTE-MospfDmJ7miQ-hBBwcnxpiCAyhqhRMCQZIpBhSTfPobw6f+55QEZsEmeUJClNIiiKJotxqBqUi-CpKHKlIJblBUDLiZRZ51tacLcm5tFzgg+hyBq1jkjmLiOLiuF-E54IAfW4a2u2KWzrEW55iSCB3HKPzpH8KRyBUybFfFVocklkb2tCVVwWU2plBlSiZNoGHJkp2gsfEGU2Oc1IuF1IYJWB94QQI8BTjR1WICuXnXBFTEaH8Ty5PVX7qFZglZncapJMka21j1QHXjtlV7fJHklMdPlnf5l2bpISjFA8K4oW8nxFq9pVdB9234LejbAVQg0-cZdEFEWOqqU9MrJHYRjXZkMiGoaXxiCWvxw+4rhAA */
+	id: "game",
 	context: {
 		currentPosition: {
 			x: 5,
@@ -201,6 +202,38 @@ export const gameMachine = setup({
 							exit: "clearSelectedToon",
 						},
 					},
+				},
+				save: {
+					initial: "cooldown",
+					states: {
+						cooldown: {
+							after: {
+								2500: {
+									target: "idle",
+								},
+							},
+						},
+						idle: {
+							on: {
+								SAVE_START: {
+									target: "#game.saving",
+								},
+							},
+						},
+					},
+					on: {
+						KEY_PRESSED: {
+							target: "save.cooldown",
+						},
+					}
+				},
+			},
+		},
+		saving: {
+			tags: ["SHOW_WORLD", "SHOW_TOON", "SHOW_LOADING"],
+			on: {
+				SAVE_END: {
+					target: "roaming",
 				},
 			},
 		},

@@ -30,11 +30,15 @@ export const GameDemo = () => {
 	return (
 		<Game
 			aoStateProp={demoState}
-			onSelectToon={function (toonId: string): void {
+			onSelectToon={(toonId) => {
 				console.info("onSelectToon", toonId);
 			}}
-			onViewFeed={function (): void {
+			onViewFeed={() => {
 				alert("onViewFeed");
+			}}
+			onSavePosition={async () => {
+				await new Promise((resolve) => setTimeout(resolve, 2000));
+				return confirm("onSavePosition");
 			}}
 		/>
 	);
