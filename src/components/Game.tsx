@@ -63,11 +63,12 @@ export const Game = ({ aoStateProp: aoState }: Props) => {
 											y={toon.savedPosition.y * tileSizeY + tileSizeY / 2}
 											isPlaying={true}
 											animationName={"idle"}
-											animationSpeed={current.context.selectedToonId === toon.id ? 1 : 0.05}
-											onclick={() => {
-                        console.log("clicked toon");
-                        send({ type: "TOON_SELECTED", toonId: toon.id })
-                      }}
+											animationSpeed={
+												current.context.selectedToonId === toon.id ? 0.2 : 0.05
+											}
+											onclick={() =>
+												send({ type: "TOON_SELECTED", toonId: toon.id })
+											}
 										/>
 									))}
 							</Container>
