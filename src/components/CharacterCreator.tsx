@@ -13,6 +13,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { toTitleCase } from "@/lib/utils";
 
 interface CharacterCreatorProps {
 	initialSeed?: string;
@@ -87,7 +88,7 @@ export const CharacterCreator = ({
 						{colorCategories.map((category, index) => (
 							<OptionSlider
 								key={category}
-								label={category}
+								label={toTitleCase(category)}
 								valueCount={colorMaxs[index]}
 								value={colorIndicies[index]}
 								onChange={(value) => {
