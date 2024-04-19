@@ -54,18 +54,16 @@ export const Avatar = ({
 		})();
 	}, [seed, setSpritesheet, lastUpdated]);
 
-	const [textures, setTextures] = useState<Texture[]>();
-	useEffect(() => {
+	const textures = useMemo(() => {
 		if (!spritesheet) return;
-		setTextures(spritesheet.animations[animationName]);
-		lastUpdated.current = Date.now();
-	}, [setTextures, spritesheet, animationName]);
+		return spritesheet.animations[animationName]
+	}, [spritesheet, animationName]);
 
 	if (!textures) return null;
 
 	return (
 		<AnimatedSprite
-			key={lastUpdated.current}
+			key={`${lastUpdated.current}-${animationName}`}
 			textures={textures}
 			anchor={{ x: 0.5, y: 0.5 }}
 			animationSpeed={0.2}
