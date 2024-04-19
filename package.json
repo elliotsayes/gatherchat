@@ -6,23 +6,43 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "test": "bun test",
+    "lint": "bunx @biomejs/biome format --write ./src",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@pixi/react": "^7.1.2",
+    "@pixi/react-animated": "^7.1.2",
+    "@pixi/tilemap": "4",
+    "@radix-ui/react-slider": "^1.1.2",
+    "@radix-ui/react-slot": "^1.0.2",
+    "@react-spring/web": "^9.7.3",
+    "@tanstack/react-query": "5.29.0",
+    "@xstate/react": "^4.1.1",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "lucide-react": "^0.372.0",
+    "pixi.js": "7",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7",
+    "xstate": "^5.11.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.7.0",
+    "@types/bun": "^1.1.0",
+    "@types/node": "^20.12.7",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.6",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
     "typescript": "^5.2.2",
-    "vite": "^5.2.0"
+    "vite": "^5.2.0",
+    "vite-plugin-pwa": "^0.19.8"
   }
 }
