@@ -1,5 +1,5 @@
 import { Texture, Spritesheet, SCALE_MODES, Transform, Matrix } from "pixi.js";
-import { AnimatedSprite } from "@pixi/react";
+import { AnimatedSprite } from "@pixi/react-animated";
 import { animationNames, generateSpriteData } from "../sprite/render";
 import { useEffect, useMemo, useRef, useState } from "react";
 

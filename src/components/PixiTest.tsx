@@ -1,8 +1,11 @@
-import { Stage, Container } from "@pixi/react";
 import { Avatar } from "./Avatar";
 import { useState } from "react";
-import { Tilemap3 } from "./TileMap3";
+// import { Tilemap3 } from "./TileMap3";
 import NamedAvatar from "./NamedAvatar";
+import { Stage } from "@pixi/react";
+import { Container } from "@pixi/react-animated";
+import { Spring } from "@react-spring/web";
+import { Tilemap3 } from "./TileMap3";
 
 type Props = {
 	seed: string;
@@ -31,7 +34,12 @@ export const PixiTest = ({ seed }: Props) => {
 						e.preventDefault();
 						// e.stopPropagation();
 						console.log("Key pressed: " + e.key);
-						if (e.key === "ArrowLeft" || e.key === "ArrowRight" || e.key === "ArrowUp" || e.key === "ArrowDown") {
+						if (
+							e.key === "ArrowLeft" ||
+							e.key === "ArrowRight" ||
+							e.key === "ArrowUp" ||
+							e.key === "ArrowDown"
+						) {
 							setIsMoving(true);
 							setTimeout(() => {
 								setIsMoving(false);
@@ -56,22 +64,30 @@ export const PixiTest = ({ seed }: Props) => {
 					}
 				}}
 			>
-				<Container x={xOffset} y={yOffset}>
-					<Tilemap3 />
-					<Container x={100} y={80}>
-						<NamedAvatar
-							name="Joooooooohn Cena"
-							seed={"a100d050c080204"}
-							animationName="idle"
-							isPlaying={true}
-						/>
-					</Container>
-				</Container>
-
-				<Container x={xOffset} y={300}></Container>
+				<Spring to={{ x: xOffset, y: yOffset }}>
+					{(props) => (
+						<Container {...props}>
+							<Tilemap3 />
+							<Container x={100} y={80}>
+								<NamedAvatar
+									name="Joooooooohn Cena"
+									seed={"a100d050c080204"}
+									animationName="idle"
+									isPlaying={true}
+								/>
+							</Container>
+						</Container>
+					)}
+				</Spring>
 
 				<Container x={400} y={270}>
-					<Avatar seed={seed} animationName={isMoving ? "run" : "idle"} flipX={(direction === "left" || direction === "down")} scale={4} isPlaying={true} />
+					<Avatar
+						seed={seed}
+						animationName={isMoving ? "run" : "idle"}
+						flipX={direction === "left" || direction === "down"}
+						scale={4}
+						isPlaying={true}
+					/>
 				</Container>
 			</Stage>
 		</>
