@@ -23,10 +23,10 @@ export const AvatarStandalone = ({
 				options={{
 					background: background ?? 0xffffff,
 				}}
-        width={renderWidth}
-        height={renderHeight}
+				width={renderWidth}
+				height={renderHeight}
 			>
-				<Avatar scale={scale} {...rest} anchor={{x: 0, y: 0}} />
+				<Avatar scale={scale} {...rest} anchor={{ x: 0, y: 0 }} />
 			</Stage>
 		</>
 	);
