@@ -81,7 +81,7 @@ export const Game = ({
 								<Tilemap3 />
 								{current.hasTag("SHOW_OBJECTS") && (
 									<InteractableSprite
-										image={`assets/sprite/board.png`}
+										image="assets/sprite/board.png"
 										scale={2}
 										anchor={{ x: 0.5, y: 0.5 }}
 										onclick={() => onViewFeed()}

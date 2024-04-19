@@ -13,7 +13,7 @@ export const AvatarStandalone = ({
 	background,
 	...rest
 }: AvatarStandaloneProps) => {
-	const { scale, seed } = rest;
+	const { scale } = rest;
 
 	const renderWidth = spriteWidth * scale;
 	const renderHeight = spriteHeight * scale;

@@ -69,15 +69,15 @@ const defaultPosition = {
 };
 
 export const gameMachine = setup({
-	schemas: {
+	types: {
 		context: {} as {
 			currentPosition: {
 				x: number;
 				y: number;
 			};
 			currentDirection: FaceDirection;
-			queuedMovement: MovementDirection | undefined;
-			selectedToonId: string | undefined;
+			queuedMovement?: MovementDirection;
+			selectedToonId?: string;
 		},
 		events: {} as
 			| {
@@ -87,39 +87,56 @@ export const gameMachine = setup({
 			| {
 					type: "TOON_SELECTED";
 					toonId: string;
+			  }
+			| {
+					type: "SAVE_START";
+			  }
+			| {
+					type: "SAVE_END";
 			  },
 		input: {} as {
 			position?: {
 				x: number;
 				y: number;
 			};
+			direction?: FaceDirection;
 		},
 	},
 	actions: {
 		queueMovement: assign({
-			queuedMovement: ({ event }) => keyToMovementMap[event.key as MovementKey],
+			queuedMovement: ({ event }) => {
+				if (event.type !== "KEY_PRESSED") throw new Error("Invalid event type");
+				return keyToMovementMap[event.key as MovementKey];
+			},
 		}),
 		executeQueuedMovement: assign(({ context }) => {
 			const { currentPosition, queuedMovement } = context;
 
+			if (!queuedMovement) {
+				return context;
+			}
+
 			const nextPosition = calculateNextPosition(
 				currentPosition,
-				queuedMovement!,
+				queuedMovement,
 			);
 
-			const directionUpdate = faceDirections.includes(queuedMovement)
-				? { currentDirection: queuedMovement }
-				: {};
+			const newFaceDirection =
+				faceDirections.filter((x) => x === queuedMovement)[0] ?? faceDirections;
 
 			return {
 				...context,
 				currentPosition: nextPosition,
-				...directionUpdate,
+				currentDirection: newFaceDirection,
 				queuedMovement: undefined,
 			};
 		}),
 		assignSelectedToon: assign({
-			selectedToonId: ({ event }) => event.toonId,
+			selectedToonId: ({ event }) => {
+				if (event.type === "TOON_SELECTED") {
+					return event.toonId;
+				}
+			},
 		}),
 		clearSelectedToon: assign({
 			selectedToonId: undefined,
@@ -127,9 +144,13 @@ export const gameMachine = setup({
 	},
 	guards: {
 		isMovementInput: ({ event }) => {
-			return movementKeys.includes(event.key);
+			if (event.type !== "KEY_PRESSED") throw new Error("Invalid event type");
+
+			return movementKeys.filter((x) => x === event.key).length > 0;
 		},
 		canMove: ({ context, event }) => {
+			if (event.type !== "KEY_PRESSED") throw new Error("Invalid event type");
+
 			const { currentPosition } = context;
 			const desiredDirection = keyToMovementMap[event.key as MovementKey];
 
