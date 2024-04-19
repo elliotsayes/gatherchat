@@ -23,7 +23,18 @@ export const PixiTest = ({ seed }: Props) => {
 				/>
 				<p>X Offset: {xOffset}</p>
 			</div>
-			<Stage options={{ background: 0xffffff, width: 800, height: 600 }}>
+			<Stage
+				options={{ background: 0xffffff, width: 800, height: 600 }}
+				style={{ outline: "none" }}
+				tabIndex={0}
+				onKeyDown={(e) => {
+					if (e.key != "Tab") {
+						e.preventDefault();
+						// e.stopPropagation();
+						console.log("Key pressed: " + e.key);
+					}
+				}}
+			>
 				<Container x={xOffset} y={10}>
 					<Tilemap3 />
 					<Container x={100} y={80}>
