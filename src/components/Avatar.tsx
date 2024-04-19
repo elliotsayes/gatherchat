@@ -17,7 +17,7 @@ export const Avatar = ({ seed, animationName, scale, flipX }: Props) => {
 		const transform = new Transform();
 		transform.setFromMatrix(new Matrix((flipX ? -1 : 1) * scale, 0, 0, scale, 0, 0));
 		return transform;
-	}, [flipX]);
+	}, [scale, flipX]);
 
 	const [spritesheet, setSpritesheet] = useState<Spritesheet | undefined>();
 	const lastUpdated = useRef(0);
