@@ -37,13 +37,6 @@ export function buildGenerator(
 		return await srcCanvas.convertToBlob({ type: "image/png" });
 	}
 
-	function deserialize(e: string) {
-		return e
-			.slice(1)
-			.match(/.{1,2}/g)!
-			.map((e) => parseInt(e, 16));
-	}
-
 	function draw16(
 		ctx: OffscreenCanvasRenderingContext2D,
 		a: number,
@@ -194,6 +187,13 @@ export function buildGenerator(
 	}
 
 	return generate;
+}
+
+export function deserialize(e: string): number[] {
+	return e
+		.slice(1)
+		.match(/.{1,2}/g)!
+		.map((e) => parseInt(e, 16));
 }
 
 const HEAD_ORIGINS = [

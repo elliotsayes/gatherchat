@@ -30,7 +30,7 @@ const demoState = {
 export const GameDemo = () => {
 	return (
 		<>
-			<CharacterCreator />
+			<CharacterCreator initialSeed="a09010903080a02" />
 			<Game
 				aoStateProp={demoState}
 				onSelectToon={(toonId) => {
