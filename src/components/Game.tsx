@@ -87,6 +87,7 @@ export const Game = ({ aoStateProp: aoState }: Props) => {
 									? "run"
 									: "idle"
 							}
+              flipX={current.context.currentDirection === "left"}
 							scale={3}
 							isPlaying={true}
 						/>

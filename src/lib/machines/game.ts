@@ -1,8 +1,5 @@
 import { setup, assign } from "xstate";
 
-export const movementDirections = ["up", "down", "left", "right"] as const;
-export type MovementDirection = (typeof movementDirections)[number];
-
 export const movementKeys = [
 	"ArrowUp",
 	"ArrowDown",
@@ -10,6 +7,12 @@ export const movementKeys = [
 	"ArrowRight",
 ] as const;
 export type MovementKey = (typeof movementKeys)[number];
+
+export const movementDirections = ["up", "down", "left", "right"] as const;
+export type MovementDirection = (typeof movementDirections)[number];
+
+export const faceDirections = ["left", "right"] as const;
+export type FaceDirection = (typeof faceDirections)[number];
 
 const keyToMovementMap: Record<MovementKey, MovementDirection> = {
 	ArrowUp: "up",
@@ -25,6 +28,7 @@ export const gameMachine = setup({
 				x: number;
 				y: number;
 			};
+      currentDirection: FaceDirection,
 			queuedMovement: MovementDirection | undefined;
 		},
 		events: {} as {
@@ -36,22 +40,30 @@ export const gameMachine = setup({
 		queueMovement: assign({
 			queuedMovement: ({ event }) => keyToMovementMap[event.key as MovementKey],
 		}),
-		executeQueuedMovement: assign({
-			queuedMovement: undefined,
-			currentPosition: ({ context }) => {
-				const { queuedMovement } = context;
-				const xDelta =
-					queuedMovement === "left" ? -1 : queuedMovement === "right" ? 1 : 0;
-				const yDelta =
-					queuedMovement === "up" ? -1 : queuedMovement === "down" ? 1 : 0;
+		executeQueuedMovement: assign(({context}) => {
+      const { queuedMovement } = context;
+      const xDelta =
+        queuedMovement === "left" ? -1 : queuedMovement === "right" ? 1 : 0;
+      const yDelta =
+        queuedMovement === "up" ? -1 : queuedMovement === "down" ? 1 : 0;
 
-				const { x, y } = context.currentPosition;
+      const { x, y } = context.currentPosition;
 
-				return {
-					x: x + xDelta,
-					y: y + yDelta,
-				};
-			},
+      const currentPosition = {
+        x: x + xDelta,
+        y: y + yDelta,
+      };
+
+      const directionUpdate = faceDirections.includes(queuedMovement)
+        ? { currentDirection: queuedMovement }
+        : {};
+
+      return {
+        ...context,
+        currentPosition,
+        ...directionUpdate,
+        queuedMovement: undefined,
+      }
 		}),
 	},
 	guards: {
