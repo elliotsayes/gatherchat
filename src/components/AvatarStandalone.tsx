@@ -21,7 +21,6 @@ export const AvatarStandalone = ({
 	return (
 		<>
 			<Stage
-				key={seed}
 				options={{
 					background: background ?? 0xffffff,
 				}}

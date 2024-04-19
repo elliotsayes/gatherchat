@@ -51,8 +51,9 @@ export const Avatar = ({
 			await spritesheet.parse();
 
 			setSpritesheet(spritesheet);
+			lastUpdated.current = Date.now();
 		})();
-	}, [seed, setSpritesheet, lastUpdated]);
+	}, [seed]);
 
 	const textures = useMemo(() => {
 		if (!spritesheet) return;
@@ -63,7 +64,7 @@ export const Avatar = ({
 
 	return (
 		<AnimatedSprite
-			key={`${seed}-${animationName}-${lastUpdated.current}`}
+			key={`${lastUpdated.current}-${animationName}-${flipX}`}
 			textures={textures}
 			autoUpdate={true}
 			animationSpeed={0.2}
