@@ -72,14 +72,18 @@ export const Game = ({
 						{(props) => (
 							<Container anchor={{ x: 0.5, y: 0.5 }} filters={current.matches("saving") ? [slightlyTransparent] : []} {...props}>
 								<Tilemap3 />
-								<InteractableSprite
-									image={`assets/sprite/board.png`}
-									scale={2}
-									anchor={{ x: 0.5, y: 0.5 }}
-									onclick={() => onViewFeed()}
-									x={tileSizeX * 4.5}
-									y={tileSizeY * 0.5}
-								/>
+								{
+									current.hasTag("SHOW_OBJECTS") && (
+										<InteractableSprite
+											image={`assets/sprite/board.png`}
+											scale={2}
+											anchor={{ x: 0.5, y: 0.5 }}
+											onclick={() => onViewFeed()}
+											x={tileSizeX * 4.5}
+											y={tileSizeY * 0.5}
+										/>
+									)
+								}
 								{current.hasTag("SHOW_OTHER_TOONS") &&
 									aoState.otherToons.map((toon) => {
 										// check if within two tiles

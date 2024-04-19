@@ -148,7 +148,7 @@ export const gameMachine = setup({
 			},
 		},
 		roaming: {
-			tags: ["SHOW_WORLD", "SHOW_OTHER_TOONS", "SHOW_TOON"],
+			tags: ["SHOW_WORLD", "SHOW_OBJECTS", "SHOW_OTHER_TOONS", "SHOW_TOON"],
 			type: "parallel",
 			states: {
 				movement: {
