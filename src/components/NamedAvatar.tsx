@@ -15,7 +15,7 @@ const NamedAvatar: React.FC<NamedAvatarProps> = ({ name, x, y, ...props }) => {
 			<Text
 				text={name}
 				anchor={{ x: 0.5, y: 0.5 }}
-				y={-25}
+				y={-35}
 				// style={{
 				// 	dropShadow: true,
 				// 	dropShadowColor: "white",
