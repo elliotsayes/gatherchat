@@ -99,12 +99,18 @@ export const gameMachine = setup({
 
 			const testPosition = calculateNextPosition(currentPosition, desiredDirection);
 
-			return (
+			const insideBounds = (
 				testPosition.x >= movementBounds.x.min &&
 				testPosition.x <= movementBounds.x.max &&
 				testPosition.y >= movementBounds.y.min &&
 				testPosition.y <= movementBounds.y.max
 			);
+
+			const onTile = (
+				(testPosition.x % 2 === 0) && (testPosition.y % 2 === 0)
+			);
+
+			return insideBounds && !onTile;
 		},
 		isMovementQueued: ({ context }) => {
 			return context.queuedMovement !== undefined;
