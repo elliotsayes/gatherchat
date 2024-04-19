@@ -96,9 +96,8 @@ export const Game = ({
 											current.context.currentPosition;
 										const { x: otherX, y: otherY } = toon.savedPosition;
 
-										const distance = 
-											Math.abs(selfX - otherX) +
-											Math.abs(selfY - otherY);
+										const distance =
+											Math.abs(selfX - otherX) + Math.abs(selfY - otherY);
 
 										const withinThreeTiles = distance <= 3;
 
@@ -138,9 +137,7 @@ export const Game = ({
 													animationName={"idle"}
 													animationSpeed={0.05}
 													filters={
-														veryFar
-															? [slightlyTransparent]
-															: [veryTransparent]
+														veryFar ? [slightlyTransparent] : [veryTransparent]
 													}
 												/>
 											);
