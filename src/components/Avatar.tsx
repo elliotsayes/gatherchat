@@ -1,5 +1,5 @@
 import { Texture, Spritesheet, SCALE_MODES, Transform, Matrix } from "pixi.js";
-import { Sprite, AnimatedSprite } from "@pixi/react";
+import { AnimatedSprite } from "@pixi/react";
 import { animationNames, generateSpriteData } from "../sprite/render";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -27,9 +27,9 @@ export const Avatar = ({
 		return transform;
 	}, [scale, flipX]);
 
-	const [spritesheet, setSpritesheet] = useState<Spritesheet | undefined>();
 	const lastUpdated = useRef(0);
 
+	const [spritesheet, setSpritesheet] = useState<Spritesheet | undefined>();
 	useEffect(() => {
 		console.log("Updating spritesheet");
 		(async () => {
@@ -48,26 +48,17 @@ export const Avatar = ({
 			await spritesheet.parse();
 
 			setSpritesheet(spritesheet);
-			lastUpdated.current = Date.now();
 		})();
 	}, [seed, setSpritesheet, lastUpdated]);
 
-	if (!spritesheet) {
-		return null;
-	}
+	const [textures, setTextures] = useState<Texture[]>();
+	useEffect(() => {
+		if (!spritesheet) return;
+		setTextures(spritesheet.animations[animationName]);
+		lastUpdated.current = Date.now();
+	}, [setTextures, spritesheet, animationName]);
 
-	const textures = spritesheet.animations[animationName];
-
-	if (animationName === "no_anim") {
-		return (
-			<Sprite
-				key={lastUpdated.current}
-				texture={textures[0]}
-				anchor={{ x: 0.5, y: 0.5 }}
-				transform={transform}
-			/>
-		);
-	}
+	if (!textures) return null;
 
 	return (
 		<AnimatedSprite

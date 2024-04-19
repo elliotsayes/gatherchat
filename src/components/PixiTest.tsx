@@ -8,21 +8,20 @@ type Props = {
 	seed: string;
 };
 
+const step = 64;
+
+const directions = ["up", "down", "left", "right"] as const;
+type Direction = (typeof directions)[number];
+
 export const PixiTest = ({ seed }: Props) => {
+	const [isMoving, setIsMoving] = useState(false);
+	const [direction, setDirection] = useState<Direction>("right");
+
 	const [xOffset, setXOffset] = useState(50);
+	const [yOffset, setYOffset] = useState(10);
 
 	return (
 		<>
-			<div>
-				<input
-					type="range"
-					min={0}
-					max={200}
-					value={xOffset}
-					onChange={(e) => setXOffset(parseInt(e.target.value))}
-				/>
-				<p>X Offset: {xOffset}</p>
-			</div>
 			<Stage
 				options={{ background: 0xffffff, width: 800, height: 600 }}
 				style={{ outline: "none" }}
@@ -32,10 +31,32 @@ export const PixiTest = ({ seed }: Props) => {
 						e.preventDefault();
 						// e.stopPropagation();
 						console.log("Key pressed: " + e.key);
+						if (e.key === "ArrowLeft" || e.key === "ArrowRight" || e.key === "ArrowUp" || e.key === "ArrowDown") {
+							setIsMoving(true);
+							setTimeout(() => {
+								setIsMoving(false);
+							}, 500);
+						}
+						switch (e.key) {
+							case "ArrowLeft":
+								setDirection("left");
+								setXOffset(xOffset + step);
+								break;
+							case "ArrowRight":
+								setDirection("right");
+								setXOffset(xOffset - step);
+								break;
+							case "ArrowUp":
+								setYOffset(yOffset + step);
+								break;
+							case "ArrowDown":
+								setYOffset(yOffset - step);
+								break;
+						}
 					}
 				}}
 			>
-				<Container x={xOffset} y={10}>
+				<Container x={xOffset} y={yOffset}>
 					<Tilemap3 />
 					<Container x={100} y={80}>
 						<NamedAvatar
@@ -50,16 +71,7 @@ export const PixiTest = ({ seed }: Props) => {
 				<Container x={xOffset} y={300}></Container>
 
 				<Container x={400} y={270}>
-					<Avatar seed={seed} animationName="run" scale={6} isPlaying={true} />
-				</Container>
-
-				<Container x={600} y={300}>
-					<Avatar
-						seed={"a0820050c020602"}
-						animationName="jump"
-						flipX={true}
-						isPlaying={true}
-					/>
+					<Avatar seed={seed} animationName={isMoving ? "run" : "idle"} flipX={(direction === "left" || direction === "down")} scale={4} isPlaying={true} />
 				</Container>
 			</Stage>
 		</>
