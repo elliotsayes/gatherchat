@@ -20,8 +20,8 @@ export const Tilemap3 = PixiComponent("TileMap3", {
 		instance.scale.set(2);
 
 		const size = 32;
-    const xDim = 11;
-    const yDim = 9;
+		const xDim = 11;
+		const yDim = 9;
 
 		// if you are too lazy, just specify filename and pixi will find it in cache
 		for (let x = 0; x < xDim; x++) {
@@ -32,13 +32,13 @@ export const Tilemap3 = PixiComponent("TileMap3", {
 					instance.tile("tough.png", x * size, y * size);
 				}
 
-        if (y === yDim - 1) {
-          instance.tile("brick_wall.png", x * size, y * size);
-        } else if (x === 0 || x === xDim - 1) {
-          instance.tile("brick.png", x * size, y * size);
-        } else if (y === 0) {
-          instance.tile("brick_wall.png", x * size, y * size);
-        }
+				if (y === yDim - 1) {
+					instance.tile("brick_wall.png", x * size, y * size);
+				} else if (x === 0 || x === xDim - 1) {
+					instance.tile("brick.png", x * size, y * size);
+				} else if (y === 0) {
+					instance.tile("brick_wall.png", x * size, y * size);
+				}
 			}
 		}
 	},
