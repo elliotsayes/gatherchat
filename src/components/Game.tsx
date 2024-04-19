@@ -47,9 +47,9 @@ export const Game = ({
 			<Stage
 				options={{
 					background: 0xaaaaaa,
-					width: stageWidth,
-					height: stageHeight,
 				}}
+				width={stageWidth}
+				height={stageHeight}
 				style={{ outline: "none" }}
 				tabIndex={0}
 				onKeyDown={(e) => {
