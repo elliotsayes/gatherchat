@@ -3,14 +3,20 @@ import { Sprite, AnimatedSprite } from "@pixi/react";
 import { animationNames, generateSpriteData } from "../sprite/render";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-type Props = {
+interface Props extends React.ComponentProps<typeof AnimatedSprite> {
 	seed: string;
 	animationName: (typeof animationNames)[number];
 	scale?: number;
 	flipX?: boolean;
-};
+}
 
-export const Avatar = ({ seed, animationName, scale, flipX }: Props) => {
+export const Avatar = ({
+	seed,
+	animationName,
+	scale,
+	flipX,
+	...animatedSpriteProps
+}: Props) => {
 	scale = scale ?? 4;
 
 	const transform = useMemo(() => {
@@ -68,11 +74,11 @@ export const Avatar = ({ seed, animationName, scale, flipX }: Props) => {
 			key={lastUpdated.current}
 			textures={textures}
 			anchor={{ x: 0.5, y: 0.5 }}
-			isPlaying={true}
 			animationSpeed={0.2}
 			// isSprite={false}
 			autoUpdate={true}
 			transform={transform}
+			{...animatedSpriteProps}
 		/>
 	);
 };

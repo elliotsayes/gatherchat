@@ -2,6 +2,7 @@ import { Stage, Container } from "@pixi/react";
 import { Avatar } from "./Avatar";
 import { useState } from "react";
 import { Tilemap3 } from "./TileMap3";
+import NamedAvatar from "./NamedAvatar";
 
 type Props = {
 	seed: string;
@@ -26,18 +27,28 @@ export const PixiTest = ({ seed }: Props) => {
 				<Container x={xOffset} y={10}>
 					<Tilemap3 />
 					<Container x={100} y={80}>
-						<Avatar seed={"a100d050c080204"} animationName="idle" />
+						<NamedAvatar
+							name="Joooooooohn Cena"
+							seed={"a100d050c080204"}
+							animationName="idle"
+							isPlaying={true}
+						/>
 					</Container>
 				</Container>
 
 				<Container x={xOffset} y={300}></Container>
 
 				<Container x={400} y={270}>
-					<Avatar seed={seed} animationName="run" scale={6} />
+					<Avatar seed={seed} animationName="run" scale={6} isPlaying={true} />
 				</Container>
 
 				<Container x={600} y={300}>
-					<Avatar seed={"a0820050c020602"} animationName="jump" flipX={true} />
+					<Avatar
+						seed={"a0820050c020602"}
+						animationName="jump"
+						flipX={true}
+						isPlaying={true}
+					/>
 				</Container>
 			</Stage>
 		</>
