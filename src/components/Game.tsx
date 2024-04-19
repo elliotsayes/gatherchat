@@ -73,9 +73,17 @@ export const Game = ({
 						x: mousePosition.x - stageWidth / 2,
 						y: mousePosition.y - stageHeight / 2,
 					};
+					function calculateOffset(mouseDistance: number) {
+						if (mouseDistance === 0) return 0;
+						return (
+							(mouseDistance > 0 ? -1 : -0) *
+							Math.floor(Math.log(Math.abs(mouseDistance / 2))) *
+							10
+						);
+					}
 					const targetOffset = {
-						x: (fromCenter.x > 0 ? -1 : -0) * Math.floor(Math.log(Math.abs(fromCenter.x / 2))) * 10,
-						y: (fromCenter.y > 0 ? -1 : -0) * Math.floor(Math.log(Math.abs(fromCenter.y / 2))) * 10,
+						x: calculateOffset(fromCenter.x),
+						y: calculateOffset(fromCenter.y),
 					};
 					setTargetOffset(targetOffset);
 				}}
