@@ -13,7 +13,7 @@ export const AvatarStandalone = ({
 	background,
 	...rest
 }: AvatarStandaloneProps) => {
-  const { scale, seed } = rest;
+	const { scale, seed } = rest;
 
 	const renderWidth = spriteWidth * scale;
 	const renderHeight = spriteHeight * scale;
@@ -21,7 +21,7 @@ export const AvatarStandalone = ({
 	return (
 		<>
 			<Stage
-        key={seed}
+				key={seed}
 				options={{
 					background: background ?? 0xffffff,
 				}}

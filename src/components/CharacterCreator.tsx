@@ -7,7 +7,7 @@ import { SHAPE_OPTIONS, colorCategories, colorThemes } from "../sprite/shared";
 import {
 	Card,
 	CardContent,
-	CardDescription,
+	// CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -54,7 +54,7 @@ export const CharacterCreator = ({
 		<Card className="w-[350px]">
 			<CardHeader>
 				<CardTitle>Edit Toon</CardTitle>
-				<CardDescription>Customise however you like.</CardDescription>
+				{/* <CardDescription>Customise however you like.</CardDescription> */}
 			</CardHeader>
 			<CardContent>
 				<div className="flex flex-row gap-4 items-center">

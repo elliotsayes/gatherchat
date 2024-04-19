@@ -20,21 +20,24 @@ const otherToons = Array.from(Array(4).keys()).map(generateOtherToon);
 export const GameDemo = () => {
 	const [seed, setSeed] = useState(randomSeed());
 
-	const demoState = useMemo(() => ({
-		user: {
-			id: "me",
-			avatarSeed: seed,
-			displayName: "ME!!",
-			savedPosition: {
-				x: 7,
-				y: 3,
+	const demoState = useMemo(
+		() => ({
+			user: {
+				id: "me",
+				avatarSeed: seed,
+				displayName: "ME!!",
+				savedPosition: {
+					x: 7,
+					y: 3,
+				},
 			},
-		},
-		otherToons,
-	}), [seed]);
+			otherToons,
+		}),
+		[seed],
+	);
 
 	return (
-		<>
+		<div className=" flex flex-row items-center justify-center h-screen w-screen">
 			<CharacterCreator initialSeed={seed} onSeedChange={setSeed} />
 			<Game
 				aoStateProp={demoState}
@@ -49,6 +52,6 @@ export const GameDemo = () => {
 					return confirm(`onSavePosition: ${JSON.stringify(position)}`);
 				}}
 			/>
-		</>
+		</div>
 	);
 };
