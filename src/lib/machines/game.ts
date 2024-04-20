@@ -125,6 +125,17 @@ export const gameMachine = setup({
 				return keyToMovementMap[event.key as MovementKey];
 			},
 		}),
+		updateDirection: assign({
+			currentDirection: ({ context, event }) => {
+				if (event.type !== "KEY_PRESSED") throw new Error("Invalid event type");
+				const movementDirection = keyToMovementMap[event.key as MovementKey];
+
+				if (movementDirection === "left" || movementDirection === "right") {
+					return movementDirection;
+				}
+				return context.currentDirection;
+			},
+		}),
 		executeQueuedMovement: assign(({ context }) => {
 			const { currentPosition, queuedMovement } = context;
 
@@ -137,13 +148,9 @@ export const gameMachine = setup({
 				queuedMovement,
 			);
 
-			const newFaceDirection =
-				faceDirections.filter((x) => x === queuedMovement)[0] ?? faceDirections;
-
 			return {
 				...context,
 				currentPosition: nextPosition,
-				currentDirection: newFaceDirection,
 				queuedMovement: undefined,
 			};
 		}),
@@ -212,7 +219,7 @@ export const gameMachine = setup({
 								KEY_PRESSED: {
 									target: "moving",
 									guard: and(["isMovementInput", "canMove"]),
-									actions: "queueMovement",
+									actions: ["updateDirection", "queueMovement"],
 								},
 							},
 							always: {
@@ -226,7 +233,7 @@ export const gameMachine = setup({
 								KEY_PRESSED: {
 									target: "moving",
 									guard: and(["isMovementInput", "canMove"]),
-									actions: "queueMovement",
+									actions: ["updateDirection", "queueMovement"],
 								},
 							},
 							after: {
