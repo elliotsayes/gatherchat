@@ -5,9 +5,9 @@ import { Game } from "./Game";
 
 function generateOtherToon(i: number) {
 	return {
-		id: "otherToon" + i,
+		id: `otherToon${i}`,
 		avatarSeed: randomSeed(),
-		displayName: "Toon #" + i,
+		displayName: `Toon #${i}`,
 		savedPosition: {
 			x: i * 2 + 1,
 			y: i * 2 + 1,
