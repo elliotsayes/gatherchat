@@ -8,19 +8,14 @@ import { gameMachine } from "../lib/machines/game";
 import { useMachine } from "@xstate/react";
 import InteractableToon from "./InteractableToon";
 import NamedAvatar from "./NamedAvatar";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import InteractableSprite from "./InteractableSprite";
 
 const tileSizeX = 64;
 const tileSizeY = 64;
 
-const stageTilesX = 12;
-const stageTilesY = 9;
-
-const stageWidth = tileSizeX * stageTilesX;
-const stageHeight = tileSizeY * stageTilesY;
-
 type Props = {
+	parentRef: React.RefObject<HTMLDivElement>;
 	aoStateProp: AoState;
 	onSelectToon: (toonId: string) => void;
 	onViewFeed: () => void;
@@ -28,11 +23,36 @@ type Props = {
 };
 
 export const Game = ({
+	parentRef,
 	aoStateProp: aoState,
 	onSelectToon,
 	onViewFeed,
 	onSavePosition,
 }: Props) => {
+	const [stageSize, setStageSize] = useState({
+		width: 0,
+		height: 0,
+	});
+
+	const resizeStage = useCallback(() => {
+		if (parentRef.current) {
+			const { clientWidth, clientHeight } = parentRef.current;
+			console.log("resizeStage", clientWidth, clientHeight);
+			setStageSize({
+				width: clientWidth,
+				height: clientHeight,
+			});
+		}
+	}, [parentRef.current]);
+
+	useEffect(() => {
+		resizeStage();
+		window.addEventListener("resize", resizeStage);
+		return () => {
+			window.removeEventListener("resize", resizeStage);
+		};
+	}, [resizeStage]);
+
 	const [current, send] = useMachine(gameMachine, {
 		input: {
 			position: aoState.user.savedPosition,
@@ -53,8 +73,8 @@ export const Game = ({
 				options={{
 					background: 0xaaaaaa,
 				}}
-				width={stageWidth}
-				height={stageHeight}
+				width={stageSize.width}
+				height={stageSize.height}
 				style={{ outline: "none" }}
 				tabIndex={0}
 				onKeyDown={(e) => {
@@ -70,8 +90,8 @@ export const Game = ({
 						y: e.clientY - position.top,
 					};
 					const fromCenter = {
-						x: mousePosition.x - stageWidth / 2,
-						y: mousePosition.y - stageHeight / 2,
+						x: mousePosition.x - stageSize.width / 2,
+						y: mousePosition.y - stageSize.height / 2,
 					};
 					function calculateOffset(mouseDistance: number) {
 						if (mouseDistance === 0) return 0;
@@ -95,11 +115,11 @@ export const Game = ({
 								<Spring
 									to={{
 										x:
-											stageWidth / 2 -
+											stageSize.width / 2 -
 											(current.context.currentPosition.x + 1) * tileSizeX +
 											tileSizeX / 2,
 										y:
-											stageHeight / 2 -
+											stageSize.height / 2 -
 											(current.context.currentPosition.y + 1) * tileSizeY +
 											tileSizeY / 2,
 									}}
@@ -201,7 +221,7 @@ export const Game = ({
 							)}
 
 							{current.hasTag("SHOW_TOON") && (
-								<Container x={stageWidth / 2} y={stageHeight / 2}>
+								<Container x={stageSize.width / 2} y={stageSize.height / 2}>
 									<NamedAvatar
 										name={aoState.user.displayName}
 										seed={aoState.user.avatarSeed}
