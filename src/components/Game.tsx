@@ -14,6 +14,11 @@ import InteractableSprite from "./InteractableSprite";
 const tileSizeX = 64;
 const tileSizeY = 64;
 
+const fallbackStageSize = {
+	width: 800,
+  height: 600
+};
+
 type Props = {
 	parentRef: React.RefObject<HTMLDivElement>;
 	aoStateProp: AoState;
@@ -29,10 +34,7 @@ export const Game = ({
 	onViewFeed,
 	onSavePosition,
 }: Props) => {
-	const [stageSize, setStageSize] = useState({
-		width: 0,
-		height: 0,
-	});
+	const [stageSize, setStageSize] = useState(fallbackStageSize);
 
 	const resizeStage = useCallback(() => {
 		if (parentRef.current) {
@@ -71,7 +73,7 @@ export const Game = ({
 		<>
 			<Stage
 				options={{
-					background: 0xaaaaaa,
+					background: 0x111111,
 				}}
 				width={stageSize.width}
 				height={stageSize.height}
