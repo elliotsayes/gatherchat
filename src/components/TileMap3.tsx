@@ -12,7 +12,7 @@ export const tileSize = 16;
 export const roomTilesX = 19;
 export const roomTilesY = 13;
 
-export const blockSpacingX = 4;
+export const blockSpacingX = 3;
 export const blockSpacingY = 4;
 
 export const windowSpacing = 4;
@@ -31,15 +31,6 @@ export const Tilemap3 = PixiComponent("TileMap3", {
 		// if you are too lazy, just specify filename and pixi will find it in cache
 		for (let x = 0; x < roomTilesX; x++) {
 			for (let y = 0; y < roomTilesY; y++) {
-				if (x >= 1 && x < roomTilesX - 1 && y >= 2 && y < roomTilesY - 1) {
-					instance.tile("room_3_2", x * tileSize, y * tileSize);
-				}
-
-				// Replace trees with sprite
-				// if (x % blockSpacingX === 0) {
-				// 	instance.tile("room_2_2", x * tileSize, y * tileSize);
-				// }
-
 				if (x === 0) {
 					if (y === 0) {
 						instance.tile("room_0_0", x * tileSize, y * tileSize);
@@ -87,6 +78,15 @@ export const Tilemap3 = PixiComponent("TileMap3", {
 						instance.tile("room_3_3", x * tileSize, y * tileSize);
 					} else {
 						instance.tile("room_3_2", x * tileSize, y * tileSize);
+					}
+				}
+
+				if (x > 0 && x < roomTilesX - 1 && y > 0 && y < roomTilesY - 2 && x % blockSpacingX === 0) {
+					if (y % blockSpacingY === 0) {
+						instance.tile("tree_0_1", x * tileSize, y * tileSize);
+					}
+					if (((y + 1) % blockSpacingY) === 0) {
+						instance.tile("tree_0_0", x * tileSize, y * tileSize);
 					}
 				}
 			}

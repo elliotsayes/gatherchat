@@ -26,6 +26,10 @@ const meta = {
 
 const allFrameSets: FrameSet[] = [
 	{
+		name: "room",
+		tiles: { x: 1, y: 3, w: 5, h: 4 },
+	},
+	{
 		name: "couch",
 		tiles: { x: 1, y: 0, w: 2, h: 2 },
 	},
@@ -33,10 +37,10 @@ const allFrameSets: FrameSet[] = [
 		name: "tv",
 		tiles: { x: 3, y: 0, w: 2, h: 2 },
 	},
-	{
-		name: "room",
-		tiles: { x: 1, y: 3, w: 5, h: 4 },
-	},
+  {
+    name:"tree",
+    tiles: {x: 2, y: 7, w: 1, h: 2 }, 
+  },
 ];
 
 const tileSize = {
@@ -52,8 +56,6 @@ function frameSetToFrames(frameSet: FrameSet): Record<string, Frame> {
 			.fill(0)
 			.map((_, i) => i),
 	};
-
-	console.log({ frameIndicies });
 
 	const frames = frameIndicies.y.flatMap((y) => {
 		return frameIndicies.x.map((x) => {
@@ -99,10 +101,7 @@ write(
 	JSON.stringify(
 		{
 			meta,
-			frames: frameSetToFrames({
-				name: "room",
-				tiles: { x: 1, y: 3, w: 5, h: 4 },
-			}),
+			frames: Object.assign({}, ...allFrameSets.map(frameSetToFrames)),
 		},
 		null,
 		2,
