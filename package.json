@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "test": "bun test",
-    "lint": "bunx @biomejs/biome format --write ./src",
+    "lint": "bunx @biomejs/biome format --write ./src ./scripts",
+    "gen": "bun run ./scripts/generateDrum.ts",
     "preview": "vite preview"
   },
   "dependencies": {
