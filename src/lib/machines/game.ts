@@ -61,7 +61,7 @@ const movementBounds = {
 		max: roomTilesX - 2,
 	},
 	y: {
-		min: 1,
+		min: 2,
 		max: roomTilesY - 2,
 	},
 } as const;

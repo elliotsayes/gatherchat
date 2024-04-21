@@ -12,7 +12,7 @@ export const tileSize = 16;
 export const roomTilesX = 19;
 export const roomTilesY = 13;
 
-export const blockSpacingX = 2;
+export const blockSpacingX = 4;
 export const blockSpacingY = 4;
 
 export const windowSpacing = 4;

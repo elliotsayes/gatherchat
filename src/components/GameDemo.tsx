@@ -10,7 +10,7 @@ function generateOtherToon(i: number) {
 		displayName: `Toon #${i}`,
 		savedPosition: {
 			x: i * 2 + 1,
-			y: i * 2 + 1,
+			y: i * 2 + 2,
 		},
 	};
 }
