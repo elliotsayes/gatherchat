@@ -9,13 +9,13 @@ type Props = {
 };
 
 export const tileSize = 16;
-export const roomTilesX = 19;
+export const roomTilesX = 21;
 export const roomTilesY = 13;
 
-export const blockSpacingX = 3;
+export const blockSpacingX = 4	;
 export const blockSpacingY = 4;
 
-export const windowSpacing = 4;
+export const windowSpacing = 3;
 
 export const Tilemap3 = PixiComponent("TileMap3", {
 	create: () => {
