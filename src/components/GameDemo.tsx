@@ -2,6 +2,8 @@ import { useMemo, useRef, useState } from "react";
 import { randomSeed } from "../sprite/edit";
 import { CharacterCreator } from "./CharacterCreator";
 import { Game } from "./Game";
+import { SidePanel, SidePanelState } from "./SidePanel";
+import { SetupForm } from "./SetupForm";
 
 function generateOtherToon(i: number) {
 	return {
@@ -21,6 +23,7 @@ export const GameDemo = () => {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	const [seed, setSeed] = useState(randomSeed());
+	const [state, setState] = useState<SidePanelState>("feed");
 
 	const demoState = useMemo(
 		() => ({
@@ -40,7 +43,6 @@ export const GameDemo = () => {
 
 	return (
 		<div className=" flex flex-row items-center justify-center h-screen w-screen">
-			<CharacterCreator initialSeed={seed} onSeedChange={setSeed} />
 			<div ref={containerRef} className="w-[100%] h-[100%] bg-red-50">
 				<Game
 					parentRef={containerRef}
@@ -56,6 +58,10 @@ export const GameDemo = () => {
 						return confirm(`onSavePosition: ${JSON.stringify(position)}`);
 					}}
 				/>
+			</div>
+			<div>
+				<SidePanel state={state} onSelectState={setState} />
+				<SetupForm onSubmit={(s) => setSeed(s.avatarSeed)} />
 			</div>
 		</div>
 	);

@@ -21,9 +21,9 @@ const formSchema = z.object({
   username: z.string().min(2).max(10),
 })
 
-const formWithSeed = z.union([formSchema, z.object({
+const formWithSeed = z.intersection(formSchema, z.object({
   avatarSeed: z.string().length(16).regex(/^[0-9a-f]+$/i),
-})])
+}))
 
 interface SetupFormProps {
   onSubmit: (values: z.infer<typeof formWithSeed>) => void
