@@ -47,11 +47,10 @@ const tileSize = {
 function frameSetToFrames(frameSet: FrameSet): Record<string, Frame> {
 	const frameIndicies = {
 		x: Array(frameSet.tiles.w)
-			.fill(0)
-			.map((_, i) => frameSet.tiles.x + i),
+			.fill(0).map((_, i) => i),
 		y: Array(frameSet.tiles.h)
 			.fill(0)
-			.map((_, i) => frameSet.tiles.y + i),
+			.map((_, i) => i),
 	};
 
 	console.log({ frameIndicies });
@@ -59,11 +58,15 @@ function frameSetToFrames(frameSet: FrameSet): Record<string, Frame> {
 	const frames = frameIndicies.y.flatMap((y) => {
 		return frameIndicies.x.map((x) => {
 			const name = `${frameSet.name}_${x}_${y}`;
+      const globalOffset = {
+        x: x + frameSet.tiles.x,
+        y: y + frameSet.tiles.y,
+      }
 			return {
 				[name]: {
 					frame: {
-						x: x * tileSize.w + 1,
-						y: y * tileSize.h + 1,
+						x: globalOffset.x * tileSize.w,
+						y: globalOffset.y * tileSize.h,
 						w: tileSize.w,
 						h: tileSize.h,
 					},
