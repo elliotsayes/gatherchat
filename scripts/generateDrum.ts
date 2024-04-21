@@ -38,7 +38,7 @@ const allFrameSets: FrameSet[] = [
 		tiles: { x: 3, y: 0, w: 2, h: 2 },
 	},
   {
-    name:"tree",
+    name: "tree",
     tiles: {x: 2, y: 7, w: 1, h: 2 }, 
   },
 ];

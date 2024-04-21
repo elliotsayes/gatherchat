@@ -1,4 +1,4 @@
-import { Assets } from "pixi.js";
+import { Assets, SCALE_MODES } from "pixi.js";
 import { applyDefaultProps, PixiComponent } from "@pixi/react";
 import { CompositeTilemap } from "@pixi/tilemap";
 

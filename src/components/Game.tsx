@@ -1,6 +1,6 @@
 import { AlphaFilter } from "pixi.js";
 import { Stage } from "@pixi/react";
-import { Container } from "@pixi/react-animated";
+import { Container, Sprite } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
 import { Tilemap3 } from "./TileMap3";
 import type { AoState } from "../lib/schema/gameModel";
@@ -138,11 +138,11 @@ export const Game = ({
 											{current.hasTag("SHOW_OBJECTS") && (
 												<InteractableSprite
 													image="assets/sprite/board.png"
-													scale={2}
-													anchor={{ x: 0.5, y: 0.5 }}
+													scale={4}
+													anchor={{ x: 0.5, y: 0.45 }}
 													onclick={() => onViewFeed()}
-													x={tileSizeX * 4.5}
-													y={tileSizeY * 0.5}
+													x={tileSizeX * 5}
+													y={tileSizeY * 1.25}
 												/>
 											)}
 											{current.hasTag("SHOW_OTHER_TOONS") &&
@@ -217,6 +217,38 @@ export const Game = ({
 														);
 													}
 												})}
+											<Sprite
+												image="assets/sprite/couch.png"
+												scale={4}
+												anchor={{ x: 0.5, y: 0.5 }}
+												// onclick={() => onViewFeed()}
+												x={tileSizeX * 11}
+												y={tileSizeY * 2}
+											/>
+											<Sprite
+												image="assets/sprite/mona.png"
+												scale={4}
+												anchor={{ x: 0.5, y: 0.5 }}
+												// onclick={() => onViewFeed()}
+												x={tileSizeX * 8}
+												y={tileSizeY * 1.25}
+											/>
+											<Sprite
+												image="assets/sprite/stary.png"
+												scale={4}
+												anchor={{ x: 0.5, y: 0.5 }}
+												// onclick={() => onViewFeed()}
+												x={tileSizeX * 14}
+												y={tileSizeY * 1.25}
+											/>
+											<Sprite
+												image="assets/sprite/scream.png"
+												scale={4}
+												anchor={{ x: 0.5, y: 0.5 }}
+												// onclick={() => onViewFeed()}
+												x={tileSizeX * 17}
+												y={tileSizeY * 1.25}
+											/>
 										</Container>
 									)}
 								</Spring>
