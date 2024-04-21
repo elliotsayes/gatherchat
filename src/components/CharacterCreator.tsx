@@ -53,62 +53,52 @@ export const CharacterCreator = ({
 	}, []);
 
 	return (
-		<Card className="w-[350px]">
-			<CardHeader>
-				<CardTitle>Edit Toon</CardTitle>
-				{/* <CardDescription>Customise however you like.</CardDescription> */}
-			</CardHeader>
-			<CardContent>
-				<div className="flex flex-row gap-4 items-center">
-					<AvatarStandalone
-						scale={10}
-						seed={currentSeed}
-						animationName={"idle"}
-						isPlaying={true}
+		<div>
+			<div className="flex flex-row gap-4 items-center">
+				<AvatarStandalone
+					scale={8}
+					seed={currentSeed}
+					animationName={"idle"}
+					isPlaying={true}
+				/>
+				<Button size={"icon"} onClick={randomize}>
+					🎲
+				</Button>
+			</div>
+			<div>
+				<div>
+					<OptionSlider
+						label={"Face"}
+						valueCount={SHAPE_OPTIONS[0].max}
+						value={faceIndex}
+						onChange={setFaceIndex}
 					/>
-					<Button size={"icon"} onClick={randomize}>
-						🎲
-					</Button>
+					<OptionSlider
+						label={"Head"}
+						valueCount={SHAPE_OPTIONS[1].max}
+						value={headIndex}
+						onChange={setHeadIndex}
+					/>
 				</div>
 				<div>
-					<div>
-						<OptionSlider
-							label={"Face"}
-							valueCount={SHAPE_OPTIONS[0].max}
-							value={faceIndex}
-							onChange={setFaceIndex}
-						/>
-						<OptionSlider
-							label={"Head"}
-							valueCount={SHAPE_OPTIONS[1].max}
-							value={headIndex}
-							onChange={setHeadIndex}
-						/>
-					</div>
-					<div>
-						{colorCategories.map((category, index) => {
-							if (category === "item") return null;
-							return (
-								<OptionSlider
-									key={category}
-									label={toTitleCase(category)}
-									valueCount={colorMaxs[index]}
-									value={colorIndicies[index]}
-									onChange={(value) => {
-										const newColorIndicies = [...colorIndicies];
-										newColorIndicies[index] = value;
-										setColorIndicies(newColorIndicies);
-									}}
-								/>
-							);
-						})}
-					</div>
+					{colorCategories.map((category, index) => {
+						if (category === "item") return null;
+						return (
+							<OptionSlider
+								key={category}
+								label={toTitleCase(category)}
+								valueCount={colorMaxs[index]}
+								value={colorIndicies[index]}
+								onChange={(value) => {
+									const newColorIndicies = [...colorIndicies];
+									newColorIndicies[index] = value;
+									setColorIndicies(newColorIndicies);
+								}}
+							/>
+						);
+					})}
 				</div>
-			</CardContent>
-			<CardFooter className="flex justify-between">
-				<Button variant="outline">Cancel</Button>
-				<Button>Save</Button>
-			</CardFooter>
-		</Card>
+			</div>
+		</div>
 	);
 };
