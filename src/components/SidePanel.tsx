@@ -19,12 +19,13 @@ export const SidePanel = ({state, onSelectState, activityFeed, profile, video}: 
         <TabsTrigger value="profile">Profile</TabsTrigger>
         <TabsTrigger value="video">Video</TabsTrigger>
       </TabsList>
-      <div className="flex flex-grow justify-center bg-gray-50/50">
-        <div className="px-4 py-2 bg-gray-50">
+      <div className="flex flex-col flex-grow justify-around items-center bg-gray-50/50">
+        <div className="px-4 pt-2 pb-20 bg-gray-50">
           <TabsContent value="feed">{activityFeed}</TabsContent>
           <TabsContent value="profile">{profile}</TabsContent>
           <TabsContent value="video">{video}</TabsContent>
         </div>
+        <div />
       </div>
     </Tabs>
   )
