@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
-    "@irys/sdk": "^0.1.22",
+    "@irys/sdk": "0.0.4",
     "@pixi/react": "^7.1.2",
     "@pixi/react-animated": "^7.1.2",
     "@pixi/tilemap": "4",
@@ -46,6 +46,7 @@
     "react-resizable-panels": "^2.0.18",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
+    "vite-plugin-node-polyfills": "^0.21.0",
     "xstate": "^5.11.0",
     "zod": "^3.23.0"
   },

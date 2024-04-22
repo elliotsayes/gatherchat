@@ -17,7 +17,7 @@ export const getUploadFee = async (fileSize: number, token: string) => {
 	if (fileSize < 10 * 1024) return BigNumber(0);
 
 	const bundlr = new WebIrys({
-		network: "mainnet",
+		url: config.bundlrNode,
 		token,
 	});
 	const fee = await bundlr.getPrice(fileSize);
@@ -33,7 +33,7 @@ const connectInstance = async (token: string) => {
 		"SIGN_TRANSACTION",
 	]);
 	const bundlr = new WebIrys({
-		network: "mainnet",
+		url: config.bundlrNode,
 		token,
 		wallet: {
 			provider: injectedArweave,
@@ -121,24 +121,6 @@ export const uploadVideosToBundlr = async (
 		}
 	}
 
-	let trailerVideoResult: UploadResult | undefined;
-	if (trailerVideo !== undefined) {
-		log?.("Uploading trailer video...");
-		const trailerVideoTitle = getTitle(trailerVideo);
-		const trailerVideoTags = {
-			...fileTags(trailerVideo),
-			...discoverabilityTags(trailerVideoTitle),
-		};
-		trailerVideoResult = await uploadFile(
-			instance,
-			trailerVideo,
-			trailerVideoTags,
-		);
-	}
-
-	log?.("Getting latest renderer...");
-	const latestRendererTags = await rendererTags();
-
 	log?.("Uploading main video...");
 	const mainVideoTitle = getTitle(mainVideo);
 	const mainVideoTags = {
@@ -149,10 +131,6 @@ export const uploadVideosToBundlr = async (
 					...udlTags,
 					...ucmTags(address, mainVideo.type, mainVideoTitle),
 				}
-			: {}),
-		...latestRendererTags,
-		...(trailerVideoResult !== undefined
-			? { Trailer: trailerVideoResult.id }
 			: {}),
 	};
 	const mainVideoResult = await uploadFile(instance, mainVideo, mainVideoTags);
@@ -181,6 +159,5 @@ export const uploadVideosToBundlr = async (
 
 	return {
 		mainVideoResult,
-		trailerVideoResult,
 	};
 };
