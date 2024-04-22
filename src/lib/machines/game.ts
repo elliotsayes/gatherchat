@@ -1,5 +1,6 @@
 import { setup, assign, and } from "xstate";
 import {
+	blockLocations,
 	blockSpacingX,
 	blockSpacingY,
 	roomTilesX,
@@ -73,8 +74,7 @@ export function isValidPosition(position: { x: number; y: number }) {
 		position.y >= movementBounds.y.min &&
 		position.y <= movementBounds.y.max;
 
-	const onTile =
-		position.x % blockSpacingX === 0 && position.y % blockSpacingY === 0;
+	const onTile = blockLocations.filter((bl) => bl.x === position.x && (bl.y === position.y || bl.y === position.y - 1)).length > 0;
 
 	return insideBounds && !onTile;
 }

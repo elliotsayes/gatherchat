@@ -2,15 +2,9 @@ import { Assets, SCALE_MODES } from "pixi.js";
 import { applyDefaultProps, PixiComponent } from "@pixi/react";
 import { CompositeTilemap } from "@pixi/tilemap";
 
-type Props = {
-	// path: string;
-	// xOffset: number;
-	// yOffset: number;
-};
-
 export const tileSize = 16;
 export const roomTilesX = 21;
-export const roomTilesY = 13;
+export const roomTilesY = 12;
 
 export const blockSpacingX = 4;
 export const blockSpacingY = 4;

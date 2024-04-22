@@ -217,15 +217,17 @@ export const Game = ({
 														);
 													}
 												})}
-											<Sprite
+											<InteractableSprite
+												active={false}
 												image="assets/sprite/couch.png"
 												scale={4}
 												anchor={{ x: 0.5, y: 0.5 }}
 												// onclick={() => onViewFeed()}
-												x={tileSizeX * 11}
+												x={tileSizeX * 19}
 												y={tileSizeY * 2}
 											/>
-											<Sprite
+											<InteractableSprite
+												active={false}
 												image="assets/sprite/mona.png"
 												scale={4}
 												anchor={{ x: 0.5, y: 0.5 }}
@@ -233,15 +235,17 @@ export const Game = ({
 												x={tileSizeX * 8}
 												y={tileSizeY * 1.25}
 											/>
-											<Sprite
+											<InteractableSprite
+												active={false}
 												image="assets/sprite/stary.png"
 												scale={4}
 												anchor={{ x: 0.5, y: 0.5 }}
 												// onclick={() => onViewFeed()}
-												x={tileSizeX * 14}
+												x={tileSizeX * 11}
 												y={tileSizeY * 1.25}
 											/>
-											<Sprite
+											<InteractableSprite
+												active={false}
 												image="assets/sprite/scream.png"
 												scale={4}
 												anchor={{ x: 0.5, y: 0.5 }}
@@ -252,6 +256,7 @@ export const Game = ({
 											{
 												blockLocations.map((blockLocation, i) => (
 													<InteractableSprite
+														active={false}
 														key={i.toString()}
 														zIndex={100}
 														image="assets/sprite/tree.png"
@@ -260,7 +265,6 @@ export const Game = ({
 														// onclick={() => onViewFeed()}
 														x={tileSizeX * (blockLocation.x + 0.5)}
 														y={tileSizeY * (blockLocation.y + 1)}
-														active={false}
 													/>
 												))
 											}
