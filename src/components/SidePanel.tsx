@@ -13,8 +13,8 @@ interface SidePanelProps {
 
 export const SidePanel = ({state, onSelectState, activityFeed, profile, video}: SidePanelProps) => {
   return (
-    <Tabs value={state} onValueChange={(value) => onSelectState(value as SidePanelState)} className="w-[400px] h-[100%] flex flex-col">
-      <TabsList>
+    <Tabs value={state} onValueChange={(value) => onSelectState(value as SidePanelState)} className="h-[100%] flex flex-col">
+      <TabsList className="w-[100%]">
         <TabsTrigger value="feed">Activity Feed</TabsTrigger>
         <TabsTrigger value="profile">Profile</TabsTrigger>
         <TabsTrigger value="video">Video</TabsTrigger>

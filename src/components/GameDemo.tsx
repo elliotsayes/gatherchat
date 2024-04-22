@@ -83,7 +83,7 @@ export const GameDemo = () => {
 				</div>
       </ResizablePanel>
 			<ResizableHandle withHandle/>
-			<ResizablePanel defaultSize={50} minSize={25} maxSize={50}>
+			<ResizablePanel defaultSize={35} minSize={25} maxSize={50}>
 				<SidePanel state={sidePanelState} onSelectState={setSidePanelState}
 					activityFeed={<p>AF</p>}
 					profile={
