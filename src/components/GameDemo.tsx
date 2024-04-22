@@ -4,6 +4,11 @@ import { CharacterCreator } from "./CharacterCreator";
 import { Game } from "./Game";
 import { SidePanel, SidePanelState } from "./SidePanel";
 import { SetupForm } from "./SetupForm";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable"
 
 function generateOtherToon(i: number) {
 	return {
@@ -26,6 +31,8 @@ export const GameDemo = () => {
 	const [seed, setSeed] = useState(randomSeed());
 	const [sidePanelState, setSidePanelState] = useState<SidePanelState>("feed");
 
+	const [lastResized, setLastResized] = useState(0);
+
 	const demoState = useMemo(
 		() => ({
 			user: {
@@ -43,30 +50,44 @@ export const GameDemo = () => {
 	);
 
 	return (
-		<div className=" flex flex-row items-center justify-center h-screen w-screen">
-			<div ref={containerRef} className="w-[100%] h-[100%] bg-red-50">
-				<Game
-					parentRef={containerRef}
-					aoStateProp={demoState}
-					onSelectToon={(toonId) => {
-						console.info("onSelectToon", toonId);
-					}}
-					onViewFeed={() => {
-						alert("onViewFeed");
-					}}
-					onSavePosition={async (position) => {
-						await new Promise((resolve) => setTimeout(resolve, 2000));
-						return confirm(`onSavePosition: ${JSON.stringify(position)}`);
-					}}
+		<ResizablePanelGroup
+      direction="horizontal"
+      className="h-screen"
+    >
+      <ResizablePanel className="h-screen" onResize={() => {
+				console.log('Resized handle!');
+				setLastResized(Date.now())
+			}}>
+				<div ref={containerRef} className="h-screen">
+					<Game
+						parentRef={containerRef}
+						lastResized={lastResized}
+						aoStateProp={demoState}
+						onSelectToon={(toonId) => {
+							console.info("onSelectToon", toonId);
+						}}
+						onViewFeed={() => {
+							alert("onViewFeed");
+						}}
+						onSavePosition={async (position) => {
+							await new Promise((resolve) => setTimeout(resolve, 2000));
+							return confirm(`onSavePosition: ${JSON.stringify(position)}`);
+						}}
+					/>
+				</div>
+      </ResizablePanel>
+			<ResizableHandle withHandle/>
+			<ResizablePanel defaultSize={50} minSize={25} maxSize={50}>
+				<SidePanel state={sidePanelState} onSelectState={setSidePanelState}
+					activityFeed={<p>AF</p>}
+					profile={
+					<SetupForm onSubmit={(s) => {
+						setSeed(s.avatarSeed)
+						setName(s.username);
+					}} />}
+					video={<p>Video</p>}
 				/>
-			</div>
-			<div>
-				<SidePanel state={sidePanelState} onSelectState={setSidePanelState} />
-				<SetupForm onSubmit={(s) => {
-					setSeed(s.avatarSeed)
-					setName(s.username);
-				}} />
-			</div>
-		</div>
+			</ResizablePanel>
+		</ResizablePanelGroup>
 	);
 };

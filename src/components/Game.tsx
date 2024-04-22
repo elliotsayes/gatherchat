@@ -21,6 +21,7 @@ const fallbackStageSize = {
 
 type Props = {
 	parentRef: React.RefObject<HTMLDivElement>;
+	lastResized: number;
 	aoStateProp: AoState;
 	onSelectToon: (toonId: string) => void;
 	onViewFeed: () => void;
@@ -29,6 +30,7 @@ type Props = {
 
 export const Game = ({
 	parentRef,
+	lastResized,
 	aoStateProp: aoState,
 	onSelectToon,
 	onViewFeed,
@@ -48,12 +50,13 @@ export const Game = ({
 	}, [parentRef.current]);
 
 	useEffect(() => {
+		console.log({lastResized});
 		resizeStage();
 		window.addEventListener("resize", resizeStage);
 		return () => {
 			window.removeEventListener("resize", resizeStage);
 		};
-	}, [resizeStage]);
+	}, [resizeStage, lastResized]);
 
 	const [current, send] = useMachine(gameMachine, {
 		input: {
@@ -218,6 +221,15 @@ export const Game = ({
 													}
 												})}
 											<InteractableSprite
+												// active={false}
+												image="assets/sprite/cal.png"
+												scale={4}
+												anchor={{ x: 0.5, y: 0.5 }}
+												// onclick={() => onViewFeed()}
+												x={tileSizeX * 2}
+												y={tileSizeY * 1}
+											/>
+											<InteractableSprite
 												active={false}
 												image="assets/sprite/couch.png"
 												scale={4}
@@ -243,6 +255,15 @@ export const Game = ({
 												// onclick={() => onViewFeed()}
 												x={tileSizeX * 11}
 												y={tileSizeY * 1.25}
+											/>
+											<InteractableSprite
+												// active={false}
+												image="assets/sprite/tv.png"
+												scale={4}
+												anchor={{ x: 0.5, y: 0.5 }}
+												// onclick={() => onViewFeed()}
+												x={tileSizeX * 14}
+												y={tileSizeY * 1}
 											/>
 											<InteractableSprite
 												active={false}

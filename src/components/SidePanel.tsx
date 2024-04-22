@@ -6,19 +6,24 @@ export type SidePanelState = typeof sidePanelState[number];
 interface SidePanelProps {
   state: SidePanelState;
   onSelectState: (state: SidePanelState) => void;
+  activityFeed: JSX.Element;
+  profile: JSX.Element;
+  video: JSX.Element;
 }
 
-export const SidePanel = ({state, onSelectState}: SidePanelProps) => {
+export const SidePanel = ({state, onSelectState, activityFeed, profile, video}: SidePanelProps) => {
   return (
-    <Tabs value={state} onValueChange={(value) => onSelectState(value as SidePanelState)} className="w-[400px]">
+    <Tabs value={state} onValueChange={(value) => onSelectState(value as SidePanelState)} className="w-[400px] h-[100%] flex flex-col">
       <TabsList>
         <TabsTrigger value="feed">Activity Feed</TabsTrigger>
         <TabsTrigger value="profile">Profile</TabsTrigger>
         <TabsTrigger value="video">Video</TabsTrigger>
       </TabsList>
-      <TabsContent value="feed">Activity Feed</TabsContent>
-      <TabsContent value="profile">Profile</TabsContent>
-      <TabsContent value="video">Video</TabsContent>
+      <div className="flex flex-grow">
+        <TabsContent value="feed">{activityFeed}</TabsContent>
+        <TabsContent value="profile">{profile}</TabsContent>
+        <TabsContent value="video">{video}</TabsContent>
+      </div>
     </Tabs>
   )
 }

@@ -4,14 +4,6 @@ import { useCallback, useMemo, useState } from "react";
 import { deserialize } from "../sprite/generate";
 import { serialize } from "../sprite/edit";
 import { SHAPE_OPTIONS, colorCategories, colorThemes } from "../sprite/shared";
-import {
-	Card,
-	CardContent,
-	// CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toTitleCase } from "@/lib/utils";
 
