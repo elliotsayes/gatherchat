@@ -10,7 +10,7 @@ import { SidePanel, type SidePanelState } from "./SidePanel";
 import { Game } from "./game/Game";
 import { ProfileView } from "./profile/ProfileView";
 import { SetupForm } from "./profile/SetupForm";
-import { UploadPage } from "./upload/UploadPage";
+import { type UploadInfo, UploadPage } from "./upload/UploadPage";
 
 interface GatherChatProps {
 	aoState: AoState;
@@ -19,12 +19,14 @@ interface GatherChatProps {
 		avatarSeed: string;
 	}): Promise<boolean>;
 	onUpdatePosition(position: { x: number; y: number }): Promise<boolean>;
+	onUpload(upload: UploadInfo): Promise<boolean>;
 }
 
 export const GatherChat = ({
 	aoState,
 	onUpdateProfile,
 	onUpdatePosition,
+	onUpload,
 }: GatherChatProps) => {
 	console.log({ aoState });
 
@@ -86,8 +88,11 @@ export const GatherChat = ({
 					upload={
 						<UploadPage
 							key={uploadPageKey}
-							onDone={() => {
+							onDone={async (info) => {
 								// Reset key
+								if (info) {
+									await onUpload(info);
+								}
 								setUploadPageKey(Date.now());
 							}}
 						/>

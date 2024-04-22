@@ -188,4 +188,16 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 
 		return this;
 	}
+
+	async post(post: Partial<ContractPost>): Promise<this> {
+		const registrationId = await this.ao.message({
+			process: this.processId,
+			data: JSON.stringify(post),
+			tags: [{ name: "Action", value: "CreatePost" }],
+			signer: createDataItemSigner(window.arweaveWallet),
+		});
+		console.debug(`Created post with id ${registrationId}`);
+
+		return this;
+	}
 }

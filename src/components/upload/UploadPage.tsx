@@ -30,9 +30,12 @@ import { SubmittingDialog } from "./SubmittingDialog";
 import { UdlForm } from "./UdlForm";
 import { UdlTable } from "./UdlTable";
 import { VideoUpload } from "./VideoUpload";
+import type { ContractPost } from "@/lib/ao-gather";
+
+export type UploadInfo = Pick<ContractPost, "type" | "textOrTxId">
 
 interface UploadPageProps {
-	onDone?: () => void;
+	onDone?: (upload?: UploadInfo) => void;
 }
 
 export const UploadPage = ({ onDone }: UploadPageProps) => {
@@ -193,7 +196,7 @@ export const UploadPage = ({ onDone }: UploadPageProps) => {
 					<SubmitSuccessDialog
 						contentType={current.context.contentType!}
 						mainVideoResult={current.context.mainVideoResult!}
-						onAccept={() => onDone?.()}
+						onAccept={() => onDone?.({ type: current.context.contentType!, textOrTxId: current.context.mainVideoResult!.id})}
 					/>
 				)}
 				{current.matches("upload failure") && (

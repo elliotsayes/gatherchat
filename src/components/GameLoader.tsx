@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { GatherChat } from "./GatherChat";
 import { SetupForm } from "./profile/SetupForm";
+import type { UploadInfo } from "./upload/UploadPage";
 
 const aoGather = new AoGatherProvider({});
 
@@ -104,24 +105,28 @@ export const GameLoader = () => {
 
 	return (
 		<GatherChat
-			aoState={gameData}
-			onUpdateProfile={async (p) => {
-				const userPart: Partial<ContractUser> = {
-					avatar: p.avatarSeed,
-					name: p.name,
-				};
-				await aoGather.update(userPart)
+      aoState={gameData}
+      onUpdateProfile={async (p) => {
+        const userPart: Partial<ContractUser> = {
+          avatar: p.avatarSeed,
+          name: p.name,
+        };
+        await aoGather.update(userPart);
         refetch();
-				return true;
-			}}
-			onUpdatePosition={async (p) => {
-				const userPart: Partial<ContractUser> = {
-					position: p,
-				};
-				await aoGather.update(userPart);
+        return true;
+      } }
+      onUpdatePosition={async (p) => {
+        const userPart: Partial<ContractUser> = {
+          position: p,
+        };
+        await aoGather.update(userPart);
         refetch();
-				return true;
-			}}
-		/>
+        return true;
+      } }
+      onUpload={async (upload: UploadInfo): Promise<boolean> => {
+        await aoGather.post(upload);
+        return true;
+      }}
+    />
 	);
 };
