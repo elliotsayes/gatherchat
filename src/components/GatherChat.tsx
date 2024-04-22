@@ -4,7 +4,6 @@ import {
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import type { AoState, AoToonMaybeSaved } from "@/lib/schema/gameModel";
-import { a } from "@react-spring/web";
 import { useRef, useState } from "react";
 import { SidePanel, type SidePanelState } from "./SidePanel";
 import { Game } from "./game/Game";
@@ -19,6 +18,7 @@ interface GatherChatProps {
 		avatarSeed: string;
 	}): Promise<boolean>;
 	onUpdatePosition(position: { x: number; y: number }): Promise<boolean>;
+	onFollow(data: {address: string}): Promise<boolean>;
 	onUpload(upload: UploadInfo): Promise<boolean>;
 }
 
@@ -26,6 +26,7 @@ export const GatherChat = ({
 	aoState,
 	onUpdateProfile,
 	onUpdatePosition,
+	onFollow,
 	onUpload,
 }: GatherChatProps) => {
 	console.log({ aoState });
@@ -101,8 +102,9 @@ export const GatherChat = ({
 						selectedToon ? (
 							<ProfileView
 								toonInfo={selectedToon}
-								onChangeFollow={() => {
-									alert("TODO: follow");
+								onChangeFollow={async (toonInfo) => {
+									await onFollow({address: toonInfo.id});
+									alert("Followed!");
 								}}
 								onCall={() => {
 									console.log("Call clicked!");

@@ -6,7 +6,7 @@ import Arweave from "arweave";
 import EventEmitter from "eventemitter3";
 import { AoProvider } from "./ao";
 
-export const aoGatherProcessId = "Zmybo0DUutTmHwbCckNfA36Ofda6h75qHd83RrG7HSI";
+export const aoGatherProcessId = "L97ua6EZ92tTzrLp9KJcmRMgoCffdjCo6dkqY_WpOPk";
 export const defaultArweave = Arweave.init({
 	host: "arweave.net",
 	protocol: "https",
@@ -62,6 +62,11 @@ export interface AoGather {
 		Record<ArweaveID, ContractPost>
 	>; // queries contract for all connections associated with a user
 	register(params: Partial<ContractUser>): Promise<this>;
+	update(params: Partial<ContractUser>): Promise<this>;
+	post(params: Partial<ContractPost>): Promise<this>;
+	follow(params: {
+		address: string;
+	}): Promise<this>;
 }
 
 export const gatherEventEmitter = new EventEmitter();
@@ -197,6 +202,18 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			signer: createDataItemSigner(window.arweaveWallet),
 		});
 		console.debug(`Created post with id ${registrationId}`);
+
+		return this;
+	}
+
+	async follow(data: { address: string }): Promise<this> {
+		const registrationId = await this.ao.message({
+			process: this.processId,
+			data: JSON.stringify(data),
+			tags: [{ name: "Action", value: "Follow" }],
+			signer: createDataItemSigner(window.arweaveWallet),
+		});
+		console.debug(`Followed ${data.address} with id ${registrationId}`);
 
 		return this;
 	}

@@ -127,6 +127,10 @@ export const GameLoader = () => {
         await aoGather.post(upload);
         return true;
       }}
+      onFollow={async (data: { address: string }) => {
+        await aoGather.follow(data);
+        return true;
+      }}
     />
 	);
 };

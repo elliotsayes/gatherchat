@@ -1,9 +1,9 @@
-import type { AoToonMaybeSaved } from "@/lib/schema/gameModel";
+import type { AoToonMaybeSaved, AoToonSaved } from "@/lib/schema/gameModel";
 import { Button } from "../ui/button";
 import { AvatarStandalone } from "./AvatarStandalone";
 
 interface ProfileViewProps {
-	toonInfo: AoToonMaybeSaved;
+	toonInfo: AoToonSaved;
 	onChangeFollow: (toonInfo: AoToonMaybeSaved) => void;
 	onCall: (toonInfo: AoToonMaybeSaved) => void;
 	onClose: () => void;
@@ -43,13 +43,14 @@ export const ProfileView = ({
 					<Button
 						type="button"
 						onClick={() => onChangeFollow(toonInfo)}
-						variant={"outline"}
+						variant={toonInfo.isFollowing ? "ghost" : "default"}
+						disabled={toonInfo.isFollowing}
 					>
-						Follow
+						{toonInfo.isFollowing ? "Already following" : "Follow"}
 					</Button>
-					<Button type="button" onClick={() => onCall(toonInfo)}>
+					{/* <Button type="button" onClick={() => onCall(toonInfo)}>
 						Call
-					</Button>
+					</Button> */}
 				</div>
 			</div>
 		</div>
