@@ -11,6 +11,7 @@ import { CharacterCreator } from "../profile/CharacterCreator";
 import { ProfileView } from "../profile/ProfileView";
 import { SetupForm } from "../profile/SetupForm";
 import { Game } from "./Game";
+import { UploadPage } from "../upload/UploadPage";
 
 function generateOtherToon(i: number) {
 	return {
@@ -89,7 +90,7 @@ export const GameDemo = () => {
 				<SidePanel
 					state={sidePanelState}
 					onSelectState={setSidePanelState}
-					activityFeed={<p>AF</p>}
+					activityFeed={<UploadPage />}
 					profile={
 						selectedToon ? (
 							<ProfileView

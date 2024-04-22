@@ -229,6 +229,14 @@ export const uploadPageMachine = setup({
 					},
 				},
 			},
+
+			on: {
+				"confirm symbol": {
+					target: "submitting",
+					guard: "canSubmitConfig",
+					actions: "assignUploadSymbol",
+				},
+			},
 		},
 
 		initial: {
@@ -244,6 +252,7 @@ export const uploadPageMachine = setup({
 
 			states: {
 				idle: {
+					initial: "none",
 					states: {
 						none: {
 							on: {

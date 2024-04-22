@@ -17,7 +17,7 @@ export const getUploadFee = async (fileSize: number, token: string) => {
 	if (fileSize < 10 * 1024) return BigNumber(0);
 
 	const bundlr = new WebIrys({
-		url: config.bundlrNode,
+		network: "mainnet",
 		token,
 	});
 	const fee = await bundlr.getPrice(fileSize);
@@ -33,7 +33,7 @@ const connectInstance = async (token: string) => {
 		"SIGN_TRANSACTION",
 	]);
 	const bundlr = new WebIrys({
-		url: config.bundlrNode,
+		network: "mainnet",
 		token,
 		wallet: {
 			provider: injectedArweave,

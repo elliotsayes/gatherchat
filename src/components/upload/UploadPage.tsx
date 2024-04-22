@@ -31,7 +31,6 @@ import { UdlForm } from "./UdlForm";
 import { UdlTable } from "./UdlTable";
 import { VideoUpload } from "./VideoUpload";
 
-const isArseeding = config.uploader === "arseeding";
 
 export const UploadPage = () => {
 	const [current, send] = useMachine(uploadPageMachine);
@@ -123,41 +122,23 @@ export const UploadPage = () => {
 									disabled={!canSumbit}
 									className={`${canSumbit ? "" : " cursor-not-allowed"}`}
 								>
-									{isArseeding ? (
-										<Button
-											size={"lg"}
-											onClick={() => setIsSubmitDialogOpen(true)}
-											className={`${
-												canSumbit &&
-												current.matches({
-													configuring: { udlConfig: "hasConfig" },
-												})
-													? "animate-pulse"
-													: ""
-											}`}
-											disabled={!canSumbit}
-										>
-											Upload With Everpay
-										</Button>
-									) : (
-										<Button
-											size={"lg"}
-											onClick={() =>
-												send({ type: "confirm symbol", data: { symbol: "AR" } })
-											}
-											className={`${
-												canSumbit &&
-												current.matches({
-													configuring: { udlConfig: "hasConfig" },
-												})
-													? "animate-pulse"
-													: ""
-											}`}
-											disabled={!canSumbit}
-										>
-											Upload With Bundlr
-										</Button>
-									)}
+									<Button
+										size={"lg"}
+										onClick={() =>
+											send({ type: "confirm symbol", data: { symbol: "AR" } })
+										}
+										className={`${
+											canSumbit &&
+											current.matches({
+												configuring: { udlConfig: "hasConfig" },
+											})
+												? "animate-pulse"
+												: ""
+										}`}
+										disabled={!canSumbit}
+									>
+										Upload With Bundlr
+									</Button>
 								</TooltipTrigger>
 								<TooltipContent>
 									{canSumbit ? "Click to Upload!" : "Requires Main Video"}
