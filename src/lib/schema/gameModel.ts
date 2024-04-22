@@ -11,6 +11,7 @@ export type AoToonBase = {
 
 export type AoToonSaved = AoToonBase & {
 	savedPosition: Position;
+	isFollowing: boolean;
 };
 
 export type AoToonMaybeSaved = AoToonBase & {

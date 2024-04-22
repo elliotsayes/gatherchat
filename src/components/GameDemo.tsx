@@ -3,7 +3,7 @@ import {
 	ResizablePanel,
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import type { AoToonMaybeSaved } from "@/lib/schema/gameModel";
+import type { AoState, AoToonMaybeSaved } from "@/lib/schema/gameModel";
 import { useMemo, useRef, useState } from "react";
 import { randomSeed } from "../sprite/edit";
 import { SidePanel, type SidePanelState } from "./SidePanel";
@@ -21,6 +21,7 @@ function generateOtherToon(i: number) {
 			x: i * 2 + 1,
 			y: i * 2 + 2,
 		},
+		isFollowing: false,
 	};
 }
 
@@ -39,7 +40,7 @@ export const GameDemo = () => {
 
 	const [lastResized, setLastResized] = useState(0);
 
-	const demoState = useMemo(
+	const demoState = useMemo<AoState>(
 		() => ({
 			user: {
 				id: "me",
@@ -105,6 +106,9 @@ export const GameDemo = () => {
 						selectedToon ? (
 							<ProfileView
 								toonInfo={selectedToon}
+								onChangeFollow={() => {
+									alert("TODO: follow")
+								}}
 								onCall={() => {
 									console.log("Call clicked!");
 									setSidePanelState("video");
