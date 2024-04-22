@@ -18,7 +18,7 @@ import { randomSeed } from "@/sprite/edit"
 import { useState } from "react"
  
 const formSchema = z.object({
-  username: z.string().min(2).max(10),
+  username: z.string().min(3).max(10),
 })
 
 const formWithSeed = z.intersection(formSchema, z.object({
@@ -27,14 +27,16 @@ const formWithSeed = z.intersection(formSchema, z.object({
 
 interface SetupFormProps {
   onSubmit: (values: z.infer<typeof formWithSeed>) => void
+  initialUsername?: string;
+  initialSeed?: string;
 }
 
-export const SetupForm = ({onSubmit: onSubmitProp}: SetupFormProps) => {
+export const SetupForm = ({onSubmit: onSubmitProp, initialUsername, initialSeed}: SetupFormProps) => {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      username: initialUsername ?? "",
     },
   })
  
@@ -49,7 +51,7 @@ export const SetupForm = ({onSubmit: onSubmitProp}: SetupFormProps) => {
     })
   }
 
-  const [avatarSeed, setAvatarSeed] = useState(randomSeed());
+  const [avatarSeed, setAvatarSeed] = useState(initialSeed ?? randomSeed());
 
   return (
     <Form {...form}>
@@ -63,7 +65,7 @@ export const SetupForm = ({onSubmit: onSubmitProp}: SetupFormProps) => {
                 <FormControl>
                   <Input placeholder="John" {...field} />
                 </FormControl>
-                <FormDescription>2-10 Characters</FormDescription>
+                <FormDescription>3-10 Characters</FormDescription>
                 <FormMessage />
               </FormItem>
           )}

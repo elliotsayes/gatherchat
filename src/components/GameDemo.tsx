@@ -96,7 +96,10 @@ export const GameDemo = () => {
 							<SetupForm onSubmit={(s) => {
 								setSeed(s.avatarSeed)
 								setName(s.username);
-							}} />
+							}}
+							initialUsername={demoState.user.displayName}
+							initialSeed={demoState.user.avatarSeed}	
+						/>
 						)
 					}
 					video={<p>Video</p>}
