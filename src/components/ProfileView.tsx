@@ -14,7 +14,7 @@ export const ProfileView = ({toonInfo, onCall, onClose}: ProfileViewProps) => {
       
       <p>{toonInfo.id}</p>
       <p>{toonInfo.displayName}</p>
-      <AvatarStandalone scale={4} seed={toonInfo.avatarSeed} animationName={"jump"} isPlaying={true}  />
+      <AvatarStandalone scale={12} seed={toonInfo.avatarSeed} animationName={"jump"} isPlaying={true}  />
       <p>last online: TODO</p>
       <Button type="button" onClick={() => onClose()} variant={"outline"}>Close</Button>
       <Button type="button" onClick={() => onCall(toonInfo)}>Call</Button>
