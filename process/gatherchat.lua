@@ -3,31 +3,31 @@ local json = require("json")
 local utils = require(".utils")
 
 -- Key: Address
-local Users = Users or {
+Users = Users or {
   testUser1 = {
-    ProcessId = "id",
-    Created = 0,
-    LastSeen = 0,
-    Name = "test",
-    Avatar = "a1204030b070a01", -- pixel art seed
-    Status = "Hello, World!",
-    Position = {
+    processId = "id",
+    created = 0,
+    lastSeen = 0,
+    name = "test",
+    avatar = "a1204030b070a01", -- pixel art seed
+    status = "Hello, World!",
+    position = {
       x = 4,
       y = 5,
     },
-    Following = {
-      "test2",
+    following = {
+      "testUser2",
     },
-  }
+  },
 }
 
 -- Key: Message ID
-local Posts = Posts or {
+Posts = Posts or {
   testPost1 = {
-    Created = 0,
-    Author = "testUser1",
-    Type = "text", -- if "video"/"image" then "TextOrTxId" is a TxId
-    TextOrTxId = "",
+    created = 0,
+    author = "testUser1",
+    type = "text", -- if "video"/"image" then "TextOrTxId" is a TxId
+    textOrTxId = "",
   }
 }
 
@@ -53,16 +53,16 @@ Handlers.add(
   function(msg)
     local address = msg.Owner;
     Users[address] = {}
-    Users[address].ProcessId = msg.From
-    Users[address].Created = msg.Timestamp
-    Users[address].LastSeen = msg.Timestamp
-    Users[address].Following = {}
+    Users[address].processId = msg.From
+    Users[address].created = msg.Timestamp
+    Users[address].lastSeen = msg.Timestamp
+    Users[address].following = {}
 
     local data = json.decode(msg.Data)
-    Users[address].Name = data.Name
-    Users[address].Avatar = data.Avatar
-    Users[address].Status = data.Status
-    Users[address].Position = data.Position
+    Users[address].name = data.Name
+    Users[address].avatar = data.Avatar
+    Users[address].status = data.Status
+    Users[address].position = data.Position
 
     ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Users[address]) })
   end
@@ -74,15 +74,15 @@ Handlers.add(
   Handlers.utils.hasMatchingTag("Action", "Update"),
   function(msg)
     local address = msg.Owner;
-    Users[address].LastSeen = msg.Timestamp
+    Users[address].lastSeen = msg.Timestamp
 
     if string.len(msg.Data) > 0 then
       local data = json.decode(msg.Data)
-      if data.Name then Users[address].Name = data.Name end
-      if data.Avatar then Users[address].Avatar = data.Avatar end
-      if data.Status then Users[address].Status = data.Status end
+      if data.Name then Users[address].name = data.Name end
+      if data.Avatar then Users[address].avatar = data.Avatar end
+      if data.Status then Users[address].status = data.Status end
       if data.Position then
-        Users[address].Position = {
+        Users[address].position = {
           x = data.Position.x,
           y = data.Position.y,
         }
@@ -101,7 +101,7 @@ Handlers.add(
     -- Users[address].LastSeen = msg.Timestamp
 
     local data = json.decode(msg.Data)
-    Users[address].Following.add(data.Address)
+    Users[address].following.add(data.Address)
 
     local Notification = {
       Source = address,
@@ -126,7 +126,7 @@ Handlers.add(
     -- Users[address].LastSeen = msg.Timestamp
 
     local data = json.decode(msg.Data)
-    Users[address].Following.remove(data.Address)
+    Users[address].following.remove(data.Address)
 
     ao.send({ Target = msg.From, Status = "OK" })
   end
@@ -156,9 +156,9 @@ Handlers.add(
 
     -- Get all users following this user
     for _, user in pairs(Users) do
-      if user.Following.contains(address) then
+      if user.following.contains(address) then
         ao.send({
-          Target = user.ProcessId,
+          Target = user.processId,
           Status = "OK",
           Action = "Notification",
           Data = json.encode(Notification),

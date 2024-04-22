@@ -135,7 +135,7 @@ export const uploadPageMachine = setup({
 				sendBack({ type: "update submitting", data: { message } });
 			log("Starting upload process...");
 
-			const mimeType = mime.lookup(mainVideo!.name);
+			const mimeType = mime.lookup(mainVideo?.name);
 			const contentType: ContentType = mimeType
 				? mimeType.startsWith("video")
 					? "video"

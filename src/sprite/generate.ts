@@ -190,9 +190,7 @@ export function buildGenerator(
 }
 
 export function deserialize(e: string): number[] {
-	const match = e
-	.slice(1)
-	.match(/.{1,2}/g)
+	const match = e.slice(1).match(/.{1,2}/g);
 	if (!match) throw Error();
 	return match.map((e) => Number.parseInt(e, 16));
 }

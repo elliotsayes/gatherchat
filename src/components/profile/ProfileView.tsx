@@ -22,7 +22,12 @@ export const ProfileView = ({
 					<p className="text-lg">{toonInfo.displayName}</p>
 					<p className="text-muted-foreground">{toonInfo.id}</p>
 				</div>
-				<Button type="button" onClick={() => onClose()} variant={"ghost"} className=" text-accent-foreground">
+				<Button
+					type="button"
+					onClick={() => onClose()}
+					variant={"ghost"}
+					className=" text-accent-foreground"
+				>
 					Close
 				</Button>
 			</div>
@@ -35,7 +40,11 @@ export const ProfileView = ({
 			<p>Last activity: TODO</p>
 			<div className="flex flex-col gap-2 items-center">
 				<div className="flex flex-row gap-2 items-center">
-					<Button type="button" onClick={() => onChangeFollow(toonInfo)} variant={"outline"}>
+					<Button
+						type="button"
+						onClick={() => onChangeFollow(toonInfo)}
+						variant={"outline"}
+					>
 						Follow
 					</Button>
 					<Button type="button" onClick={() => onCall(toonInfo)}>
