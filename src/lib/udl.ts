@@ -5,13 +5,14 @@ import {
 } from "@/lib/schema/udl";
 import type { z } from "zod";
 
-const udlLicenseTxId = "yRj4a5KMctX_uOmKWCFJIjmY8DeJcusVk6-HzLiM_t8";
+// const udlV1LicenseTxId = "yRj4a5KMctX_uOmKWCFJIjmY8DeJcusVk6-HzLiM_t8";
+const udlV2LicenseTxId = "yRj4a5KMctX_uOmKWCFJIjmY8DeJcusVk6-HzLiM_t8";
 
 export const udlConfigToTags = (
 	config: z.infer<typeof zUdlInputSchema>,
 ): Record<string, string> | undefined => {
 	const tags: Record<string, string> = {
-		License: udlLicenseTxId,
+		License: udlV2LicenseTxId,
 	};
 
 	if (config.Access !== "Unspecified") {
