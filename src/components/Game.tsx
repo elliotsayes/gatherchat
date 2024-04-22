@@ -187,7 +187,7 @@ export const Game = ({
 																		type: "TOON_SELECTED",
 																		toonId: toon.id,
 																	});
-																	onSelectToon(toon.id);
+																	onSelectToon(toon);
 																}}
 															/>
 														);
