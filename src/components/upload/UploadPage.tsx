@@ -19,7 +19,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { config } from "@/config";
+// import { config } from "@/config";
 import { uploadPageMachine } from "@/lib/machines/upload_page";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { useMachine } from "@xstate/react";

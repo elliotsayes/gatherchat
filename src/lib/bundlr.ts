@@ -1,7 +1,7 @@
 import { config } from "@/config";
 import { WebIrys } from "@irys/sdk";
 import { BigNumber } from "bignumber.js";
-import { ucmTags } from "./ucm";
+// import { ucmTags } from "./ucm";
 import {
 	type ContentType,
 	type UploadVideosResult as UploadContentResult,
@@ -10,7 +10,7 @@ import {
 	fileTags,
 	getTitle,
 } from "./upload";
-import { ensureRegistered } from "./warp";
+// import { ensureRegistered } from "./warp";
 
 // Function to get upload fee
 export const getUploadFee = async (fileSize: number, token: string) => {

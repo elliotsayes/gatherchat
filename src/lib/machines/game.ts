@@ -1,8 +1,6 @@
 import { and, assign, setup } from "xstate";
 import {
 	blockLocations,
-	blockSpacingX,
-	blockSpacingY,
 	roomTilesX,
 	roomTilesY,
 } from "../../components/game/TileMap3";

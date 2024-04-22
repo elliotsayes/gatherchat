@@ -7,7 +7,6 @@ import type { AoToonMaybeSaved } from "@/lib/schema/gameModel";
 import { useMemo, useRef, useState } from "react";
 import { randomSeed } from "../../sprite/edit";
 import { SidePanel, type SidePanelState } from "../SidePanel";
-import { CharacterCreator } from "../profile/CharacterCreator";
 import { ProfileView } from "../profile/ProfileView";
 import { SetupForm } from "../profile/SetupForm";
 import { UploadPage } from "../upload/UploadPage";

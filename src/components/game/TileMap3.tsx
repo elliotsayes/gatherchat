@@ -1,6 +1,6 @@
 import { PixiComponent, applyDefaultProps } from "@pixi/react";
 import { CompositeTilemap } from "@pixi/tilemap";
-import { Assets, SCALE_MODES } from "pixi.js";
+import { Assets } from "pixi.js";
 
 export const tileSize = 16;
 export const roomTilesX = 21;
@@ -29,6 +29,10 @@ export const blockLocations = (() => {
 })();
 
 export const windowSpacing = 3;
+
+interface Props {
+	unknown?: unknown;
+}
 
 export const Tilemap3 = PixiComponent("TileMap3", {
 	create: () => {

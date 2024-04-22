@@ -1,10 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { config } from "@/config.ts";
+// import { config } from "@/config.ts";
 import type { ContentType, UploadResult } from "@/lib/upload";
 import { Button } from "../ui/button";
 import TextView from "./TextView";
@@ -21,12 +21,12 @@ export const SubmitSuccessDialog = (props: Props) => {
 	const { contentType, mainVideoResult, onAccept } = props;
 
 	const renderResult = (
-		title: string,
+		// title: string,
 		result: UploadResult,
-		isAsset?: boolean,
+		// isAsset?: boolean,
 	) => {
 		const gatewayUrl = `https://arweave.net/${result.id}`;
-		const mainVideoBazarUrl = `https://bazar.arweave.dev/#/asset/${mainVideoResult.id}`;
+		// const mainVideoBazarUrl = `https://bazar.arweave.dev/#/asset/${mainVideoResult.id}`;
 
 		return (
 			<Card>
@@ -87,9 +87,7 @@ export const SubmitSuccessDialog = (props: Props) => {
           Yay :)
         </DialogDescription> */}
 			</DialogHeader>
-			<div className="flex flex-col gap-4">
-				{renderResult("Content", mainVideoResult, true)}
-			</div>
+			<div className="flex flex-col gap-4">{renderResult(mainVideoResult)}</div>
 			<Button onClick={() => onAccept()}>Done</Button>
 		</DialogContent>
 	);

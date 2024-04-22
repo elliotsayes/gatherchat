@@ -190,10 +190,11 @@ export function buildGenerator(
 }
 
 export function deserialize(e: string): number[] {
-	return e
-		.slice(1)
-		.match(/.{1,2}/g)
-		?.map((e) => Number.parseInt(e, 16));
+	const match = e
+	.slice(1)
+	.match(/.{1,2}/g)
+	if (!match) throw Error();
+	return match.map((e) => Number.parseInt(e, 16));
 }
 
 const HEAD_ORIGINS = [

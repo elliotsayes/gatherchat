@@ -1,5 +1,5 @@
 import { Stage } from "@pixi/react";
-import { Container, Sprite } from "@pixi/react-animated";
+import { Container } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
 import { useMachine } from "@xstate/react";
 import { AlphaFilter } from "pixi.js";

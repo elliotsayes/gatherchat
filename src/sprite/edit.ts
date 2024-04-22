@@ -18,6 +18,6 @@ function randomValues() {
 	);
 
 	return [faceIndex, headIndex, ...colorIndexes].map((e) =>
-		Math.floor(Math.random() * e),
+		Math.floor(Math.random() * e!),
 	);
 }
