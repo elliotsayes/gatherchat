@@ -2,7 +2,7 @@ import { AlphaFilter } from "pixi.js";
 import { Stage } from "@pixi/react";
 import { Container, Sprite } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
-import { Tilemap3 } from "./TileMap3";
+import { Tilemap3, blockLocations } from "./TileMap3";
 import type { AoState } from "../lib/schema/gameModel";
 import { gameMachine } from "../lib/machines/game";
 import { useMachine } from "@xstate/react";
@@ -249,6 +249,21 @@ export const Game = ({
 												x={tileSizeX * 17}
 												y={tileSizeY * 1.25}
 											/>
+											{
+												blockLocations.map((blockLocation, i) => (
+													<InteractableSprite
+														key={i.toString()}
+														zIndex={100}
+														image="assets/sprite/tree.png"
+														scale={4}
+														anchor={{ x: 0.5, y: 0.5 }}
+														// onclick={() => onViewFeed()}
+														x={tileSizeX * (blockLocation.x + 0.5)}
+														y={tileSizeY * (blockLocation.y + 1)}
+														active={false}
+													/>
+												))
+											}
 										</Container>
 									)}
 								</Spring>
