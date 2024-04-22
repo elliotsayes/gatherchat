@@ -3,12 +3,12 @@ import { WebIrys } from "@irys/sdk";
 import { BigNumber } from "bignumber.js";
 import { ucmTags } from "./ucm";
 import {
-	type UploadResult,
+	type ContentType,
 	type UploadVideosResult as UploadContentResult,
+	type UploadResult,
 	discoverabilityTags,
 	fileTags,
 	getTitle,
-	type ContentType,
 } from "./upload";
 import { ensureRegistered } from "./warp";
 
@@ -135,7 +135,7 @@ export const uploadVideosToBundlr = async (
 			: {}),
 		...{
 			"Content-For": "GatherChat",
-		}
+		},
 	};
 	const mainVideoResult = await uploadFile(instance, mainVideo, mainVideoTags);
 

@@ -6,9 +6,9 @@ import {
 } from "@/components/ui/dialog";
 import { config } from "@/config.ts";
 import type { ContentType, UploadResult } from "@/lib/upload";
-import { VideoPreview } from "./VideoPreview";
-import TextView from "./TextView";
 import { Button } from "../ui/button";
+import TextView from "./TextView";
+import { VideoPreview } from "./VideoPreview";
 
 interface Props {
 	contentType: ContentType;
@@ -31,15 +31,17 @@ export const SubmitSuccessDialog = (props: Props) => {
 		return (
 			<Card>
 				<CardContent className="relative flex flex-col items-center">
-					{
-						contentType === "video" ? (
+					{contentType === "video" ? (
 						<VideoPreview controls={true} url={gatewayUrl} />
-						) : contentType === "image" ? (
-							<img src={gatewayUrl} className="aspect-video w-48 sm:w-72" alt="Uploaded Asset" />
-						) : (
-							<TextView url={gatewayUrl} />
-						)
-					}
+					) : contentType === "image" ? (
+						<img
+							src={gatewayUrl}
+							className="aspect-video w-48 sm:w-72"
+							alt="Uploaded Asset"
+						/>
+					) : (
+						<TextView url={gatewayUrl} />
+					)}
 					<p className="text-center">
 						{/* {isAsset && (
 							<>
@@ -78,7 +80,7 @@ export const SubmitSuccessDialog = (props: Props) => {
 	};
 
 	return (
-		<DialogContent hasCloseButton={false} >
+		<DialogContent hasCloseButton={false}>
 			<DialogHeader>
 				<DialogTitle className="text-xl">Successfully Uploaded!</DialogTitle>
 				{/* <DialogDescription>

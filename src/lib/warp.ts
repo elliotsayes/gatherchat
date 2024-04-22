@@ -6,7 +6,7 @@ export const ensureRegistered = async (
 	registerProvider: "node1" | "node2" | "arweave",
 ) => {
 	const body = JSON.stringify({ id, registerProvider });
-	console.log({ ensureRegisteredBody: body })
+	console.log({ ensureRegisteredBody: body });
 	const registerResult = await fetch(
 		`${GATEWAY_HOST}/gateway/contracts/register`,
 		{

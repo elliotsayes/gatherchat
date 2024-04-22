@@ -64,14 +64,7 @@ export const VideoUpload = (props: Props) => {
 				".mov",
 				".mkv",
 			],
-			"image/*": [
-				".jpg",
-				".jpeg",
-				".png",
-				".gif",
-				".bmp",
-				".webp",
-			],
+			"image/*": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"],
 		},
 		maxFiles: 1,
 		maxSize: 1024 * 1024 * 1024, // 1GB

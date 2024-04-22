@@ -1,10 +1,10 @@
 import type { zUdlInputSchema } from "@/lib/schema/udl";
 import { udlConfigToTags } from "@/lib/udl";
 import type { ContentType, UploadResult } from "@/lib/upload";
+import mime from "mime-types";
 import { type EventObject, assign, fromCallback, setup } from "xstate";
 import type { z } from "zod";
 import { uploadVideosToBundlr } from "../bundlr";
-import mime from "mime-types";
 
 type Events =
 	| {
@@ -135,10 +135,23 @@ export const uploadPageMachine = setup({
 				sendBack({ type: "update submitting", data: { message } });
 			log("Starting upload process...");
 
-			const mimeType = mime.lookup(mainVideo!.name)
-			const contentType: ContentType = mimeType ? (mimeType.startsWith('video') ? "video" : (mimeType.startsWith("image") ? "image" : "text")) : "text";
+			const mimeType = mime.lookup(mainVideo?.name);
+			const contentType: ContentType = mimeType
+				? mimeType.startsWith("video")
+					? "video"
+					: mimeType.startsWith("image")
+						? "image"
+						: "text"
+				: "text";
 
-			uploadVideosToBundlr(contentType, mainVideo!, "arweave", udlTags, trailerVideo, log)
+			uploadVideosToBundlr(
+				contentType,
+				mainVideo!,
+				"arweave",
+				udlTags,
+				trailerVideo,
+				log,
+			)
 				.then((data) => {
 					console.log({ data });
 					sendBack({ type: "upload success", data });
