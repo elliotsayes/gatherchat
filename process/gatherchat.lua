@@ -139,19 +139,18 @@ Handlers.add(
     local address = msg.Owner;
     -- Users[address].LastSeen = msg.Timestamp
 
+    Posts[msg.Id] = {}
+    Posts[msg.Id].created = msg.Timestamp
+    Posts[msg.Id].author = address
+
     local data = json.decode(msg.Data)
-    local Post = {
-      created = msg.Timestamp,
-      author = address,
-      type = data.type,
-      textOrTxId = data.textOrTxId,
-    }
-    Posts[msg.Id] = Post
+    Posts[msg.Id].type = data.type
+    Posts[msg.Id].textOrTxId = data.textOrTxId
 
     local Notification = {
       Source = address,
       Type = "Post",
-      Post = Post,
+      Post = Posts[msg.Id],
     }
 
     -- Get all users following this user
@@ -166,6 +165,6 @@ Handlers.add(
       end
     end
 
-    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Post) })
+    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Posts[msg.Id]) })
   end
 )
