@@ -77,7 +77,7 @@ export const GameDemo = () => {
 							setSidePanelState("profile");
 						}}
 						onViewFeed={() => {
-							alert("onViewFeed");
+							setSidePanelState("feed");
 						}}
 						onSavePosition={async (position) => {
 							await new Promise((resolve) => setTimeout(resolve, 2000));
