@@ -103,6 +103,17 @@ Handlers.add(
     local data = json.decode(msg.Data)
     Users[address].Following.add(data.Address)
 
+    local Notification = {
+      Source = address,
+      Type = "Follow",
+      Address = msg.Owner,
+    }
+
+    local FollowedUserProcess = Users[data.Address].ProcessId
+    if FollowedUserProcess then
+      ao.send({ Target = FollowedUserProcess, Status = "OK", Action = "Notification", Data = json.encode(Notification) })
+    end
+
     ao.send({ Target = msg.From, Status = "OK" })
   end
 )
@@ -137,6 +148,12 @@ Handlers.add(
     }
     Posts[msg.Id] = Post
 
+    local Notification = {
+      Source = address,
+      Type = "Post",
+      Post = Post,
+    }
+
     -- Get all users following this user
     for _, user in pairs(Users) do
       if user.Following.contains(address) then
@@ -144,7 +161,7 @@ Handlers.add(
           Target = user.ProcessId,
           Status = "OK",
           Action = "Notification",
-          Data = json.encode(Post),
+          Data = json.encode(Notification),
         })
       end
     end
