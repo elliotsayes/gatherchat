@@ -3,7 +3,7 @@ import { Stage } from "@pixi/react";
 import { Container, Sprite } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
 import { Tilemap3, blockLocations } from "./TileMap3";
-import type { AoState } from "../lib/schema/gameModel";
+import type { AoState, AoToonMaybeSaved } from "../lib/schema/gameModel";
 import { gameMachine } from "../lib/machines/game";
 import { useMachine } from "@xstate/react";
 import InteractableToon from "./InteractableToon";
@@ -23,7 +23,7 @@ type Props = {
 	parentRef: React.RefObject<HTMLDivElement>;
 	lastResized: number;
 	aoStateProp: AoState;
-	onSelectToon: (toonId: string) => void;
+	onSelectToon: (toon: AoToonMaybeSaved) => void;
 	onViewFeed: () => void;
 	onSavePosition: (position: { x: number; y: number }) => Promise<boolean>;
 };

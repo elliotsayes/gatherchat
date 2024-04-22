@@ -9,6 +9,8 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
+import { ProfileView } from "./ProfileView";
+import type { AoToonMaybeSaved } from "@/lib/schema/gameModel";
 
 function generateOtherToon(i: number) {
 	return {
@@ -30,6 +32,8 @@ export const GameDemo = () => {
 	const [name, setName] = useState("ME!");
 	const [seed, setSeed] = useState(randomSeed());
 	const [sidePanelState, setSidePanelState] = useState<SidePanelState>("feed");
+
+	const [selectedToon, setSelectedToon] = useState<AoToonMaybeSaved | undefined>(undefined)
 
 	const [lastResized, setLastResized] = useState(0);
 
@@ -63,8 +67,10 @@ export const GameDemo = () => {
 						parentRef={containerRef}
 						lastResized={lastResized}
 						aoStateProp={demoState}
-						onSelectToon={(toonId) => {
-							console.info("onSelectToon", toonId);
+						onSelectToon={(toon) => {
+							console.info("onSelectToon", toon);
+							setSelectedToon(toon);
+							setSidePanelState("profile");
 						}}
 						onViewFeed={() => {
 							alert("onViewFeed");
@@ -81,10 +87,18 @@ export const GameDemo = () => {
 				<SidePanel state={sidePanelState} onSelectState={setSidePanelState}
 					activityFeed={<p>AF</p>}
 					profile={
-					<SetupForm onSubmit={(s) => {
-						setSeed(s.avatarSeed)
-						setName(s.username);
-					}} />}
+						selectedToon ? (
+							<ProfileView toonInfo={selectedToon} onCall={() => {
+								console.log('Call clicked!');
+								setSidePanelState("video");
+							}} onClose={() => setSelectedToon(undefined)} />
+						) : (
+							<SetupForm onSubmit={(s) => {
+								setSeed(s.avatarSeed)
+								setName(s.username);
+							}} />
+						)
+					}
 					video={<p>Video</p>}
 				/>
 			</ResizablePanel>
