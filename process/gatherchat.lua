@@ -24,7 +24,7 @@ local Users = Users or {
 -- Key: Message ID
 local Posts = Posts or {
   testPost1 = {
-    TimeStamp = 0,
+    Created = 0,
     Author = "testUser1",
     Type = "text", -- if "video"/"image" then "TextOrTxId" is a TxId
     TextOrTxId = "",
@@ -141,7 +141,7 @@ Handlers.add(
 
     local data = json.decode(msg.Data)
     local Post = {
-      TimeStamp = msg.Timestamp,
+      Created = msg.Timestamp,
       Author = address,
       Type = data.Type,
       TextOrTxId = data.TextOrTxId,
