@@ -11,7 +11,7 @@ import { GatherChat } from "./GatherChat";
 const aoGather = new AoGatherProvider({});
 
 export const GameLoader = () => {
-	const { data } = useQuery({
+	const { data, refetch } = useQuery({
 		queryKey: ["gameData"],
 		queryFn: async () => {
 			aoGather.ensureStarted();
@@ -86,7 +86,8 @@ export const GameLoader = () => {
 					avatar: p.avatarSeed,
 					name: p.name,
 				};
-				await aoGather.update(userPart);
+				await aoGather.update(userPart)
+        refetch();
 				return true;
 			}}
 			onUpdatePosition={async (p) => {
@@ -94,6 +95,7 @@ export const GameLoader = () => {
 					position: p,
 				};
 				await aoGather.update(userPart);
+        refetch();
 				return true;
 			}}
 		/>
