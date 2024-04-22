@@ -61,7 +61,7 @@ export const CharacterCreator = ({
 					animationName={"idle"}
 					isPlaying={true}
 				/>
-				<Button size={"icon"} onClick={randomize}>
+				<Button type="button" size={"icon"} onClick={randomize}>
 					🎲
 				</Button>
 			</div>

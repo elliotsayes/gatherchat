@@ -22,15 +22,16 @@ const otherToons = Array.from(Array(4).keys()).map(generateOtherToon);
 export const GameDemo = () => {
 	const containerRef = useRef<HTMLDivElement>(null);
 
+	const [name, setName] = useState("ME!");
 	const [seed, setSeed] = useState(randomSeed());
-	const [state, setState] = useState<SidePanelState>("feed");
+	const [sidePanelState, setSidePanelState] = useState<SidePanelState>("feed");
 
 	const demoState = useMemo(
 		() => ({
 			user: {
 				id: "me",
 				avatarSeed: seed,
-				displayName: "ME!!",
+				displayName: name,
 				savedPosition: {
 					x: 7,
 					y: 3,
@@ -38,7 +39,7 @@ export const GameDemo = () => {
 			},
 			otherToons,
 		}),
-		[seed],
+		[name, seed],
 	);
 
 	return (
@@ -60,8 +61,11 @@ export const GameDemo = () => {
 				/>
 			</div>
 			<div>
-				<SidePanel state={state} onSelectState={setState} />
-				<SetupForm onSubmit={(s) => setSeed(s.avatarSeed)} />
+				<SidePanel state={sidePanelState} onSelectState={setSidePanelState} />
+				<SetupForm onSubmit={(s) => {
+					setSeed(s.avatarSeed)
+					setName(s.username);
+				}} />
 			</div>
 		</div>
 	);
