@@ -130,9 +130,12 @@ export const uploadVideosToBundlr = async (
 		...(udlTags !== undefined
 			? {
 					...udlTags,
-					...ucmTags(address, mainVideo.type, mainVideoTitle),
+					// ...ucmTags(address, mainVideo.type, mainVideoTitle),
 				}
 			: {}),
+		...{
+			"Content-For": "GatherChat",
+		}
 	};
 	const mainVideoResult = await uploadFile(instance, mainVideo, mainVideoTags);
 
@@ -141,16 +144,16 @@ export const uploadVideosToBundlr = async (
 	// log?.(`Registered with Warp: ${JSON.stringify(await result.json())}`);
 
 	try {
-		log?.("Checking remaining balance...");
-		const remainingBalance = await getBalance(instance);
-		log?.(`Balance: ${remainingBalance.toString()} winston`);
+		log?.("SKIPPING: Checking remaining balance...");
+		// const remainingBalance = await getBalance(instance);
+		// log?.(`Balance: ${remainingBalance.toString()} winston`);
 
-		if (remainingBalance.gt(0)) {
-			log?.("Withdrawing balance...");
-			await instance.withdrawBalance(remainingBalance);
-		} else {
-			log?.("No balance to withdraw.");
-		}
+		// if (remainingBalance.gt(0)) {
+		// 	log?.("Withdrawing balance...");
+		// 	await instance.withdrawBalance(remainingBalance);
+		// } else {
+		// 	log?.("No balance to withdraw.");
+		// }
 	} catch (e) {
 		console.error(e);
 		log?.("Problem withdrawing balance, skipping.");
