@@ -5,6 +5,8 @@ import { ArconnectSigner, ArweaveSigner } from 'arbundles';
 import Arweave from 'arweave';
 import { decryptJSONWithArconnect, encryptJSONWithPublicKey } from '../utils';
 import { createDataItemSigner } from '@permaweb/aoconnect';
+import { aoRtcProcessId, defaultArweave } from '../constants';
+import EventEmitter from 'eventemitter3';
 
 export type ArweaveID = string;
 export type ArweavePublicKey = string;
@@ -74,6 +76,8 @@ export interface AoRtc {
     register(params: Partial<User>): Promise<this>;
 }
 
+export const rtcEventEmitter = new EventEmitter();
+
 // Class AoRtcProvider extends from AoProvider and implements the AoRtc interface
 export class AoRtcProvider extends AoProvider implements AoRtc {
     signer: RtcSigner;
@@ -84,21 +88,23 @@ export class AoRtcProvider extends AoProvider implements AoRtc {
     heartbeat: any;
 
     constructor({
-        arweave = Arweave.init({ host: 'arweave.net', protocol: 'https', port: 443 }),
+        arweave = defaultArweave,
+        processId = aoRtcProcessId,
+        signer = new ArconnectSigner(window.arweaveWallet, defaultArweave as any),
         ...params
     }: {
-        signer: RtcSigner, 
-        processId: string, 
-        arweave: Arweave,
+        signer?: RtcSigner, 
+        processId?: string, 
+        arweave?: Arweave,
         scheduler?: string, 
         connectConfig?: Services
-    }) {
+    } = {}) {
         super({
-            processId: params.processId, 
+            processId: processId, 
             scheduler: params.scheduler, 
             connectConfig: params.connectConfig
         });
-        this.signer = params.signer;
+        this.signer = signer;
         this.arweave = arweave;
         this.connections = {}
         this.streams = {}
@@ -153,18 +159,33 @@ export class AoRtcProvider extends AoProvider implements AoRtc {
  * and sends offers to new connections, checks for renegotiation and sends new offers if needed
  */
     async updateConnectionStates(): Promise<void> {
+        console.log(this)
+        console.log('updating connection states')
+        console.log("fetching public key")
         const publicKey = await window.arweaveWallet.getActivePublicKey();
+        console.log(`fetching connection states`)
         const encryptedConnections = await this.getContractConnections({userId: publicKey});
         
+        console.log('mapping over connections', encryptedConnections)
         for (const [connectionId, contractConnection] of Object.entries(encryptedConnections)) {
+            console.log(contractConnection)
             const host = contractConnection.Host.id
             const guest = contractConnection.Guest.id
 
             if (host === publicKey) {
+                console.log('if user is host')
                 // update remote ICE servers as host
+                if (contractConnection.Guest.IceCandidates.length) {
+                    console.log('decrypting ice candidates', contractConnection.Guest.IceCandidates)
+
                 await decryptJSONWithArconnect(contractConnection.Guest.IceCandidates, window.arweaveWallet)
-                .then((obj: object) => Array.isArray(obj) ? obj.map(candidate => new RTCIceCandidate(candidate)) : [])
-                .then(candidates => candidates.forEach(candidate => this.connections[guest].addIceCandidate(candidate)));
+                .then((obj: object) => Array.isArray(obj) ? obj : [])
+                .then(candidates => candidates.forEach(candidate => {
+                    console.log(candidate)
+                    this.connections[guest].addIceCandidate(new RTCIceCandidate(candidate)).catch((e)=> console.error(e))
+                }));
+                }
+                console.log('decrypted ice candidates')
 
                 const decryptedAnswer = contractConnection.ConnectionConfig.Answer.length ? new RTCSessionDescription(
                     await decryptJSONWithArconnect(
@@ -178,17 +199,22 @@ export class AoRtcProvider extends AoProvider implements AoRtc {
 
             } else if (guest === publicKey) {
                 // update remote ICE servers as guest
+                if (contractConnection.Host.IceCandidates.length) {
                 await decryptJSONWithArconnect(contractConnection.Host.IceCandidates, window.arweaveWallet)
                 .then((obj: object) => Array.isArray(obj) ? obj.map(candidate => new RTCIceCandidate(candidate)) : [])
-                .then(candidates => candidates.forEach(candidate => this.connections[host].addIceCandidate(candidate)));
+                .then(candidates => candidates.forEach(candidate => this.connections[host].addIceCandidate(candidate))).catch((e)=> console.error(e));
+                }
+                console.log('decrypted ice candidates')
 
+                console.log('decrypting offer')
                 const decryptedOffer = contractConnection.ConnectionConfig.Offer.length ? new RTCSessionDescription(
                     await decryptJSONWithArconnect(
                         contractConnection.ConnectionConfig.Offer, 
                         window.arweaveWallet
                         ) as RTCSessionDescriptionInit) : undefined;
+                console.log('decrypted offer', decryptedOffer)
                 // if the decrypted offer is not the same as the remote description, set it
-                if (decryptedOffer && decryptedOffer !== this.connections[host].remoteDescription) {
+                if (decryptedOffer && decryptedOffer !== this.connections[host]?.remoteDescription) {
                     await this.onRecieveOffer({connectionId, hostPublicKey:host, encryptedOffer: contractConnection.ConnectionConfig.Offer})
                 }
             } else {
@@ -261,6 +287,7 @@ export class AoRtcProvider extends AoProvider implements AoRtc {
         // set video and audio tracks
         const stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
         stream.getTracks().forEach(track => this.connections[id].addTrack(track, stream));
+        this.streams[id] = stream;
 
         const connectionId = await this.ao.message({
             process: this.processId,
@@ -277,7 +304,7 @@ export class AoRtcProvider extends AoProvider implements AoRtc {
 
         console.debug(`Connection to user ${id} created with id ${connectionId}`)
 
-        return this.start();
+        return this;
     }
 
 
@@ -349,9 +376,9 @@ export class AoRtcProvider extends AoProvider implements AoRtc {
                 // Send the offer to the remote peer via your signaling mechanism
                 this.ao.message({
                     process: this.processId,
+                    data: JSON.stringify({Offer: await encryptJSONWithPublicKey(offer, remoteId)}),
                     tags: [
                         {name: 'Action', value: 'RenegotiateConnection'},
-                        {name: 'Offer', value: await encryptJSONWithPublicKey(offer, remoteId)},
                         {name: "ConnectionId", value: connectionId}
                     ],
                     signer: createDataItemSigner(window.arweaveWallet)
@@ -402,7 +429,7 @@ export class AoRtcProvider extends AoProvider implements AoRtc {
     }
 
     async getMediaStream({id}: {id: ArweaveID}): Promise<MediaStream> {
-        if (!(id in Object.keys(this.streams))) {
+        if (!(Object.keys(this.streams).includes(id))) {
             throw new Error(`Connection to user ${id} does not exist`);
         }
         return this.streams[id];
@@ -435,13 +462,14 @@ export class AoRtcProvider extends AoProvider implements AoRtc {
             const stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
             stream.getTracks().forEach(track => connection.addTrack(track, stream));
             this.streams[hostPublicKey] = stream;
+            rtcEventEmitter.emit('mediaStream', stream);
 
             // Send the answer back to the original sender (host)
             this.ao.message({
                 process: this.processId,
+                data: JSON.stringify({ Answer: await encryptJSONWithPublicKey(answer, hostPublicKey)}),
                 tags: [
                     {name: 'Action', value: 'AcceptConnection'},
-                    {name: 'Answer', value: await encryptJSONWithPublicKey(answer, hostPublicKey)},
                     {name: "ConnectionId", value: connectionId}
                 ],
                 signer: createDataItemSigner(window.arweaveWallet)

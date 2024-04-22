@@ -24,8 +24,7 @@ local Users = Users or {
         }
     }
 }
--- webRTC connections
-local Connections = Connections or {
+local testConnection = {
     test = {
         Host = { id = "test", IceCandidates = "" },
         Guest = { id = "test2", IceCandidates = ""},
@@ -35,6 +34,8 @@ local Connections = Connections or {
         }
     }
 }
+-- webRTC connections
+local Connections = Connections or testConnection
 
 Handlers.add(
     "Register",
@@ -44,7 +45,7 @@ Handlers.add(
         Users[user.PublicKey] = user.MetaData
         Users[user.PublicKey].Address = msg.From
 
-        ao.send({Target = msg.From, Status = "OK", Users = json.encode(Users)})
+        ao.send({Target = msg.From, Status = "OK", Data = json.encode(Users)})
 
     end
 )
@@ -108,7 +109,7 @@ Handlers.add(
         assert(guestPublicKey, "User not found. Please register first.")
         assert(connection.Guest.id == guestPublicKey, "You are not the guest of this connection.")
 
-        connection.ConnectionConfig.Answer = msg.Answer
+        connection.ConnectionConfig.Answer = json.decode(msg.Data).Answer
         Connections[msg.ConnectionId] = connection
 
         ao.send({Target = Users[connection.Host.id].Address, Status = "OK", ConnectionId = msg.ConnectionId, Connection = json.encode(connection)})
@@ -131,7 +132,7 @@ Handlers.add(
     function(msg)
         local connectionId = msg.ConnectionId
         local connection = Connections[connectionId]
-        local offer = msg.Offer
+        local offer = json.decode(msg.Data).Offer
         local host = utils.find(
             function (val) return Users[val].Address == msg.From end,
             utils.keys(Users)
