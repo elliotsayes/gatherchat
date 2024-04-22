@@ -7,13 +7,13 @@ local Users = Users or {
   testUser1 = {
     ProcessId = "id",
     Created = 0,
+    LastSeen = 0,
     Name = "test",
     Avatar = "a1204030b070a01", -- pixel art seed
     Status = "Hello, World!",
     Following = {
       "test2",
     },
-    LastSeen = 0,
   }
 }
 
