@@ -7,6 +7,7 @@ import type {
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { GatherChat } from "./GatherChat";
+import { SetupForm } from "./profile/SetupForm";
 
 const aoGather = new AoGatherProvider({});
 
@@ -46,8 +47,11 @@ export const GameLoader = () => {
 		//   displayName: userData.name,
 		//   savedPosition: { x: userData.position.x, y: userData.position.y },
 		// };
-		const userData = data.testUser1;
-		console.log({ userData });
+		const userData = data[arweaveId];
+    console.log({ userData })
+
+    if (!userData) return undefined;
+
 		const user: AoToonMaybeSaved = {
 			id: "testUser1",
 			avatarSeed: userData.avatar,
@@ -57,7 +61,7 @@ export const GameLoader = () => {
 		};
 		const otherToons: AoToonSaved[] = Object.entries(data)
 			.map(([id, toon]) => {
-				// if (id === arweaveId) return null;
+				if (id === arweaveId) return null;
 				return {
 					id,
 					avatarSeed: toon.avatar,
@@ -74,9 +78,29 @@ export const GameLoader = () => {
 		};
 	}, [data, arweaveId]);
 
-	if (gameData === undefined) {
+	if (data === undefined) {
 		return <div>Loading...</div>;
 	}
+
+	if (gameData === undefined) {
+		return (
+      <SetupForm
+        onSubmit={(s) => {
+          (async () => {
+            await aoGather.register({
+              name: s.username,
+              avatar: s.avatarSeed,
+              status: "Hello Gather Chat!",
+              position: { x: 3, y: 3 },
+            })
+            await refetch();
+            alert("Registered!")
+          })();
+        }}
+      />
+    )
+	}
+
 
 	return (
 		<GatherChat

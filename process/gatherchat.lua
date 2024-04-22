@@ -59,10 +59,10 @@ Handlers.add(
     Users[address].following = {}
 
     local data = json.decode(msg.Data)
-    Users[address].name = data.Name
-    Users[address].avatar = data.Avatar
-    Users[address].status = data.Status
-    Users[address].position = data.Position
+    Users[address].name = data.name
+    Users[address].avatar = data.avatar
+    Users[address].status = data.status
+    Users[address].position = data.position
 
     ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Users[address]) })
   end
@@ -78,13 +78,13 @@ Handlers.add(
 
     if string.len(msg.Data) > 0 then
       local data = json.decode(msg.Data)
-      if data.Name then Users[address].name = data.Name end
-      if data.Avatar then Users[address].avatar = data.Avatar end
-      if data.Status then Users[address].status = data.Status end
-      if data.Position then
+      if data.name then Users[address].name = data.name end
+      if data.avatar then Users[address].avatar = data.avatar end
+      if data.status then Users[address].status = data.status end
+      if data.position then
         Users[address].position = {
-          x = data.Position.x,
-          y = data.Position.y,
+          x = data.position.x,
+          y = data.position.y,
         }
       end
     end
@@ -104,12 +104,12 @@ Handlers.add(
     Users[address].following.add(data.Address)
 
     local Notification = {
-      Source = address,
-      Type = "Follow",
-      Address = msg.Owner,
+      source = address,
+      type = "Follow",
+      address = msg.Owner,
     }
 
-    local FollowedUserProcess = Users[data.Address].ProcessId
+    local FollowedUserProcess = Users[data.address].processId
     if FollowedUserProcess then
       ao.send({ Target = FollowedUserProcess, Status = "OK", Action = "Notification", Data = json.encode(Notification) })
     end
@@ -126,7 +126,7 @@ Handlers.add(
     -- Users[address].LastSeen = msg.Timestamp
 
     local data = json.decode(msg.Data)
-    Users[address].following.remove(data.Address)
+    Users[address].following.remove(data.address)
 
     ao.send({ Target = msg.From, Status = "OK" })
   end
@@ -141,10 +141,10 @@ Handlers.add(
 
     local data = json.decode(msg.Data)
     local Post = {
-      Created = msg.Timestamp,
-      Author = address,
-      Type = data.Type,
-      TextOrTxId = data.TextOrTxId,
+      created = msg.Timestamp,
+      author = address,
+      type = data.type,
+      textOrTxId = data.textOrTxId,
     }
     Posts[msg.Id] = Post
 

@@ -6,7 +6,7 @@ import Arweave from "arweave";
 import EventEmitter from "eventemitter3";
 import { AoProvider } from "./ao";
 
-export const aoGatherProcessId = "X9FLhb3OuZnKVJA2jQMy6unRMGm-gQNStx1J40VfFDs";
+export const aoGatherProcessId = "Zmybo0DUutTmHwbCckNfA36Ofda6h75qHd83RrG7HSI";
 export const defaultArweave = Arweave.init({
 	host: "arweave.net",
 	protocol: "https",
