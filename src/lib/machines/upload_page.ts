@@ -132,7 +132,9 @@ export const uploadPageMachine = setup({
 				sendBack({ type: "update submitting", data: { message } });
 			log("Starting upload process...");
 
-			uploadVideosToBundlr("video", mainVideo!, "arweave", udlTags, trailerVideo, log)
+			const contentType = "video" // TODO
+
+			uploadVideosToBundlr(contentType, mainVideo!, "arweave", udlTags, trailerVideo, log)
 				.then((data) => {
 					console.log({ data });
 					sendBack({ type: "upload success", data });

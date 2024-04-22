@@ -47,14 +47,14 @@ export const UploadPage = () => {
 		<div>
 			<Card className="mx-auto max-w-md lg:max-w-3xl text-left">
 				<CardHeader>
-					<CardTitle>UDL Video Uploader</CardTitle>
+					<CardTitle>Upload Media Content</CardTitle>
 					{/* <CardDescription>Card Description</CardDescription> */}
 				</CardHeader>
 				<CardContent className="flex flex-col gap-4 items-stretch">
 					<div className="flex flex-col lg:flex-row gap-4 lg:justify-stretch">
 						<VideoUpload
-							title={"Main Video"}
-							subtitle={"Select your main video"}
+							title={"Image/Video"}
+							subtitle={"Select your media"}
 							file={current.context.mainVideo}
 							onFile={(mainVideo) =>
 								send({ type: "main video set", data: { mainVideo } })
@@ -62,7 +62,7 @@ export const UploadPage = () => {
 							onClear={() => send({ type: "main video cleared" })}
 							disabled={!current.matches("configuring")}
 						/>
-						<VideoUpload
+						{/* <VideoUpload
 							title={"Trailer"}
 							subtitle={"Select trailer video (optional)"}
 							file={current.context.trailerVideo}
@@ -71,7 +71,7 @@ export const UploadPage = () => {
 							}
 							onClear={() => send({ type: "trailer video cleared" })}
 							disabled={!current.matches("configuring")}
-						/>
+						/> */}
 					</div>
 					<Card className="w-full">
 						<CardHeader>

@@ -90,7 +90,8 @@ export const GameDemo = () => {
 				<SidePanel
 					state={sidePanelState}
 					onSelectState={setSidePanelState}
-					activityFeed={<UploadPage />}
+					activityFeed={<p>AF</p>}
+					upload={<UploadPage />}
 					profile={
 						selectedToon ? (
 							<ProfileView

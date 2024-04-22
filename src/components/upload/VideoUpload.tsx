@@ -64,6 +64,14 @@ export const VideoUpload = (props: Props) => {
 				".mov",
 				".mkv",
 			],
+			"image/*": [
+				".jpg",
+				".jpeg",
+				".png",
+				".gif",
+				".bmp",
+				".webp",
+			],
 		},
 		maxFiles: 1,
 		maxSize: 1024 * 1024 * 1024, // 1GB
@@ -92,9 +100,9 @@ export const VideoUpload = (props: Props) => {
 						) : (
 							<div className="text-center text-[#C9CDCF]/90 font-semibold bg-gradient-radial from-primary/20 via-primary/5 to-transparent px-2 sm:px-4 py-[2.6rem] sm:py-[4.25rem]">
 								{isDragActive ? (
-									<p>Drop video here!</p>
+									<p>Drop media here!</p>
 								) : (
-									<p>Drag & drop video file</p>
+									<p>Drag & drop media file</p>
 								)}
 							</div>
 						))}
