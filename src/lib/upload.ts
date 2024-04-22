@@ -9,10 +9,11 @@ export const fileTags = (file: File) => ({
 	"File-Name": file.name,
 });
 
-export const discoverabilityTags = (title: string) => ({
-	Type: "video",
+export type ContentType = "text" | "image" | "video";
+export const discoverabilityTags = (type: ContentType, title: string) => ({
+	Type: type,
 	Title: title,
-	Description: `Uploaded with UDL Video Uploader via ${formatTagHuman(
+	Description: `Uploaded with Gather Chat via ${formatTagHuman(
 		config.uploader,
 	)}`,
 });
@@ -37,5 +38,5 @@ export type UploadResult = {
 
 export type UploadVideosResult = {
 	mainVideoResult: UploadResult;
-	trailerVideoResult?: UploadResult;
+	// trailerVideoResult?: UploadResult;
 };

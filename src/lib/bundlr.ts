@@ -8,7 +8,7 @@ import {
 	discoverabilityTags,
 	fileTags,
 	getTitle,
-	rendererTags,
+	type ContentType,
 } from "./upload";
 import { ensureRegistered } from "./warp";
 
@@ -77,6 +77,7 @@ const uploadFile = async (
 };
 
 export const uploadVideosToBundlr = async (
+	contentType: ContentType,
 	mainVideo: File,
 	token: string,
 	udlTags?: Record<string, string>,
@@ -125,7 +126,7 @@ export const uploadVideosToBundlr = async (
 	const mainVideoTitle = getTitle(mainVideo);
 	const mainVideoTags = {
 		...fileTags(mainVideo),
-		...discoverabilityTags(mainVideoTitle),
+		...discoverabilityTags(contentType, mainVideoTitle),
 		...(udlTags !== undefined
 			? {
 					...udlTags,
