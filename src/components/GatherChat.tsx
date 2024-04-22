@@ -107,14 +107,13 @@ export const GatherChat = ({
 							/>
 						) : (
 							<SetupForm
-								key={`${aoState.user.displayName}-${aoState.user.avatarSeed}`}
 								onSubmit={(s) => {
 									onUpdateProfile({
 										name: s.username,
 										avatarSeed: s.avatarSeed,
 									}).then((res) => {
 										if (res) {
-											alert("Position updated!");
+											alert("Profile updated!");
 										} else {
 											alert("Update failed!");
 										}
