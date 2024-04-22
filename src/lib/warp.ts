@@ -3,8 +3,10 @@ const GATEWAY_HOST = "https://gateway.warp.cc";
 
 export const ensureRegistered = async (
 	id: string,
-	bundlrNode: "node1" | "node2" | "arweave",
+	registerProvider: "node1" | "node2" | "arweave",
 ) => {
+	const body = JSON.stringify({ id, registerProvider });
+	console.log({ ensureRegisteredBody: body })
 	const registerResult = await fetch(
 		`${GATEWAY_HOST}/gateway/contracts/register`,
 		{
@@ -13,7 +15,7 @@ export const ensureRegistered = async (
 				"Content-Type": "application/json",
 				Accept: "application/json",
 			},
-			body: JSON.stringify({ id, bundlrNode }),
+			body,
 		},
 	);
 	return registerResult;

@@ -1,9 +1,10 @@
 import type { zUdlInputSchema } from "@/lib/schema/udl";
 import { udlConfigToTags } from "@/lib/udl";
-import type { UploadResult } from "@/lib/upload";
+import type { ContentType, UploadResult } from "@/lib/upload";
 import { type EventObject, assign, fromCallback, setup } from "xstate";
 import type { z } from "zod";
 import { uploadVideosToBundlr } from "../bundlr";
+import mime from "mime-types";
 
 type Events =
 	| {
@@ -69,6 +70,7 @@ type Context = {
 	udlTags?: Record<string, string>;
 	uploadSymbol?: string;
 	submitLog: string;
+	contentType?: ContentType;
 	mainVideoResult?: UploadResult;
 	trailerVideoResult?: UploadResult;
 	uploadError?: unknown;
@@ -110,8 +112,9 @@ export const uploadPageMachine = setup({
 			},
 		}),
 		assignSendAndPayResult: assign({
+			contentType: ({ event }) => event.data.contentType,
 			mainVideoResult: ({ event }) => event.data.mainVideoResult,
-			trailerVideoResult: ({ event }) => event.data.trailerVideoResult,
+			// trailerVideoResult: ({ event }) => event.data.trailerVideoResult,
 		}),
 		assignUploadError: assign({
 			uploadError: ({ event }) => event.data.uploadError,
@@ -132,7 +135,8 @@ export const uploadPageMachine = setup({
 				sendBack({ type: "update submitting", data: { message } });
 			log("Starting upload process...");
 
-			const contentType = "video" // TODO
+			const mimeType = mime.lookup(mainVideo!.name)
+			const contentType: ContentType = mimeType ? (mimeType.startsWith('video') ? "video" : (mimeType.startsWith("image") ? "image" : "text")) : "text";
 
 			uploadVideosToBundlr(contentType, mainVideo!, "arweave", udlTags, trailerVideo, log)
 				.then((data) => {

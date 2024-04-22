@@ -3,13 +3,15 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import { Button } from "../ui/button";
 
 interface Props {
 	error?: Error;
+	onAccept: () => void;
 }
 
 export const SubmitFailureDialog = (props: Props) => {
-	const { error } = props;
+	const { error, onAccept } = props;
 
 	return (
 		<DialogContent className="sm:max-w-[425px]" hasCloseButton={false}>
@@ -28,6 +30,7 @@ export const SubmitFailureDialog = (props: Props) => {
 			) : (
 				<span className="text-xl">No error information available.</span>
 			)}
+			<Button onClick={() => onAccept()}>Close</Button>
 		</DialogContent>
 	);
 };

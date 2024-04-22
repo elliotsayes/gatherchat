@@ -56,6 +56,8 @@ export const GameDemo = () => {
 		[name, seed],
 	);
 
+	const [uploadPageKey, setUploadPageKey] = useState(0);
+
 	return (
 		<ResizablePanelGroup direction="horizontal" className="h-screen">
 			<ResizablePanel
@@ -91,7 +93,13 @@ export const GameDemo = () => {
 					state={sidePanelState}
 					onSelectState={setSidePanelState}
 					activityFeed={<p>AF</p>}
-					upload={<UploadPage />}
+					upload={<UploadPage
+						key={uploadPageKey}
+						onDone={() => {
+							// Reset key
+							setUploadPageKey(Date.now())
+						}} 
+					/>}
 					profile={
 						selectedToon ? (
 							<ProfileView

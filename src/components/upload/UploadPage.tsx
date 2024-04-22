@@ -31,8 +31,11 @@ import { UdlForm } from "./UdlForm";
 import { UdlTable } from "./UdlTable";
 import { VideoUpload } from "./VideoUpload";
 
+interface UploadPageProps {
+	onDone?: () => void;
+}
 
-export const UploadPage = () => {
+export const UploadPage = ({ onDone }: UploadPageProps) => {
 	const [current, send] = useMachine(uploadPageMachine);
 
 	const canSumbit = current.can({
@@ -188,12 +191,16 @@ export const UploadPage = () => {
 				)}
 				{current.matches("upload success") && (
 					<SubmitSuccessDialog
+						contentType={current.context.contentType!}
 						mainVideoResult={current.context.mainVideoResult!}
-						trailerVideoResult={current.context.trailerVideoResult}
+						onAccept={() => onDone?.()}
 					/>
 				)}
 				{current.matches("upload failure") && (
-					<SubmitFailureDialog error={current.context.uploadError as Error} />
+					<SubmitFailureDialog
+						error={current.context.uploadError as Error}
+						onAccept={() => onDone?.()}
+					/>
 				)}
 			</Dialog>
 		</div>

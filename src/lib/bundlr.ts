@@ -4,7 +4,7 @@ import { BigNumber } from "bignumber.js";
 import { ucmTags } from "./ucm";
 import {
 	type UploadResult,
-	type UploadVideosResult,
+	type UploadVideosResult as UploadContentResult,
 	discoverabilityTags,
 	fileTags,
 	getTitle,
@@ -83,7 +83,7 @@ export const uploadVideosToBundlr = async (
 	udlTags?: Record<string, string>,
 	trailerVideo?: File,
 	log?: (message: string) => void,
-): Promise<UploadVideosResult> => {
+): Promise<UploadContentResult> => {
 	log?.("Connecting to Arweave Wallet...");
 	const { instance, address } = await connectInstance(token);
 	log?.(`Connected to Arweave Wallet: ${address}`);
@@ -122,7 +122,7 @@ export const uploadVideosToBundlr = async (
 		}
 	}
 
-	log?.("Uploading main video...");
+	log?.("Uploading main content...");
 	const mainVideoTitle = getTitle(mainVideo);
 	const mainVideoTags = {
 		...fileTags(mainVideo),
@@ -136,9 +136,9 @@ export const uploadVideosToBundlr = async (
 	};
 	const mainVideoResult = await uploadFile(instance, mainVideo, mainVideoTags);
 
-	log?.("Registering atomic asset with Warp...");
-	const result = await ensureRegistered(mainVideoResult.id, config.bundlrNode);
-	log?.(`Registered with Warp: ${JSON.stringify(await result.json())}`);
+	log?.("SKIPPING: Registering atomic asset with Warp...");
+	// const result = await ensureRegistered(mainVideoResult.id, config.bundlrNode);
+	// log?.(`Registered with Warp: ${JSON.stringify(await result.json())}`);
 
 	try {
 		log?.("Checking remaining balance...");
@@ -159,6 +159,7 @@ export const uploadVideosToBundlr = async (
 	log?.("Done!");
 
 	return {
+		contentType,
 		mainVideoResult,
 	};
 };

@@ -5,39 +5,43 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { config } from "@/config.ts";
-import type { UploadResult } from "@/lib/upload";
+import type { ContentType, UploadResult } from "@/lib/upload";
 import { VideoPreview } from "./VideoPreview";
+import TextView from "./TextView";
+import { Button } from "../ui/button";
 
 interface Props {
+	contentType: ContentType;
 	mainVideoResult: UploadResult;
-	trailerVideoResult?: UploadResult;
+	// trailerVideoResult?: UploadResult;
+	onAccept: () => void;
 }
 
-const isArseeding = config.uploader === "arseeding";
-
 export const SubmitSuccessDialog = (props: Props) => {
-	const { mainVideoResult, trailerVideoResult } = props;
+	const { contentType, mainVideoResult, onAccept } = props;
 
 	const renderResult = (
 		title: string,
 		result: UploadResult,
 		isAsset?: boolean,
 	) => {
-		const gatewayUrl = isArseeding
-			? `${config.arseedingUrl}/${result.id}`
-			: `https://arweave.net/${result.id}`;
+		const gatewayUrl = `https://arweave.net/${result.id}`;
 		const mainVideoBazarUrl = `https://bazar.arweave.dev/#/asset/${mainVideoResult.id}`;
 
 		return (
 			<Card>
-				<CardHeader>
-					<CardTitle className="text-lg">{title}</CardTitle>
-					{/* <CardDescription>{subtitle}</CardDescription> */}
-				</CardHeader>
 				<CardContent className="relative flex flex-col items-center">
-					<VideoPreview controls={true} url={gatewayUrl} />
+					{
+						contentType === "video" ? (
+						<VideoPreview controls={true} url={gatewayUrl} />
+						) : contentType === "image" ? (
+							<img src={gatewayUrl} className="aspect-video w-48 sm:w-72" alt="Uploaded Asset" />
+						) : (
+							<TextView url={gatewayUrl} />
+						)
+					}
 					<p className="text-center">
-						{isAsset && (
+						{/* {isAsset && (
 							<>
 								Open asset on{" "}
 								<a
@@ -50,7 +54,7 @@ export const SubmitSuccessDialog = (props: Props) => {
 								</a>
 								<br />
 							</>
-						)}
+						)} */}
 						Open tx on{" "}
 						<a
 							href={gatewayUrl}
@@ -58,7 +62,7 @@ export const SubmitSuccessDialog = (props: Props) => {
 							className="underline"
 							rel="noreferrer"
 						>
-							{isArseeding ? "Arseeding Gateway" : "Arweave Gateway"}
+							Arweave Gateway
 						</a>{" "}
 						or{" "}
 						<span
@@ -74,7 +78,7 @@ export const SubmitSuccessDialog = (props: Props) => {
 	};
 
 	return (
-		<DialogContent hasCloseButton={false}>
+		<DialogContent hasCloseButton={false} >
 			<DialogHeader>
 				<DialogTitle className="text-xl">Successfully Uploaded!</DialogTitle>
 				{/* <DialogDescription>
@@ -82,10 +86,9 @@ export const SubmitSuccessDialog = (props: Props) => {
         </DialogDescription> */}
 			</DialogHeader>
 			<div className="flex flex-col gap-4">
-				{renderResult("Main Video", mainVideoResult, true)}
-				{trailerVideoResult &&
-					renderResult("Trailer Video", trailerVideoResult)}
+				{renderResult("Content", mainVideoResult, true)}
 			</div>
+			<Button onClick={() => onAccept()}>Done</Button>
 		</DialogContent>
 	);
 };

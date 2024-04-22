@@ -37,6 +37,7 @@ export type UploadResult = {
 };
 
 export type UploadVideosResult = {
+	contentType: ContentType;
 	mainVideoResult: UploadResult;
 	// trailerVideoResult?: UploadResult;
 };
