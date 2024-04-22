@@ -1,5 +1,5 @@
 import { Stage } from "@pixi/react";
-import { Container } from "@pixi/react-animated";
+import { Container, Sprite } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
 import { useMachine } from "@xstate/react";
 import { AlphaFilter } from "pixi.js";
@@ -138,6 +138,18 @@ export const Game = ({
 											{...props}
 										>
 											<Tilemap3 />
+											{
+												aoState.user.savedPosition !== undefined && (
+													<Sprite
+														image={"assets/sprite/purple.png"}
+														width={tileSizeX}
+														height={tileSizeY}
+														x={tileSizeX * aoState.user.savedPosition.x}
+														y={tileSizeY * aoState.user.savedPosition.y}
+														filters={[veryTransparent]}
+													/>
+												)
+											}
 											{current.hasTag("SHOW_OBJECTS") && (
 												<InteractableSprite
 													image="assets/sprite/board.png"
