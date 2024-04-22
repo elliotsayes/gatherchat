@@ -37,10 +37,10 @@ const allFrameSets: FrameSet[] = [
 		name: "tv",
 		tiles: { x: 3, y: 0, w: 2, h: 2 },
 	},
-  {
-    name: "tree",
-    tiles: {x: 2, y: 7, w: 1, h: 2 }, 
-  },
+	{
+		name: "tree",
+		tiles: { x: 2, y: 7, w: 1, h: 2 },
+	},
 ];
 
 const tileSize = {
@@ -51,7 +51,8 @@ const tileSize = {
 function frameSetToFrames(frameSet: FrameSet): Record<string, Frame> {
 	const frameIndicies = {
 		x: Array(frameSet.tiles.w)
-			.fill(0).map((_, i) => i),
+			.fill(0)
+			.map((_, i) => i),
 		y: Array(frameSet.tiles.h)
 			.fill(0)
 			.map((_, i) => i),
@@ -60,10 +61,10 @@ function frameSetToFrames(frameSet: FrameSet): Record<string, Frame> {
 	const frames = frameIndicies.y.flatMap((y) => {
 		return frameIndicies.x.map((x) => {
 			const name = `${frameSet.name}_${x}_${y}`;
-      const globalOffset = {
-        x: x + frameSet.tiles.x,
-        y: y + frameSet.tiles.y,
-      }
+			const globalOffset = {
+				x: x + frameSet.tiles.x,
+				y: y + frameSet.tiles.y,
+			};
 			return {
 				[name]: {
 					frame: {

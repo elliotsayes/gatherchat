@@ -1,22 +1,22 @@
-import { AlphaFilter } from "pixi.js";
 import { Stage } from "@pixi/react";
 import { Container, Sprite } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
-import { Tilemap3, blockLocations } from "./TileMap3";
-import type { AoState, AoToonMaybeSaved } from "../lib/schema/gameModel";
-import { gameMachine } from "../lib/machines/game";
 import { useMachine } from "@xstate/react";
+import { AlphaFilter } from "pixi.js";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { gameMachine } from "../../lib/machines/game";
+import type { AoState, AoToonMaybeSaved } from "../../lib/schema/gameModel";
+import InteractableSprite from "./InteractableSprite";
 import InteractableToon from "./InteractableToon";
 import NamedAvatar from "./NamedAvatar";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import InteractableSprite from "./InteractableSprite";
+import { Tilemap3, blockLocations } from "./TileMap3";
 
 const tileSizeX = 64;
 const tileSizeY = 64;
 
 const fallbackStageSize = {
 	width: 800,
-  height: 600
+	height: 600,
 };
 
 type Props = {
@@ -50,7 +50,7 @@ export const Game = ({
 	}, [parentRef.current]);
 
 	useEffect(() => {
-		console.log({lastResized});
+		console.log({ lastResized });
 		resizeStage();
 		window.addEventListener("resize", resizeStage);
 		return () => {
@@ -274,21 +274,19 @@ export const Game = ({
 												x={tileSizeX * 17}
 												y={tileSizeY * 1.25}
 											/>
-											{
-												blockLocations.map((blockLocation, i) => (
-													<InteractableSprite
-														active={false}
-														key={i.toString()}
-														zIndex={100}
-														image="assets/sprite/tree.png"
-														scale={4}
-														anchor={{ x: 0.5, y: 0.5 }}
-														// onclick={() => onViewFeed()}
-														x={tileSizeX * (blockLocation.x + 0.5)}
-														y={tileSizeY * (blockLocation.y + 1)}
-													/>
-												))
-											}
+											{blockLocations.map((blockLocation, i) => (
+												<InteractableSprite
+													active={false}
+													key={i.toString()}
+													zIndex={100}
+													image="assets/sprite/tree.png"
+													scale={4}
+													anchor={{ x: 0.5, y: 0.5 }}
+													// onclick={() => onViewFeed()}
+													x={tileSizeX * (blockLocation.x + 0.5)}
+													y={tileSizeY * (blockLocation.y + 1)}
+												/>
+											))}
 										</Container>
 									)}
 								</Spring>

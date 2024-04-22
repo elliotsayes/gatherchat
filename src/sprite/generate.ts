@@ -5,7 +5,7 @@
 // const generate = buildGenerator(baseTex, partTex);
 // const sprite = generate("seed");
 
-import { ColorSelections, colorThemes, pad2 } from "./shared";
+import { type ColorSelections, colorThemes, pad2 } from "./shared";
 
 export function buildGenerator(
 	baseTex: CanvasImageSource,
@@ -60,71 +60,71 @@ export function buildGenerator(
 		n: number[],
 	) {
 		let c = false;
-		if (t == 4 && r == 2) {
-			if (a == 1) {
-				if (e == 1) {
+		if (t === 4 && r === 2) {
+			if (a === 1) {
+				if (e === 1) {
 					draw16(ctx, e * 16, a * 24 + 1, partTex, 4, 4);
 					c = true;
-				} else if (e == 2) {
+				} else if (e === 2) {
 					draw16(ctx, e * 16, a * 24 + 2, partTex, 5, 4);
 					c = true;
-				} else if (e == 3) {
+				} else if (e === 3) {
 					draw16(ctx, e * 16, a * 24 + 1, partTex, 4, 4);
 					c = true;
 				}
-			} else if (a == 3) {
+			} else if (a === 3) {
 				draw16(ctx, e * 16, a * 24 + EYES_ORIGINS[3][e], partTex, 4, 4);
 				c = true;
 			}
-		} else if (t == 6 && r == 0) {
-			if (a == 1 && (e == 1 || e == 3)) {
+		} else if (t === 6 && r === 0) {
+			if (a === 1 && (e === 1 || e === 3)) {
 				draw16(ctx, e * 16, a * 24 + HEAD_ORIGINS[1][e], partTex, 6, 4);
 				c = true;
-			} else if (a == 1 && e == 2) {
+			} else if (a === 1 && e === 2) {
 				draw16(ctx, e * 16, a * 24 + HEAD_ORIGINS[1][e], partTex, 7, 4);
 				c = true;
-			} else if (a == 2 && e == 3) {
+			} else if (a === 2 && e === 3) {
 				draw16(ctx, e * 16, a * 24 + HEAD_ORIGINS[1][e], partTex, 6, 4);
 				c = true;
-			} else if (a == 3 && e == 2) {
+			} else if (a === 3 && e === 2) {
 				draw16(ctx, e * 16, a * 24 + 2, partTex, 8, 4);
 				c = true;
-			} else if (a == 3 && (e == 5 || e == 3)) {
+			} else if (a === 3 && (e === 5 || e === 3)) {
 				draw16(ctx, e * 16, a * 24 + HEAD_ORIGINS[3][e], partTex, 6, 4);
 				c = true;
-			} else if (a == 3 && e == 4) {
+			} else if (a === 3 && e === 4) {
 				draw16(ctx, e * 16, a * 24 + HEAD_ORIGINS[3][e], partTex, 7, 4);
 				c = true;
-			} else if (a == 3 && e == 1) {
+			} else if (a === 3 && e === 1) {
 				draw16(ctx, e * 16, a * 24 + 2, partTex, 9, 4);
 				c = true;
 			}
-		} else if (t == 8 && r == 3) {
-			if ((e == 1 || e == 3) && a == 3) {
+		} else if (t === 8 && r === 3) {
+			if ((e === 1 || e === 3) && a === 3) {
 				draw16(ctx, e * 16, a * 24 + EYES_ORIGINS[3][e], partTex, 10, 4);
 				c = true;
 			}
-			if (e == 2 && a == 3) {
+			if (e === 2 && a === 3) {
 				draw16(ctx, e * 16, a * 24 + EYES_ORIGINS[3][e], partTex, 11, 4);
 				c = true;
 			}
-		} else if (t == 13 && (r == 0 || r == 1)) {
+		} else if (t === 13 && (r === 0 || r === 1)) {
 			drawShape(ctx, e, a, 6, r, n);
 			drawShape(ctx, e, a, 12, r, n);
 			c = true;
-		} else if (t == 14 && (r == 0 || r == 1)) {
+		} else if (t === 14 && (r === 0 || r === 1)) {
 			drawShape(ctx, e, a, 10, r, n);
 			drawShape(ctx, e, a, 12, r, n);
 			c = true;
-		} else if (t == 15 && (r == 0 || r == 1)) {
+		} else if (t === 15 && (r === 0 || r === 1)) {
 			drawShape(ctx, e, a, 7, r, n);
 			drawShape(ctx, e, a, 12, r, n);
 			c = true;
-		} else if (t == 23 && (r == 0 || r == 1)) {
+		} else if (t === 23 && (r === 0 || r === 1)) {
 			drawShape(ctx, e, a, 6, r, n);
 			drawShape(ctx, e, a, 22, r, n);
 			c = true;
-		} else if (t == 24 && (r == 0 || r == 1)) {
+		} else if (t === 24 && (r === 0 || r === 1)) {
 			drawShape(ctx, e, a, 7, r, n);
 			drawShape(ctx, e, a, 22, r, n);
 			c = true;
@@ -165,9 +165,9 @@ export function buildGenerator(
 
 	function hexToArr(e: string) {
 		return [
-			parseInt(e.slice(0, 2), 16),
-			parseInt(e.slice(2, 4), 16),
-			parseInt(e.slice(4, 6), 16),
+			Number.parseInt(e.slice(0, 2), 16),
+			Number.parseInt(e.slice(2, 4), 16),
+			Number.parseInt(e.slice(4, 6), 16),
 		];
 	}
 
@@ -177,7 +177,7 @@ export function buildGenerator(
 			const c = hexToArr(t[r]);
 			for (let i = 0; i < e.length; i += 4) {
 				const o = pad2(e[i]) + pad2(e[i + 1]) + pad2(e[i + 2]);
-				if (e[i + 3] == 255 && o === n) {
+				if (e[i + 3] === 255 && o === n) {
 					e[i + 0] = c[0];
 					e[i + 1] = c[1];
 					e[i + 2] = c[2];
@@ -192,8 +192,8 @@ export function buildGenerator(
 export function deserialize(e: string): number[] {
 	return e
 		.slice(1)
-		.match(/.{1,2}/g)!
-		.map((e) => parseInt(e, 16));
+		.match(/.{1,2}/g)
+		?.map((e) => Number.parseInt(e, 16));
 }
 
 const HEAD_ORIGINS = [

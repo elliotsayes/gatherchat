@@ -1,6 +1,6 @@
-import { Assets, SCALE_MODES } from "pixi.js";
-import { applyDefaultProps, PixiComponent } from "@pixi/react";
+import { PixiComponent, applyDefaultProps } from "@pixi/react";
 import { CompositeTilemap } from "@pixi/tilemap";
+import { Assets, SCALE_MODES } from "pixi.js";
 
 export const tileSize = 16;
 export const roomTilesX = 21;
@@ -9,12 +9,18 @@ export const roomTilesY = 12;
 export const blockSpacingX = 4;
 export const blockSpacingY = 4;
 export const blockLocations = (() => {
-	const locations: {x: number; y: number}[] = [];
+	const locations: { x: number; y: number }[] = [];
 	for (let x = 0; x < roomTilesX; x++) {
 		for (let y = 0; y < roomTilesY; y++) {
-			if (x > 0 && x < roomTilesX - 1 && y > 0 && y < roomTilesY - 2 && x % blockSpacingX === 0) {
-				if (((y + 1) % blockSpacingY) === 0) {
-					locations.push({x, y});
+			if (
+				x > 0 &&
+				x < roomTilesX - 1 &&
+				y > 0 &&
+				y < roomTilesY - 2 &&
+				x % blockSpacingX === 0
+			) {
+				if ((y + 1) % blockSpacingY === 0) {
+					locations.push({ x, y });
 				}
 			}
 		}
@@ -69,7 +75,7 @@ export const Tilemap3 = PixiComponent("TileMap3", {
 						instance.tile("room_2_0", x * tileSize, y * tileSize);
 					} else if (y === 1) {
 						instance.tile("room_2_1", x * tileSize, y * tileSize);
-					}  else if (y === 2) {
+					} else if (y === 2) {
 						instance.tile("room_2_2", x * tileSize, y * tileSize);
 					} else if (y === roomTilesY - 1) {
 						instance.tile("room_2_3", x * tileSize, y * tileSize);

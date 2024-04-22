@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import NamedAvatar from "./NamedAvatar";
 import { Spring } from "@react-spring/web";
+import type React from "react";
+import { useState } from "react";
+import NamedAvatar from "./NamedAvatar";
 
 interface InteractableToonProps
 	extends Omit<React.ComponentProps<typeof NamedAvatar>, "scale"> {

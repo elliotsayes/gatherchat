@@ -1,7 +1,7 @@
-import { Texture, Spritesheet, SCALE_MODES, Transform, Matrix } from "pixi.js";
 import { AnimatedSprite } from "@pixi/react-animated";
-import { type animationNames, generateSpriteData } from "../sprite/render";
+import { Matrix, SCALE_MODES, Spritesheet, Texture, Transform } from "pixi.js";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { type animationNames, generateSpriteData } from "../../sprite/render";
 
 interface Props extends React.ComponentProps<typeof AnimatedSprite> {
 	seed: string;

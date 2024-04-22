@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
 import { Sprite } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
 import { SCALE_MODES, Texture } from "pixi.js";
+import type React from "react";
+import { useEffect, useState } from "react";
 
 interface InteractableSpriteProps
 	extends Omit<React.ComponentProps<typeof Sprite>, "scale"> {
@@ -19,12 +20,14 @@ const InteractableSprite: React.FC<InteractableSpriteProps> = (
 	const [texture, setTexture] = useState<Texture | null>(null);
 	useEffect(() => {
 		if (image) {
-			setTexture(Texture.from(image as string, { scaleMode: SCALE_MODES.NEAREST }));
+			setTexture(
+				Texture.from(image as string, { scaleMode: SCALE_MODES.NEAREST }),
+			);
 		}
 	}, [image]);
 
 	if (!texture) {
-		return null 
+		return null;
 	}
 
 	return (

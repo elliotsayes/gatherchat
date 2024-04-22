@@ -1,16 +1,16 @@
-import { useMemo, useRef, useState } from "react";
-import { randomSeed } from "../sprite/edit";
-import { CharacterCreator } from "./CharacterCreator";
-import { Game } from "./Game";
-import { SidePanel, SidePanelState } from "./SidePanel";
-import { SetupForm } from "./SetupForm";
 import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable"
-import { ProfileView } from "./ProfileView";
+	ResizableHandle,
+	ResizablePanel,
+	ResizablePanelGroup,
+} from "@/components/ui/resizable";
 import type { AoToonMaybeSaved } from "@/lib/schema/gameModel";
+import { useMemo, useRef, useState } from "react";
+import { randomSeed } from "../../sprite/edit";
+import { SidePanel, type SidePanelState } from "../SidePanel";
+import { CharacterCreator } from "../profile/CharacterCreator";
+import { ProfileView } from "../profile/ProfileView";
+import { SetupForm } from "../profile/SetupForm";
+import { Game } from "./Game";
 
 function generateOtherToon(i: number) {
 	return {
@@ -33,7 +33,9 @@ export const GameDemo = () => {
 	const [seed, setSeed] = useState(randomSeed());
 	const [sidePanelState, setSidePanelState] = useState<SidePanelState>("feed");
 
-	const [selectedToon, setSelectedToon] = useState<AoToonMaybeSaved | undefined>(undefined)
+	const [selectedToon, setSelectedToon] = useState<
+		AoToonMaybeSaved | undefined
+	>(undefined);
 
 	const [lastResized, setLastResized] = useState(0);
 
@@ -54,14 +56,14 @@ export const GameDemo = () => {
 	);
 
 	return (
-		<ResizablePanelGroup
-      direction="horizontal"
-      className="h-screen"
-    >
-      <ResizablePanel className="h-screen" onResize={() => {
-				console.log('Resized handle!');
-				setLastResized(Date.now())
-			}}>
+		<ResizablePanelGroup direction="horizontal" className="h-screen">
+			<ResizablePanel
+				className="h-screen"
+				onResize={() => {
+					console.log("Resized handle!");
+					setLastResized(Date.now());
+				}}
+			>
 				<div ref={containerRef} className="h-screen">
 					<Game
 						parentRef={containerRef}
@@ -81,25 +83,32 @@ export const GameDemo = () => {
 						}}
 					/>
 				</div>
-      </ResizablePanel>
-			<ResizableHandle withHandle/>
+			</ResizablePanel>
+			<ResizableHandle withHandle />
 			<ResizablePanel defaultSize={35} minSize={25} maxSize={50}>
-				<SidePanel state={sidePanelState} onSelectState={setSidePanelState}
+				<SidePanel
+					state={sidePanelState}
+					onSelectState={setSidePanelState}
 					activityFeed={<p>AF</p>}
 					profile={
 						selectedToon ? (
-							<ProfileView toonInfo={selectedToon} onCall={() => {
-								console.log('Call clicked!');
-								setSidePanelState("video");
-							}} onClose={() => setSelectedToon(undefined)} />
+							<ProfileView
+								toonInfo={selectedToon}
+								onCall={() => {
+									console.log("Call clicked!");
+									setSidePanelState("video");
+								}}
+								onClose={() => setSelectedToon(undefined)}
+							/>
 						) : (
-							<SetupForm onSubmit={(s) => {
-								setSeed(s.avatarSeed)
-								setName(s.username);
-							}}
-							initialUsername={demoState.user.displayName}
-							initialSeed={demoState.user.avatarSeed}	
-						/>
+							<SetupForm
+								onSubmit={(s) => {
+									setSeed(s.avatarSeed);
+									setName(s.username);
+								}}
+								initialUsername={demoState.user.displayName}
+								initialSeed={demoState.user.avatarSeed}
+							/>
 						)
 					}
 					video={<p>Video</p>}

@@ -84,5 +84,5 @@ export const colorThemes = [
 ];
 
 export function pad2(e: number) {
-	return ("00" + e.toString(16)).slice(-2);
+	return `00${e.toString(16)}`.slice(-2);
 }

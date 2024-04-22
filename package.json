@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "test": "bun test",
-    "lint": "bunx @biomejs/biome format --write ./src ./scripts",
+    "format": "bunx @biomejs/biome format --write ./src ./scripts",
+    "lint": "bunx @biomejs/biome lint --apply ./src ./scripts",
+    "lint-unsafe": "bunx @biomejs/biome lint --apply-unsafe ./src ./scripts",
+    "check": "bunx @biomejs/biome check --apply ./src ./scripts",
+    "check-unsafe": "bunx @biomejs/biome check --apply-unsafe ./src ./scripts",
     "gen": "bun run ./scripts/generateDrum.ts",
     "preview": "vite preview"
   },

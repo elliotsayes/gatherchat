@@ -54,8 +54,9 @@ function generateFrameNames(prefix: string, count: number): FrameName[] {
 }
 
 function generateFrames(frameNames: string[], yOffset: number): Frames {
-	return frameNames
-		.map((e, i) => ({
+	return Object.assign(
+		{},
+		...frameNames.map((e, i) => ({
 			[e]: {
 				frame: {
 					x: i * spriteSize.w,
@@ -71,23 +72,25 @@ function generateFrames(frameNames: string[], yOffset: number): Frames {
 					h: spriteSize.h,
 				},
 			},
-		}))
-		.reduce((a, b) => ({ ...a, ...b }), {});
+		})),
+	);
 }
 
-const animations = animationNames
-	.map((e) => {
+const animations = Object.assign(
+	{},
+	...animationNames.map((e) => {
 		const anim = ANIMATIONS[e];
 		const frameNames = generateFrameNames(e, anim.len);
 		return {
 			[e]: frameNames,
 		};
-	})
-	.reduce((a, b) => ({ ...a, ...b }), {});
+	}),
+);
 
-const frames = animationNames
-	.map((e, i) => generateFrames(animations[e], i))
-	.reduce((a, b) => ({ ...a, ...b }), {});
+const frames = Object.assign(
+	{},
+	...animationNames.map((e, i) => generateFrames(animations[e], i)),
+);
 
 export function generateSpriteData(spriteSheetUrl: string): SpriteData {
 	return {
