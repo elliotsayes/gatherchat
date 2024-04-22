@@ -11,6 +11,10 @@ local Users = Users or {
     Name = "test",
     Avatar = "a1204030b070a01", -- pixel art seed
     Status = "Hello, World!",
+    Position = {
+      x = 4,
+      y = 5,
+    },
     Following = {
       "test2",
     },
@@ -58,6 +62,7 @@ Handlers.add(
     Users[address].Name = data.Name
     Users[address].Avatar = data.Avatar
     Users[address].Status = data.Status
+    Users[address].Position = data.Position
 
     ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Users[address]) })
   end
@@ -73,9 +78,15 @@ Handlers.add(
 
     if string.len(msg.Data) > 0 then
       local data = json.decode(msg.Data)
-      Users[address].Name = data.Name or Users[address].Name
-      Users[address].Avatar = data.Avatar or Users[address].Avatar
-      Users[address].Status = data.Status or Users[address].Status
+      if data.Name then Users[address].Name = data.Name end
+      if data.Avatar then Users[address].Avatar = data.Avatar end
+      if data.Status then Users[address].Status = data.Status end
+      if data.Position then
+        Users[address].Position = {
+          x = data.Position.x,
+          y = data.Position.y,
+        }
+      end
     end
 
     ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Users[address]) })
