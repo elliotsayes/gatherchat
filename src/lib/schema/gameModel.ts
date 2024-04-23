@@ -1,3 +1,5 @@
+import { ContractPost } from "../ao-gather";
+
 export type Position = {
 	x: number;
 	y: number;
@@ -18,7 +20,9 @@ export type AoToonMaybeSaved = AoToonBase & {
 	savedPosition?: Position;
 };
 
-export type AoState = {
+export type AoUsersState = {
 	user: AoToonMaybeSaved;
 	otherToons: AoToonSaved[];
 };
+
+export type AoPostsState = (ContractPost & { id: string })[];

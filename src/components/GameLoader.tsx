@@ -1,8 +1,9 @@
 import { AoGatherProvider, type ContractUser } from "@/lib/ao-gather";
 import type {
-	AoState,
+	AoUsersState,
 	AoToonMaybeSaved,
 	AoToonSaved,
+  AoPostsState,
 } from "@/lib/schema/gameModel";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
@@ -13,11 +14,20 @@ import type { UploadInfo } from "./upload/UploadPage";
 const aoGather = new AoGatherProvider({});
 
 export const GameLoader = () => {
-	const { data, refetch } = useQuery({
+	const { data: users, refetch: refetchUsers } = useQuery({
 		queryKey: ["gameData"],
 		queryFn: async () => {
 			aoGather.ensureStarted();
 			return aoGather.getUsers();
+		},
+		// enabled: arweaveId !== undefined,
+	});
+
+  const { data: posts, refetch: refetchPosts } = useQuery({
+		queryKey: ["posts"],
+		queryFn: async () => {
+			aoGather.ensureStarted();
+			return aoGather.getPosts();
 		},
 		// enabled: arweaveId !== undefined,
 	});
@@ -38,8 +48,8 @@ export const GameLoader = () => {
 		})();
 	}, []);
 
-	const gameData = useMemo<AoState | undefined>(() => {
-		if (!data || !arweaveId) return undefined;
+	const usersState = useMemo<AoUsersState | undefined>(() => {
+		if (!users || !arweaveId) return undefined;
 		// const userData = data[arweaveId];
 		// const user: AoToonMaybeSaved = {
 		//   id: arweaveId,
@@ -48,7 +58,7 @@ export const GameLoader = () => {
 		//   displayName: userData.name,
 		//   savedPosition: { x: userData.position.x, y: userData.position.y },
 		// };
-		const userData = data[arweaveId];
+		const userData = users[arweaveId];
     console.log({ userData })
 
     if (!userData) return undefined;
@@ -60,7 +70,7 @@ export const GameLoader = () => {
 			savedPosition: { x: userData.position.x, y: userData.position.y },
 			...userData,
 		};
-		const otherToons: AoToonSaved[] = Object.entries(data)
+		const otherToons: AoToonSaved[] = Object.entries(users)
 			.map(([id, toon]) => {
 				if (id === arweaveId) return null;
 				return {
@@ -68,7 +78,7 @@ export const GameLoader = () => {
 					avatarSeed: toon.avatar,
 					displayName: toon.name,
 					savedPosition: { x: toon.position.x, y: toon.position.y },
-					isFollowing: userData.following.includes(id),
+					isFollowing: Object.keys(userData.following).includes(id),
 					...toon,
 				};
 			})
@@ -77,13 +87,21 @@ export const GameLoader = () => {
 			user,
 			otherToons,
 		};
-	}, [data, arweaveId]);
+	}, [users, arweaveId]);
 
-	if (data === undefined) {
+  const postsState = useMemo<AoPostsState | undefined>(() => {
+    if (!posts) return undefined;
+    return Object.keys(posts).map((id) => ({
+      id,
+      ...posts[id],
+    }));
+  }, [posts]);
+
+	if (users === undefined || posts === undefined) {
 		return <div>Loading...</div>;
 	}
 
-	if (gameData === undefined) {
+	if (usersState === undefined) {
 		return (
       <SetupForm
         onSubmit={(s) => {
@@ -94,7 +112,7 @@ export const GameLoader = () => {
               status: "Hello Gather Chat!",
               position: { x: 3, y: 3 },
             })
-            await refetch();
+            await refetchUsers();
             alert("Registered!")
           })();
         }}
@@ -105,14 +123,15 @@ export const GameLoader = () => {
 
 	return (
 		<GatherChat
-      aoState={gameData}
+      aoUsersState={usersState}
+      aoPostsState={postsState ?? []}
       onUpdateProfile={async (p) => {
         const userPart: Partial<ContractUser> = {
           avatar: p.avatarSeed,
           name: p.name,
         };
         await aoGather.update(userPart);
-        refetch();
+        refetchUsers();
         return true;
       } }
       onUpdatePosition={async (p) => {
@@ -120,11 +139,12 @@ export const GameLoader = () => {
           position: p,
         };
         await aoGather.update(userPart);
-        refetch();
+        refetchUsers();
         return true;
       } }
       onUpload={async (upload: UploadInfo): Promise<boolean> => {
         await aoGather.post(upload);
+        refetchPosts();
         return true;
       }}
       onFollow={async (data: { address: string }) => {

@@ -101,7 +101,7 @@ Handlers.add(
     -- Users[address].LastSeen = msg.Timestamp
 
     local data = json.decode(msg.Data)
-    Users[address].following.add(data.Address)
+    Users[address].following[data.address] = true
 
     local Notification = {
       source = address,
@@ -126,7 +126,7 @@ Handlers.add(
     -- Users[address].LastSeen = msg.Timestamp
 
     local data = json.decode(msg.Data)
-    Users[address].following.remove(data.address)
+    table.remove(Users[address].following, data.address)
 
     ao.send({ Target = msg.From, Status = "OK" })
   end
@@ -139,32 +139,33 @@ Handlers.add(
     local address = msg.Owner;
     -- Users[address].LastSeen = msg.Timestamp
 
-    Posts[msg.Id] = {}
-    Posts[msg.Id].created = msg.Timestamp
-    Posts[msg.Id].author = address
+    local postId = msg.Id
+    Posts[postId] = {}
+    Posts[postId].created = msg.Timestamp
+    Posts[postId].author = address
 
     local data = json.decode(msg.Data)
-    Posts[msg.Id].type = data.type
-    Posts[msg.Id].textOrTxId = data.textOrTxId
+    Posts[postId].type = data.type
+    Posts[postId].textOrTxId = data.textOrTxId
 
-    local Notification = {
-      Source = address,
-      Type = "Post",
-      Post = Posts[msg.Id],
-    }
+    -- local Notification = {
+    --   Source = address,
+    --   Type = "Post",
+    --   Post = Posts[postId],
+    -- }
 
-    -- Get all users following this user
-    for _, user in pairs(Users) do
-      if user.following.contains(address) then
-        ao.send({
-          Target = user.processId,
-          Status = "OK",
-          Action = "Notification",
-          Data = json.encode(Notification),
-        })
-      end
-    end
+    -- -- Get all users following this user
+    -- for _, user in pairs(Users) do
+    --   if user.following.contains(address) then
+    --     ao.send({
+    --       Target = user.processId,
+    --       Status = "OK",
+    --       Action = "Notification",
+    --       Data = json.encode(Notification),
+    --     })
+    --   end
+    -- end
 
-    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Posts[msg.Id]) })
+    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Posts[postId]) })
   end
 )

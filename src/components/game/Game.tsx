@@ -5,7 +5,7 @@ import { useMachine } from "@xstate/react";
 import { AlphaFilter } from "pixi.js";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { gameMachine } from "../../lib/machines/game";
-import type { AoState, AoToonMaybeSaved } from "../../lib/schema/gameModel";
+import type { AoUsersState, AoToonMaybeSaved, AoToonSaved } from "../../lib/schema/gameModel";
 import InteractableSprite from "./InteractableSprite";
 import InteractableToon from "./InteractableToon";
 import NamedAvatar from "./NamedAvatar";
@@ -22,8 +22,8 @@ const fallbackStageSize = {
 type Props = {
 	parentRef: React.RefObject<HTMLDivElement>;
 	lastResized: number;
-	aoStateProp: AoState;
-	onSelectToon: (toon: AoToonMaybeSaved) => void;
+	aoStateProp: AoUsersState;
+	onSelectToon: (toon: AoToonSaved) => void;
 	onViewFeed: () => void;
 	onSavePosition: (position: { x: number; y: number }) => Promise<boolean>;
 };

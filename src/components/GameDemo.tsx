@@ -3,7 +3,7 @@ import {
 	ResizablePanel,
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import type { AoState, AoToonMaybeSaved } from "@/lib/schema/gameModel";
+import type { AoUsersState, AoToonMaybeSaved } from "@/lib/schema/gameModel";
 import { useMemo, useRef, useState } from "react";
 import { randomSeed } from "../sprite/edit";
 import { SidePanel, type SidePanelState } from "./SidePanel";
@@ -40,7 +40,7 @@ export const GameDemo = () => {
 
 	const [lastResized, setLastResized] = useState(0);
 
-	const demoState = useMemo<AoState>(
+	const demoState = useMemo<AoUsersState>(
 		() => ({
 			user: {
 				id: "me",

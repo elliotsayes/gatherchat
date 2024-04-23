@@ -3,7 +3,7 @@ import {
 	ResizablePanel,
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import type { AoState, AoToonMaybeSaved } from "@/lib/schema/gameModel";
+import type { AoUsersState as AoUsersState, AoToonMaybeSaved, AoPostsState, AoToonSaved } from "@/lib/schema/gameModel";
 import { useRef, useState } from "react";
 import { SidePanel, type SidePanelState } from "./SidePanel";
 import { Game } from "./game/Game";
@@ -12,7 +12,8 @@ import { SetupForm } from "./profile/SetupForm";
 import { type UploadInfo, UploadPage } from "./upload/UploadPage";
 
 interface GatherChatProps {
-	aoState: AoState;
+	aoUsersState: AoUsersState;
+	aoPostsState: AoPostsState;
 	onUpdateProfile(profile: {
 		name: string;
 		avatarSeed: string;
@@ -23,20 +24,21 @@ interface GatherChatProps {
 }
 
 export const GatherChat = ({
-	aoState,
+	aoUsersState,
+	aoPostsState,
 	onUpdateProfile,
 	onUpdatePosition,
 	onFollow,
 	onUpload,
 }: GatherChatProps) => {
-	console.log({ aoState });
+	console.log({ aoState: aoUsersState });
 
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	const [sidePanelState, setSidePanelState] = useState<SidePanelState>("feed");
 
 	const [selectedToon, setSelectedToon] = useState<
-		AoToonMaybeSaved | undefined
+		AoToonSaved | undefined
 	>(undefined);
 
 	const [lastResized, setLastResized] = useState(0);
@@ -56,7 +58,7 @@ export const GatherChat = ({
 					<Game
 						parentRef={containerRef}
 						lastResized={lastResized}
-						aoStateProp={aoState}
+						aoStateProp={aoUsersState}
 						onSelectToon={(toon) => {
 							console.info("onSelectToon", toon);
 							setSelectedToon(toon);
@@ -85,7 +87,28 @@ export const GatherChat = ({
 				<SidePanel
 					state={sidePanelState}
 					onSelectState={setSidePanelState}
-					activityFeed={<p>AF</p>}
+					activityFeed={(
+						<ul>
+							{
+								aoPostsState.map((post) => {
+									if (post.type === "text") {
+										return (
+											<li key={post.id}>
+												{post.author}: {post.textOrTxId}
+											</li>
+										)
+									// biome-ignore lint/style/noUselessElse: <explanation>
+									} else {
+										return (
+											<li key={post.id}>
+												<span className=" text-muted-foreground">{post.author}</span>: <a href={`https://arweave.net/${post.textOrTxId}`} target="_blank" className=" text-blue-400">({post.type})</a>
+											</li>
+										)
+									}
+								})
+							}
+						</ul>
+					)}
 					upload={
 						<UploadPage
 							key={uploadPageKey}
@@ -126,8 +149,8 @@ export const GatherChat = ({
 										}
 									});
 								}}
-								initialUsername={aoState.user.displayName}
-								initialSeed={aoState.user.avatarSeed}
+								initialUsername={aoUsersState.user.displayName}
+								initialSeed={aoUsersState.user.avatarSeed}
 							/>
 						)
 					}

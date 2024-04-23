@@ -6,7 +6,7 @@ import Arweave from "arweave";
 import EventEmitter from "eventemitter3";
 import { AoProvider } from "./ao";
 
-export const aoGatherProcessId = "L97ua6EZ92tTzrLp9KJcmRMgoCffdjCo6dkqY_WpOPk";
+export const aoGatherProcessId = "nUfdG3fx30W4b0fFWSd9JttPCFP_I1URM--Iri8Y4xo";
 export const defaultArweave = Arweave.init({
 	host: "arweave.net",
 	protocol: "https",
@@ -29,7 +29,9 @@ export type ContractUser = {
 		x: number;
 		y: number;
 	};
-	following: ArweaveID[];
+	following: {
+		[address: string]: boolean;
+	};
 	// blockList: ArweaveID[]; // disallows connection to specified users and prevent them from messaging/inviting the user to lobbies.
 	// preferences: UserSettings;
 };
