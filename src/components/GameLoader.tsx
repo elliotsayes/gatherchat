@@ -10,6 +10,8 @@ import { useEffect, useMemo, useState } from "react";
 import { GatherChat } from "./GatherChat";
 import { SetupForm } from "./profile/SetupForm";
 import type { UploadInfo } from "./upload/UploadPage";
+import { boolean } from "zod";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 const aoGather = new AoGatherProvider({});
 
@@ -64,7 +66,7 @@ export const GameLoader = () => {
     if (!userData) return undefined;
 
 		const user: AoToonMaybeSaved = {
-			id: "testUser1",
+			id: arweaveId,
 			avatarSeed: userData.avatar,
 			displayName: userData.name,
 			savedPosition: { x: userData.position.x, y: userData.position.y },
@@ -78,7 +80,7 @@ export const GameLoader = () => {
 					avatarSeed: toon.avatar,
 					displayName: toon.name,
 					savedPosition: { x: toon.position.x, y: toon.position.y },
-					isFollowing: Object.keys(userData.following).includes(id),
+					isFollowing: userData.following[id] === true,
 					...toon,
 				};
 			})
@@ -103,20 +105,30 @@ export const GameLoader = () => {
 
 	if (usersState === undefined) {
 		return (
-      <SetupForm
-        onSubmit={(s) => {
-          (async () => {
-            await aoGather.register({
-              name: s.username,
-              avatar: s.avatarSeed,
-              status: "Hello Gather Chat!",
-              position: { x: 3, y: 3 },
-            })
-            await refetchUsers();
-            alert("Registered!")
-          })();
-        }}
-      />
+      <div className="flex flex-col items-center justify-center h-screen">
+        <p className="text-xl pb-8">Welcome to Gather Chat!</p>
+        <Card className="w-96">
+          <CardHeader>
+            <CardTitle>Set up your Profile</CardTitle>
+          </CardHeader>
+          <CardContent>
+          <SetupForm
+          onSubmit={(s) => {
+            (async () => {
+              await aoGather.register({
+                name: s.username,
+                avatar: s.avatarSeed,
+                status: "Hello Gather Chat!",
+                position: { x: 3, y: 3 },
+              })
+              await refetchUsers();
+              alert("Registered!")
+            })();
+          }}
+        />
+          </CardContent>
+        </Card>
+      </div>
     )
 	}
 
@@ -149,6 +161,12 @@ export const GameLoader = () => {
       }}
       onFollow={async (data: { address: string }) => {
         await aoGather.follow(data);
+        window.location.reload();
+        return true;
+      }}
+      onUnfollow={async (data: { address: string }) => {
+        await aoGather.unfollow(data);
+        window.location.reload();
         return true;
       }}
     />

@@ -8,7 +8,7 @@ Users = Users or {
     processId = "id",
     created = 0,
     lastSeen = 0,
-    name = "test",
+    name = "Test User :)",
     avatar = "a1204030b070a01", -- pixel art seed
     status = "Hello, World!",
     position = {
@@ -27,7 +27,7 @@ Posts = Posts or {
     created = 0,
     author = "testUser1",
     type = "text", -- if "video"/"image" then "TextOrTxId" is a TxId
-    textOrTxId = "",
+    textOrTxId = "Welcome to GatherChat!",
   }
 }
 
@@ -126,7 +126,7 @@ Handlers.add(
     -- Users[address].LastSeen = msg.Timestamp
 
     local data = json.decode(msg.Data)
-    table.remove(Users[address].following, data.address)
+    Users[address].following[data.address] = nil
 
     ao.send({ Target = msg.From, Status = "OK" })
   end

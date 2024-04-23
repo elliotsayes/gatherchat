@@ -6,7 +6,7 @@ import Arweave from "arweave";
 import EventEmitter from "eventemitter3";
 import { AoProvider } from "./ao";
 
-export const aoGatherProcessId = "nUfdG3fx30W4b0fFWSd9JttPCFP_I1URM--Iri8Y4xo";
+export const aoGatherProcessId = "7MZLFmJXEExv0cjAwIp8gc4vCkPQYcCMLXZ25jgu7Rw";
 export const defaultArweave = Arweave.init({
 	host: "arweave.net",
 	protocol: "https",
@@ -213,6 +213,18 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			process: this.processId,
 			data: JSON.stringify(data),
 			tags: [{ name: "Action", value: "Follow" }],
+			signer: createDataItemSigner(window.arweaveWallet),
+		});
+		console.debug(`Followed ${data.address} with id ${registrationId}`);
+
+		return this;
+	}
+
+	async unfollow(data: { address: string }): Promise<this> {
+		const registrationId = await this.ao.message({
+			process: this.processId,
+			data: JSON.stringify(data),
+			tags: [{ name: "Action", value: "Unfollow" }],
 			signer: createDataItemSigner(window.arweaveWallet),
 		});
 		console.debug(`Followed ${data.address} with id ${registrationId}`);

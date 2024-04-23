@@ -20,6 +20,7 @@ interface GatherChatProps {
 	}): Promise<boolean>;
 	onUpdatePosition(position: { x: number; y: number }): Promise<boolean>;
 	onFollow(data: {address: string}): Promise<boolean>;
+	onUnfollow(data: {address: string}): Promise<boolean>;
 	onUpload(upload: UploadInfo): Promise<boolean>;
 }
 
@@ -29,6 +30,7 @@ export const GatherChat = ({
 	onUpdateProfile,
 	onUpdatePosition,
 	onFollow,
+	onUnfollow,
 	onUpload,
 }: GatherChatProps) => {
 	console.log({ aoState: aoUsersState });
@@ -90,18 +92,20 @@ export const GatherChat = ({
 					activityFeed={(
 						<ul>
 							{
-								aoPostsState.map((post) => {
+								[...aoPostsState].sort((p) => p.created).map((post) => {
+									console.log({myId: aoUsersState.user.id, postAuthor: post.author })
+									const toon = [...aoUsersState.otherToons, aoUsersState.user].find((t) => t.id === post.author);
 									if (post.type === "text") {
 										return (
 											<li key={post.id}>
-												{post.author}: {post.textOrTxId}
+												{toon?.displayName ?? post.author}: {post.textOrTxId}
 											</li>
 										)
 									// biome-ignore lint/style/noUselessElse: <explanation>
 									} else {
 										return (
 											<li key={post.id}>
-												<span className=" text-muted-foreground">{post.author}</span>: <a href={`https://arweave.net/${post.textOrTxId}`} target="_blank" className=" text-blue-400">({post.type})</a>
+												<span className=" text-muted-foreground">{toon?.displayName ?? post.author}: </span>: <a href={`https://arweave.net/${post.textOrTxId}`} target="_blank" className=" text-blue-400">({post.type})</a>
 											</li>
 										)
 									}
@@ -126,8 +130,13 @@ export const GatherChat = ({
 							<ProfileView
 								toonInfo={selectedToon}
 								onChangeFollow={async (toonInfo) => {
-									await onFollow({address: toonInfo.id});
-									alert("Followed!");
+									if (toonInfo.isFollowing) {
+										await onUnfollow({address: toonInfo.id});
+										// alert("Unfollowed!");
+									} else {
+										await onFollow({address: toonInfo.id});
+										// alert("Followed!");
+									}
 								}}
 								onCall={() => {
 									console.log("Call clicked!");

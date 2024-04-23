@@ -4,8 +4,8 @@ import { AvatarStandalone } from "./AvatarStandalone";
 
 interface ProfileViewProps {
 	toonInfo: AoToonSaved;
-	onChangeFollow: (toonInfo: AoToonMaybeSaved) => void;
-	onCall: (toonInfo: AoToonMaybeSaved) => void;
+	onChangeFollow: (toonInfo: AoToonSaved) => void;
+	onCall: (toonInfo: AoToonSaved) => void;
 	onClose: () => void;
 }
 
@@ -43,10 +43,9 @@ export const ProfileView = ({
 					<Button
 						type="button"
 						onClick={() => onChangeFollow(toonInfo)}
-						variant={toonInfo.isFollowing ? "ghost" : "default"}
-						disabled={toonInfo.isFollowing}
+						variant={toonInfo.isFollowing ? "destructive" : "default"}
 					>
-						{toonInfo.isFollowing ? "Already following" : "Follow"}
+						{toonInfo.isFollowing ? "Unfollow" : "Follow"}
 					</Button>
 					{/* <Button type="button" onClick={() => onCall(toonInfo)}>
 						Call
