@@ -1,38 +1,63 @@
-import { AlphaFilter } from "pixi.js";
 import { Stage } from "@pixi/react";
-import { Container } from "@pixi/react-animated";
+import { Container, Sprite } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
-import { Tilemap3 } from "./TileMap3";
-import type { AoState } from "../lib/schema/gameModel";
-import { gameMachine } from "../lib/machines/game";
 import { useMachine } from "@xstate/react";
+import { AlphaFilter } from "pixi.js";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { gameMachine } from "../../lib/machines/game";
+import type { AoUsersState, AoToonSaved } from "../../lib/schema/gameModel";
+import InteractableSprite from "./InteractableSprite";
 import InteractableToon from "./InteractableToon";
 import NamedAvatar from "./NamedAvatar";
-import { useMemo, useState } from "react";
-import InteractableSprite from "./InteractableSprite";
+import { Tilemap3, blockLocations } from "./TileMap3";
 
 const tileSizeX = 64;
 const tileSizeY = 64;
 
-const stageTilesX = 12;
-const stageTilesY = 9;
-
-const stageWidth = tileSizeX * stageTilesX;
-const stageHeight = tileSizeY * stageTilesY;
+const fallbackStageSize = {
+	width: 800,
+	height: 600,
+};
 
 type Props = {
-	aoStateProp: AoState;
-	onSelectToon: (toonId: string) => void;
+	parentRef: React.RefObject<HTMLDivElement>;
+	lastResized: number;
+	aoStateProp: AoUsersState;
+	onSelectToon: (toon: AoToonSaved) => void;
 	onViewFeed: () => void;
 	onSavePosition: (position: { x: number; y: number }) => Promise<boolean>;
 };
 
 export const Game = ({
+	parentRef,
+	lastResized,
 	aoStateProp: aoState,
 	onSelectToon,
 	onViewFeed,
 	onSavePosition,
 }: Props) => {
+	const [stageSize, setStageSize] = useState(fallbackStageSize);
+
+	const resizeStage = useCallback(() => {
+		if (parentRef.current) {
+			const { clientWidth, clientHeight } = parentRef.current;
+			console.log("resizeStage", clientWidth, clientHeight);
+			setStageSize({
+				width: clientWidth,
+				height: clientHeight,
+			});
+		}
+	}, [parentRef.current]);
+
+	useEffect(() => {
+		console.log({ lastResized });
+		resizeStage();
+		window.addEventListener("resize", resizeStage);
+		return () => {
+			window.removeEventListener("resize", resizeStage);
+		};
+	}, [resizeStage, lastResized]);
+
 	const [current, send] = useMachine(gameMachine, {
 		input: {
 			position: aoState.user.savedPosition,
@@ -51,10 +76,10 @@ export const Game = ({
 		<>
 			<Stage
 				options={{
-					background: 0xaaaaaa,
+					background: 0x111111,
 				}}
-				width={stageWidth}
-				height={stageHeight}
+				width={stageSize.width}
+				height={stageSize.height}
 				style={{ outline: "none" }}
 				tabIndex={0}
 				onKeyDown={(e) => {
@@ -70,8 +95,8 @@ export const Game = ({
 						y: e.clientY - position.top,
 					};
 					const fromCenter = {
-						x: mousePosition.x - stageWidth / 2,
-						y: mousePosition.y - stageHeight / 2,
+						x: mousePosition.x - stageSize.width / 2,
+						y: mousePosition.y - stageSize.height / 2,
 					};
 					function calculateOffset(mouseDistance: number) {
 						if (mouseDistance === 0) return 0;
@@ -95,11 +120,11 @@ export const Game = ({
 								<Spring
 									to={{
 										x:
-											stageWidth / 2 -
+											stageSize.width / 2 -
 											(current.context.currentPosition.x + 1) * tileSizeX +
 											tileSizeX / 2,
 										y:
-											stageHeight / 2 -
+											stageSize.height / 2 -
 											(current.context.currentPosition.y + 1) * tileSizeY +
 											tileSizeY / 2,
 									}}
@@ -113,14 +138,26 @@ export const Game = ({
 											{...props}
 										>
 											<Tilemap3 />
+											{
+												aoState.user.savedPosition !== undefined && (
+													<Sprite
+														image={"assets/sprite/purple.png"}
+														width={tileSizeX}
+														height={tileSizeY}
+														x={tileSizeX * aoState.user.savedPosition.x}
+														y={tileSizeY * aoState.user.savedPosition.y}
+														filters={[veryTransparent]}
+													/>
+												)
+											}
 											{current.hasTag("SHOW_OBJECTS") && (
 												<InteractableSprite
 													image="assets/sprite/board.png"
-													scale={2}
-													anchor={{ x: 0.5, y: 0.5 }}
+													scale={4}
+													anchor={{ x: 0.5, y: 0.45 }}
 													onclick={() => onViewFeed()}
-													x={tileSizeX * 4.5}
-													y={tileSizeY * 0.5}
+													x={tileSizeX * 5}
+													y={tileSizeY * 1.25}
 												/>
 											)}
 											{current.hasTag("SHOW_OTHER_TOONS") &&
@@ -162,7 +199,7 @@ export const Game = ({
 																		type: "TOON_SELECTED",
 																		toonId: toon.id,
 																	});
-																	onSelectToon(toon.id);
+																	onSelectToon(toon);
 																}}
 															/>
 														);
@@ -195,13 +232,80 @@ export const Game = ({
 														);
 													}
 												})}
+											<InteractableSprite
+												// active={false}
+												image="assets/sprite/cal.png"
+												scale={4}
+												anchor={{ x: 0.5, y: 0.5 }}
+												// onclick={() => onViewFeed()}
+												x={tileSizeX * 2}
+												y={tileSizeY * 1}
+											/>
+											<InteractableSprite
+												active={false}
+												image="assets/sprite/couch.png"
+												scale={4}
+												anchor={{ x: 0.5, y: 0.5 }}
+												// onclick={() => onViewFeed()}
+												x={tileSizeX * 19}
+												y={tileSizeY * 2}
+											/>
+											<InteractableSprite
+												active={false}
+												image="assets/sprite/mona.png"
+												scale={4}
+												anchor={{ x: 0.5, y: 0.5 }}
+												// onclick={() => onViewFeed()}
+												x={tileSizeX * 8}
+												y={tileSizeY * 1.25}
+											/>
+											<InteractableSprite
+												active={false}
+												image="assets/sprite/stary.png"
+												scale={4}
+												anchor={{ x: 0.5, y: 0.5 }}
+												// onclick={() => onViewFeed()}
+												x={tileSizeX * 11}
+												y={tileSizeY * 1.25}
+											/>
+											<InteractableSprite
+												// active={false}
+												image="assets/sprite/tv.png"
+												scale={4}
+												anchor={{ x: 0.5, y: 0.5 }}
+												// onclick={() => onViewFeed()}
+												x={tileSizeX * 14}
+												y={tileSizeY * 1}
+											/>
+											<InteractableSprite
+												active={false}
+												image="assets/sprite/scream.png"
+												scale={4}
+												anchor={{ x: 0.5, y: 0.5 }}
+												// onclick={() => onViewFeed()}
+												x={tileSizeX * 17}
+												y={tileSizeY * 1.25}
+											/>
+											{blockLocations.map((blockLocation, i) => (
+												<InteractableSprite
+													active={false}
+													key={i.toString()}
+													zIndex={100}
+													image="assets/sprite/tree.png"
+													scale={4}
+													anchor={{ x: 0.5, y: 0.5 }}
+													// onclick={() => onViewFeed()}
+													x={tileSizeX * (blockLocation.x + 0.5)}
+													y={tileSizeY * (blockLocation.y + 1)}
+												/>
+											))}
 										</Container>
 									)}
 								</Spring>
 							)}
 
 							{current.hasTag("SHOW_TOON") && (
-								<Container x={stageWidth / 2} y={stageHeight / 2}>
+								<Container x={stageSize.width / 2} y={stageSize.height / 2}>
 									<NamedAvatar
 										name={aoState.user.displayName}
 										seed={aoState.user.avatarSeed}

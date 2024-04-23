@@ -1,5 +1,5 @@
-import React from "react";
 import { Container, Text } from "@pixi/react-animated";
+import type React from "react";
 import { Avatar } from "./Avatar";
 
 interface NamedAvatarProps extends React.ComponentProps<typeof Avatar> {

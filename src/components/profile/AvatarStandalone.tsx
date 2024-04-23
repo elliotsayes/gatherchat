@@ -1,5 +1,5 @@
-import { Avatar } from "./Avatar";
 import { Stage } from "@pixi/react";
+import { Avatar } from "../game/Avatar";
 
 interface AvatarStandaloneProps extends React.ComponentProps<typeof Avatar> {
 	scale: number;
@@ -9,6 +9,8 @@ interface AvatarStandaloneProps extends React.ComponentProps<typeof Avatar> {
 const spriteWidth = 16;
 const spriteHeight = 24;
 
+const yClip = spriteHeight / 8;
+
 export const AvatarStandalone = ({
 	background,
 	...rest
@@ -16,7 +18,7 @@ export const AvatarStandalone = ({
 	const { scale } = rest;
 
 	const renderWidth = spriteWidth * scale;
-	const renderHeight = spriteHeight * scale;
+	const renderHeight = (spriteHeight - yClip) * scale;
 
 	return (
 		<>
@@ -26,8 +28,9 @@ export const AvatarStandalone = ({
 				}}
 				width={renderWidth}
 				height={renderHeight}
+				className="border rounded-lg shadow-lg bg-white p-4"
 			>
-				<Avatar anchor={{ x: 0, y: 0 }} {...rest} />
+				<Avatar y={-yClip * scale} anchor={{ x: 0, y: 0 }} {...rest} />
 			</Stage>
 		</>
 	);

@@ -1,11 +1,11 @@
 import { QueryClientProvider } from "@tanstack/react-query";
+import { GameLoader } from "./components/GameLoader";
 import { queryClient } from "./lib/query";
-import { GameDemo } from "./components/GameDemo";
 
 function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<GameDemo />
+			<GameLoader />
 		</QueryClientProvider>
 	);
 }

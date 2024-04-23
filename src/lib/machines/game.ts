@@ -1,10 +1,9 @@
-import { setup, assign, and } from "xstate";
+import { and, assign, setup } from "xstate";
 import {
-	blockSpacingX,
-	blockSpacingY,
+	blockLocations,
 	roomTilesX,
 	roomTilesY,
-} from "../../components/TileMap3";
+} from "../../components/game/TileMap3";
 
 export const movementKeys = [
 	"ArrowUp",
@@ -61,7 +60,7 @@ const movementBounds = {
 		max: roomTilesX - 2,
 	},
 	y: {
-		min: 1,
+		min: 2,
 		max: roomTilesY - 2,
 	},
 } as const;
@@ -74,7 +73,10 @@ export function isValidPosition(position: { x: number; y: number }) {
 		position.y <= movementBounds.y.max;
 
 	const onTile =
-		position.x % blockSpacingX === 0 && position.y % blockSpacingY === 0;
+		blockLocations.filter(
+			(bl) =>
+				bl.x === position.x && (bl.y === position.y || bl.y === position.y - 1),
+		).length > 0;
 
 	return insideBounds && !onTile;
 }

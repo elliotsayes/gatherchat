@@ -1,14 +1,15 @@
-import React, { useState } from "react";
-import { Sprite } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
+import type React from "react";
+import { useState } from "react";
+import NamedAvatar from "./NamedAvatar";
 
-interface InteractableSpriteProps
-	extends Omit<React.ComponentProps<typeof Sprite>, "scale"> {
+interface InteractableToonProps
+	extends Omit<React.ComponentProps<typeof NamedAvatar>, "scale"> {
 	scale: number;
 }
 
-const InteractableToon: React.FC<InteractableSpriteProps> = (
-	props: InteractableSpriteProps,
+const InteractableToon: React.FC<InteractableToonProps> = (
+	props: InteractableToonProps,
 ) => {
 	const { scale, ...namedAvatarProps } = props;
 
@@ -17,7 +18,7 @@ const InteractableToon: React.FC<InteractableSpriteProps> = (
 	return (
 		<Spring to={{ scale: emphasis ? scale * 1.2 : scale }}>
 			{(springProps) => (
-				<Sprite
+				<NamedAvatar
 					onmouseenter={() => setEmphasis(true)}
 					onmouseleave={() => setEmphasis(false)}
 					eventMode={"dynamic"}
