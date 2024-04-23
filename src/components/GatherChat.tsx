@@ -47,6 +47,7 @@ export const GatherChat = ({
 	const [lastResized, setLastResized] = useState(0);
 
 	const [uploadPageKey, setUploadPageKey] = useState(0);
+	const [profileKey, setProileKey] = useState(0);
 
 	return (
 		<ResizablePanelGroup direction="horizontal" className="h-screen">
@@ -134,15 +135,18 @@ export const GatherChat = ({
 					profile={
 						selectedToon ? (
 							<ProfileView
+								key={profileKey}
 								toonInfo={selectedToon}
 								onChangeFollow={async (toonInfo) => {
 									if (toonInfo.isFollowing) {
 										await onUnfollow({address: toonInfo.id});
-										// alert("Unfollowed!");
+										alert("Unfollowed!");
 									} else {
 										await onFollow({address: toonInfo.id});
-										// alert("Followed!");
+										alert("Followed!");
 									}
+									setProileKey(Date.now());
+									setSelectedToon(undefined);
 								}}
 								onCall={() => {
 									console.log("Call clicked!");

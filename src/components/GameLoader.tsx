@@ -18,18 +18,22 @@ export const GameLoader = () => {
 	const { data: users, error: errorUsers, refetch: refetchUsers } = useQuery({
 		queryKey: ["gameData"],
 		queryFn: async () => {
+      console.log("fetching users")
 			aoGather.ensureStarted();
 			return aoGather.getUsers();
 		},
+    refetchInterval: 5000,
 		// enabled: arweaveId !== undefined,
 	});
 
   const { data: posts, error: errorPosts, refetch: refetchPosts } = useQuery({
 		queryKey: ["posts"],
 		queryFn: async () => {
+      console.log("fetching posts")
 			aoGather.ensureStarted();
 			return aoGather.getPosts();
 		},
+    refetchInterval: 5000,
 		// enabled: arweaveId !== undefined,
 	});
 
@@ -51,14 +55,7 @@ export const GameLoader = () => {
 
 	const usersState = useMemo<AoUsersState | undefined>(() => {
 		if (!users || !arweaveId) return undefined;
-		// const userData = data[arweaveId];
-		// const user: AoToonMaybeSaved = {
-		//   id: arweaveId,
-		//   ...userData,
-		//   avatarSeed: userData.avatar,
-		//   displayName: userData.name,
-		//   savedPosition: { x: userData.position.x, y: userData.position.y },
-		// };
+
 		const userData = users[arweaveId];
     console.log({ userData })
 
@@ -167,13 +164,13 @@ export const GameLoader = () => {
       onFollow={async (data: { address: string }) => {
         await aoGather.follow(data);
         refetchUsers();
-        window.location.reload();
+        // window.location.reload();
         return true;
       }}
       onUnfollow={async (data: { address: string }) => {
         await aoGather.unfollow(data);
         refetchUsers();
-        window.location.reload();
+        // window.location.reload();
         return true;
       }}
     />
