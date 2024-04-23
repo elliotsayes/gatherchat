@@ -4,7 +4,7 @@
 - Have fun :)
 
 ## Permaweb Link
-[https://gatherchat.ar-io.dev/](https://gatherchat.vercel.app/)
+[https://gatherchat.ar-io.dev/](https://gatherchat.ar-io.dev/)
 
 ## Backup Link
 [https://gatherchat.vercel.app/](https://gatherchat.vercel.app/)
