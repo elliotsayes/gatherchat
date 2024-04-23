@@ -10,6 +10,7 @@ import { Game } from "./game/Game";
 import { ProfileView } from "./profile/ProfileView";
 import { SetupForm } from "./profile/SetupForm";
 import { type UploadInfo, UploadPage } from "./upload/UploadPage";
+import { timeAgo } from "@/lib/timeago";
 
 interface GatherChatProps {
 	aoUsersState: AoUsersState;
@@ -98,16 +99,18 @@ export const GatherChat = ({
 										if (post.type === "text") {
 											return (
 												<li key={post.id}>
-													<span className=" text-muted-foreground">{toon?.displayName ?? post.author}: </span>
+													<span className="text-muted-foreground"> {toon?.displayName ?? post.author}: </span>
 													{post.textOrTxId}
+													<span className="text-muted-foreground text-xs"> {timeAgo.format(toon?.lastSeen ?? 0)}</span>
 												</li>
 											)
 										// biome-ignore lint/style/noUselessElse: <explanation>
 										} else {
 											return (
 												<li key={post.id}>
-													<span className=" text-muted-foreground">{toon?.displayName ?? post.author}: </span>
+													<span className=" text-muted-foreground"> {toon?.displayName ?? post.author}: </span>
 													<a href={`https://arweave.net/${post.textOrTxId}`} target="_blank" className=" text-blue-400">({post.type})</a>
+													<span className="text-muted-foreground text-xs"> {timeAgo.format(toon?.lastSeen ?? 0)}</span>
 												</li>
 											)
 										}

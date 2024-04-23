@@ -1,6 +1,8 @@
 import type { AoToonMaybeSaved, AoToonSaved } from "@/lib/schema/gameModel";
 import { Button } from "../ui/button";
 import { AvatarStandalone } from "./AvatarStandalone";
+import { trimId } from "@/lib/utils";
+import { timeAgo } from "@/lib/timeago";
 
 interface ProfileViewProps {
 	toonInfo: AoToonSaved;
@@ -20,7 +22,7 @@ export const ProfileView = ({
 			<div className="flex flex-row gap-2 items-start justify-between">
 				<div>
 					<p className="text-lg">{toonInfo.displayName}</p>
-					<p className="text-muted-foreground">{toonInfo.id}</p>
+					<p className="text-muted-foreground">{trimId(toonInfo.id)}</p>
 				</div>
 				<Button
 					type="button"
@@ -37,7 +39,7 @@ export const ProfileView = ({
 				animationName={"jump"}
 				isPlaying={true}
 			/>
-			<p>Last activity: TODO</p>
+			<p>Last activity: {timeAgo.format(toonInfo.lastSeen)}</p>
 			<div className="flex flex-col gap-2 items-center">
 				<div className="flex flex-row gap-2 items-center">
 					<Button

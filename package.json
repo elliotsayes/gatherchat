@@ -38,6 +38,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "filesize": "^10.1.1",
+    "javascript-time-ago": "^2.5.10",
     "lucide-react": "^0.372.0",
     "mime-types": "^2.1.35",
     "pixi.js": "7",

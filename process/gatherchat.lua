@@ -6,8 +6,8 @@ local utils = require(".utils")
 Users = Users or {
   testUser1 = {
     processId = "id",
-    created = 0,
-    lastSeen = 0,
+    created = 1713833416559,
+    lastSeen = 1713833416559,
     name = "Test User :)",
     avatar = "a1204030b070a01", -- pixel art seed
     status = "Hello, World!",
@@ -24,7 +24,7 @@ Users = Users or {
 -- Key: Message ID
 Posts = Posts or {
   testPost1 = {
-    created = 0,
+    created = 1713833416559,
     author = "testUser1",
     type = "text", -- if "video"/"image" then "TextOrTxId" is a TxId
     textOrTxId = "Welcome to GatherChat!",
@@ -98,7 +98,7 @@ Handlers.add(
   Handlers.utils.hasMatchingTag("Action", "Follow"),
   function(msg)
     local address = msg.Owner;
-    -- Users[address].LastSeen = msg.Timestamp
+    Users[address].lastSeen = msg.Timestamp
 
     local data = json.decode(msg.Data)
     Users[address].following[data.address] = true
@@ -123,7 +123,7 @@ Handlers.add(
   Handlers.utils.hasMatchingTag("Action", "Unfollow"),
   function(msg)
     local address = msg.Owner;
-    -- Users[address].LastSeen = msg.Timestamp
+    Users[address].lastSeen = msg.Timestamp
 
     local data = json.decode(msg.Data)
     Users[address].following[data.address] = nil
@@ -137,7 +137,7 @@ Handlers.add(
   Handlers.utils.hasMatchingTag("Action", "CreatePost"),
   function(msg)
     local address = msg.Owner;
-    -- Users[address].LastSeen = msg.Timestamp
+    Users[address].lastSeen = msg.Timestamp
 
     local postId = msg.Id
     Posts[postId] = {}

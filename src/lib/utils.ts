@@ -23,3 +23,7 @@ export function formatTagHuman(str: string) {
 		.map((word) => word[0].toUpperCase() + word.slice(1))
 		.join(" ");
 }
+
+export function trimId(id: string) {
+	return `${id.slice(0, 4)}...${id.slice(-4)}`;
+}

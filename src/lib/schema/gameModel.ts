@@ -1,4 +1,4 @@
-import { ContractPost } from "../ao-gather";
+import type { ContractPost } from "../ao-gather";
 
 export type Position = {
 	x: number;
@@ -9,6 +9,7 @@ export type AoToonBase = {
 	id: string;
 	avatarSeed: string;
 	displayName: string;
+	lastSeen: number;
 };
 
 export type AoToonSaved = AoToonBase & {
