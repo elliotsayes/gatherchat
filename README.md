@@ -1,4 +1,15 @@
-# Instructions
+# How To
+- Make sure you have ArConnect installed
+- Go to one of the links below
+- Have fun :)
+
+## Permaweb Link
+[https://gatherchat.ar-io.dev/](https://gatherchat.vercel.app/)
+
+## Backup Link
+[https://gatherchat.vercel.app/](https://gatherchat.vercel.app/)
+
+# Developement
 
 - Install: `bun install`
 - Run: `bun run dev`
