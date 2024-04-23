@@ -61,11 +61,12 @@ export const GameLoader = () => {
 
     if (!userData) return undefined;
 
-		const user: AoToonMaybeSaved = {
+		const user: AoToonSaved = {
 			id: arweaveId,
 			avatarSeed: userData.avatar,
 			displayName: userData.name,
 			savedPosition: { x: userData.position.x, y: userData.position.y },
+      isFollowing: false,
 			...userData,
 		};
 		const otherToons: AoToonSaved[] = Object.entries(users)

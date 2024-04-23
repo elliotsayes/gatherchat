@@ -22,7 +22,7 @@ export type AoToonMaybeSaved = AoToonBase & {
 };
 
 export type AoUsersState = {
-	user: AoToonMaybeSaved;
+	user: AoToonSaved;
 	otherToons: AoToonSaved[];
 };
 
