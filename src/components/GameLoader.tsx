@@ -1,7 +1,6 @@
 import { AoGatherProvider, type ContractUser } from "@/lib/ao-gather";
 import type {
 	AoUsersState,
-	AoToonMaybeSaved,
 	AoToonSaved,
   AoPostsState,
 } from "@/lib/schema/gameModel";
