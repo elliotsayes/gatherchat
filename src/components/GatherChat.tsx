@@ -11,6 +11,7 @@ import { ProfileView } from "./profile/ProfileView";
 import { SetupForm } from "./profile/SetupForm";
 import { type UploadInfo, UploadPage } from "./upload/UploadPage";
 import { timeAgo } from "@/lib/timeago";
+import { ChatBox } from "./upload/TextUpload";
 
 interface GatherChatProps {
 	aoUsersState: AoUsersState;
@@ -92,8 +93,8 @@ export const GatherChat = ({
 					state={sidePanelState}
 					onSelectState={setSidePanelState}
 					activityFeed={(
-						<div>
-							<ul className="w-[100%] h-[100%]">
+						<div className="h-[100%] flex flex-col gap-4 pb-6">
+							<ul className="flex-grow">
 								{
 									aoPostsState.map((post) => {
 										const toon = [...aoUsersState.otherToons, aoUsersState.user].find((t) => t.id === post.author);
@@ -118,6 +119,9 @@ export const GatherChat = ({
 									})
 								}
 							</ul>
+							<ChatBox onSubmit={async (text) => {
+								await onUpload({type: "text", textOrTxId: text});
+							}} />
 						</div>
 					)}
 					upload={

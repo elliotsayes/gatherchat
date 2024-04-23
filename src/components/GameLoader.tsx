@@ -92,7 +92,7 @@ export const GameLoader = () => {
     return Object.keys(posts).map((id) => ({
       id,
       ...posts[id],
-    })).sort((a, b) => b.created - a.created);
+    })).sort((a, b) => a.created - b.created);
   }, [posts]);
 
 	if (errorUsers !== null || errorPosts !== null) {
