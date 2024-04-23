@@ -90,28 +90,31 @@ export const GatherChat = ({
 					state={sidePanelState}
 					onSelectState={setSidePanelState}
 					activityFeed={(
-						<ul>
-							{
-								[...aoPostsState].sort((p) => p.created).map((post) => {
-									console.log({myId: aoUsersState.user.id, postAuthor: post.author })
-									const toon = [...aoUsersState.otherToons, aoUsersState.user].find((t) => t.id === post.author);
-									if (post.type === "text") {
-										return (
-											<li key={post.id}>
-												{toon?.displayName ?? post.author}: {post.textOrTxId}
-											</li>
-										)
-									// biome-ignore lint/style/noUselessElse: <explanation>
-									} else {
-										return (
-											<li key={post.id}>
-												<span className=" text-muted-foreground">{toon?.displayName ?? post.author}: </span>: <a href={`https://arweave.net/${post.textOrTxId}`} target="_blank" className=" text-blue-400">({post.type})</a>
-											</li>
-										)
-									}
-								})
-							}
-						</ul>
+						<div>
+							<ul className="w-[100%] h-[100%]">
+								{
+									aoPostsState.map((post) => {
+										const toon = [...aoUsersState.otherToons, aoUsersState.user].find((t) => t.id === post.author);
+										if (post.type === "text") {
+											return (
+												<li key={post.id}>
+													<span className=" text-muted-foreground">{toon?.displayName ?? post.author}: </span>
+													{post.textOrTxId}
+												</li>
+											)
+										// biome-ignore lint/style/noUselessElse: <explanation>
+										} else {
+											return (
+												<li key={post.id}>
+													<span className=" text-muted-foreground">{toon?.displayName ?? post.author}: </span>
+													<a href={`https://arweave.net/${post.textOrTxId}`} target="_blank" className=" text-blue-400">({post.type})</a>
+												</li>
+											)
+										}
+									})
+								}
+							</ul>
+						</div>
 					)}
 					upload={
 						<UploadPage

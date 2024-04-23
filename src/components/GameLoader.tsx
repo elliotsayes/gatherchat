@@ -10,13 +10,12 @@ import { useEffect, useMemo, useState } from "react";
 import { GatherChat } from "./GatherChat";
 import { SetupForm } from "./profile/SetupForm";
 import type { UploadInfo } from "./upload/UploadPage";
-import { boolean } from "zod";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 const aoGather = new AoGatherProvider({});
 
 export const GameLoader = () => {
-	const { data: users, refetch: refetchUsers } = useQuery({
+	const { data: users, error: errorUsers, refetch: refetchUsers } = useQuery({
 		queryKey: ["gameData"],
 		queryFn: async () => {
 			aoGather.ensureStarted();
@@ -25,7 +24,7 @@ export const GameLoader = () => {
 		// enabled: arweaveId !== undefined,
 	});
 
-  const { data: posts, refetch: refetchPosts } = useQuery({
+  const { data: posts, error: errorPosts, refetch: refetchPosts } = useQuery({
 		queryKey: ["posts"],
 		queryFn: async () => {
 			aoGather.ensureStarted();
@@ -96,10 +95,16 @@ export const GameLoader = () => {
     return Object.keys(posts).map((id) => ({
       id,
       ...posts[id],
-    }));
+    })).sort((a, b) => b.created - a.created);
   }, [posts]);
 
+	if (errorUsers !== null || errorPosts !== null) {
+    console.log({ users, posts })
+		return <div>Error!</div>;
+	}
+
 	if (users === undefined || posts === undefined) {
+    console.log({ users, posts })
 		return <div>Loading...</div>;
 	}
 
@@ -161,11 +166,13 @@ export const GameLoader = () => {
       }}
       onFollow={async (data: { address: string }) => {
         await aoGather.follow(data);
+        refetchUsers();
         window.location.reload();
         return true;
       }}
       onUnfollow={async (data: { address: string }) => {
         await aoGather.unfollow(data);
+        refetchUsers();
         window.location.reload();
         return true;
       }}
