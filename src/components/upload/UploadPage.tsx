@@ -51,109 +51,103 @@ export const UploadPage = ({ onDone }: UploadPageProps) => {
 
 	return (
 		<div>
-			<Card className="mx-auto max-w-md lg:max-w-3xl text-left">
+			<div className=" flex flex-col gap-2 items-center justify-center">
+			<div className="flex flex-col lg:flex-row gap-4 lg:justify-stretch">
+				<VideoUpload
+					title={"Image/Video"}
+					subtitle={"Select your media"}
+					file={current.context.mainVideo}
+					onFile={(mainVideo) =>
+						send({ type: "main video set", data: { mainVideo } })
+					}
+					onClear={() => send({ type: "main video cleared" })}
+					disabled={!current.matches("configuring")}
+				/>
+				{/* <VideoUpload
+					title={"Trailer"}
+					subtitle={"Select trailer video (optional)"}
+					file={current.context.trailerVideo}
+					onFile={(trailerVideo) =>
+						send({ type: "trailer video set", data: { trailerVideo } })
+					}
+					onClear={() => send({ type: "trailer video cleared" })}
+					disabled={!current.matches("configuring")}
+				/> */}
+			</div>
+			<Card className="w-full">
 				<CardHeader>
-					<CardTitle>Upload Media Content</CardTitle>
-					{/* <CardDescription>Card Description</CardDescription> */}
+					<CardTitle>UDL Config</CardTitle>
+					<CardDescription>
+						Configure{" "}
+						<a
+							href="https://wiki.arweave.dev/#/en/Universal-Data-License-How-to-use-it"
+							target="_blank"
+							className="underline"
+							rel="noreferrer"
+						>
+							Universal Data License
+						</a>
+					</CardDescription>
 				</CardHeader>
-				<CardContent className="flex flex-col gap-4 items-stretch">
-					<div className="flex flex-col lg:flex-row gap-4 lg:justify-stretch">
-						<VideoUpload
-							title={"Image/Video"}
-							subtitle={"Select your media"}
-							file={current.context.mainVideo}
-							onFile={(mainVideo) =>
-								send({ type: "main video set", data: { mainVideo } })
-							}
-							onClear={() => send({ type: "main video cleared" })}
+				<CardContent className="relative flex flex-col items-center">
+					{current.matches({ configuring: { udlConfig: "hasConfig" } }) && (
+						<UdlTable tags={current.context.udlTags ?? {}} />
+					)}
+					<div className="pt-4 flex flex-row gap-4">
+						<Button
+							variant={"secondary"}
+							onClick={() => setIsUdlSheetOpen(true)}
 							disabled={!current.matches("configuring")}
-						/>
-						{/* <VideoUpload
-							title={"Trailer"}
-							subtitle={"Select trailer video (optional)"}
-							file={current.context.trailerVideo}
-							onFile={(trailerVideo) =>
-								send({ type: "trailer video set", data: { trailerVideo } })
-							}
-							onClear={() => send({ type: "trailer video cleared" })}
-							disabled={!current.matches("configuring")}
-						/> */}
-					</div>
-					<Card className="w-full">
-						<CardHeader>
-							<CardTitle>UDL Config</CardTitle>
-							<CardDescription>
-								Configure{" "}
-								<a
-									href="https://wiki.arweave.dev/#/en/Universal-Data-License-How-to-use-it"
-									target="_blank"
-									className="underline"
-									rel="noreferrer"
-								>
-									Universal Data License
-								</a>
-							</CardDescription>
-						</CardHeader>
-						<CardContent className="relative flex flex-col items-center">
-							{current.matches({ configuring: { udlConfig: "hasConfig" } }) && (
-								<UdlTable tags={current.context.udlTags ?? {}} />
-							)}
-							<div className="pt-4 flex flex-row gap-4">
-								<Button
-									variant={"secondary"}
-									onClick={() => setIsUdlSheetOpen(true)}
-									disabled={!current.matches("configuring")}
-								>
-									{current.matches({ configuring: { udlConfig: "hasConfig" } })
-										? "Modify UDL"
-										: "Add UDL"}
-								</Button>
-								{current.matches({
-									configuring: { udlConfig: "hasConfig" },
-								}) && (
-									<Button
-										variant={"destructive"}
-										onClick={() => send({ type: "udl config cleared" })}
-									>
-										Clear UDL
-									</Button>
-								)}
-							</div>
-						</CardContent>
-					</Card>
-					<div className="mx-auto pt-6">
-						<TooltipProvider>
-							<Tooltip delayDuration={canSumbit ? 500 : 200}>
-								<TooltipTrigger
-									disabled={!canSumbit}
-									className={`${canSumbit ? "" : " cursor-not-allowed"}`}
-								>
-									<Button
-										size={"lg"}
-										onClick={() =>
-											send({ type: "confirm symbol", data: { symbol: "AR" } })
-										}
-										className={`${
-											canSumbit &&
-											current.matches({
-												configuring: { udlConfig: "hasConfig" },
-											})
-												? "animate-pulse"
-												: ""
-										}`}
-										disabled={!canSumbit}
-									>
-										Upload With Bundlr
-									</Button>
-								</TooltipTrigger>
-								<TooltipContent>
-									{canSumbit ? "Click to Upload!" : "Requires Main Video"}
-								</TooltipContent>
-							</Tooltip>
-						</TooltipProvider>
+						>
+							{current.matches({ configuring: { udlConfig: "hasConfig" } })
+								? "Modify UDL"
+								: "Add UDL"}
+						</Button>
+						{current.matches({
+							configuring: { udlConfig: "hasConfig" },
+						}) && (
+							<Button
+								variant={"destructive"}
+								onClick={() => send({ type: "udl config cleared" })}
+							>
+								Clear UDL
+							</Button>
+						)}
 					</div>
 				</CardContent>
 			</Card>
+			<div className="mx-auto pt-2">
+				<TooltipProvider>
+					<Tooltip delayDuration={canSumbit ? 500 : 200}>
+						<TooltipTrigger
+							disabled={!canSumbit}
+							className={`${canSumbit ? "" : " cursor-not-allowed"}`}
+						>
+							<Button
+								size={"lg"}
+								onClick={() =>
+									send({ type: "confirm symbol", data: { symbol: "AR" } })
+								}
+								className={`${
+									canSumbit &&
+									current.matches({
+										configuring: { udlConfig: "hasConfig" },
+									})
+										? "animate-pulse"
+										: ""
+								}`}
+								disabled={!canSumbit}
+							>
+								Upload With Bundlr
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent>
+							{canSumbit ? "Click to Upload!" : "Requires Main Video"}
+						</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
+			</div>
+			</div>
 			<Sheet
 				open={isUdlSheetOpen}
 				onOpenChange={setIsUdlSheetOpen}
