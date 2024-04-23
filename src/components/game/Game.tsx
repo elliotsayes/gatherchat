@@ -5,7 +5,7 @@ import { useMachine } from "@xstate/react";
 import { AlphaFilter } from "pixi.js";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { gameMachine } from "../../lib/machines/game";
-import type { AoUsersState, AoToonMaybeSaved, AoToonSaved } from "../../lib/schema/gameModel";
+import type { AoUsersState, AoToonSaved } from "../../lib/schema/gameModel";
 import InteractableSprite from "./InteractableSprite";
 import InteractableToon from "./InteractableToon";
 import NamedAvatar from "./NamedAvatar";

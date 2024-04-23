@@ -3,7 +3,7 @@ import {
 	ResizablePanel,
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import type { AoUsersState as AoUsersState, AoToonMaybeSaved, AoPostsState, AoToonSaved } from "@/lib/schema/gameModel";
+import type { AoUsersState, AoPostsState, AoToonSaved } from "@/lib/schema/gameModel";
 import { useRef, useState } from "react";
 import { SidePanel, type SidePanelState } from "./SidePanel";
 import { Game } from "./game/Game";
@@ -169,7 +169,6 @@ export const GatherChat = ({
 							/>
 						)
 					}
-					video={<p>Video</p>}
 				/>
 			</ResizablePanel>
 		</ResizablePanelGroup>

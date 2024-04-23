@@ -1,4 +1,4 @@
-import type { AoToonMaybeSaved, AoToonSaved } from "@/lib/schema/gameModel";
+import type { AoToonSaved } from "@/lib/schema/gameModel";
 import { Button } from "../ui/button";
 import { AvatarStandalone } from "./AvatarStandalone";
 import { trimId } from "@/lib/utils";
@@ -14,7 +14,7 @@ interface ProfileViewProps {
 export const ProfileView = ({
 	toonInfo,
 	onChangeFollow,
-	onCall,
+	// onCall,
 	onClose,
 }: ProfileViewProps) => {
 	return (
