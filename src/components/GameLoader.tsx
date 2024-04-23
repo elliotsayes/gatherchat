@@ -1,7 +1,6 @@
 import { AoGatherProvider, type ContractUser } from "@/lib/ao-gather";
 import type {
 	AoUsersState,
-	AoToonMaybeSaved,
 	AoToonSaved,
   AoPostsState,
 } from "@/lib/schema/gameModel";
@@ -61,11 +60,12 @@ export const GameLoader = () => {
 
     if (!userData) return undefined;
 
-		const user: AoToonMaybeSaved = {
+		const user: AoToonSaved = {
 			id: arweaveId,
 			avatarSeed: userData.avatar,
 			displayName: userData.name,
 			savedPosition: { x: userData.position.x, y: userData.position.y },
+      isFollowing: false,
 			...userData,
 		};
 		const otherToons: AoToonSaved[] = Object.entries(users)
@@ -92,7 +92,7 @@ export const GameLoader = () => {
     return Object.keys(posts).map((id) => ({
       id,
       ...posts[id],
-    })).sort((a, b) => b.created - a.created);
+    })).sort((a, b) => a.created - b.created);
   }, [posts]);
 
 	if (errorUsers !== null || errorPosts !== null) {
