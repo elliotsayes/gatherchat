@@ -38,7 +38,7 @@ export const GatherChat = ({
 
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	const [sidePanelState, setSidePanelState] = useState<SidePanelState>("feed");
+	const [sidePanelState, setSidePanelState] = useState<SidePanelState>("profile");
 
 	const [selectedToon, setSelectedToon] = useState<
 		AoToonSaved | undefined
