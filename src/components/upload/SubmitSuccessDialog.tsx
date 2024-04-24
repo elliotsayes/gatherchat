@@ -9,6 +9,7 @@ import type { ContentType, UploadResult } from "@/lib/upload";
 import { Button } from "../ui/button";
 import TextView from "./TextView";
 import { VideoPreview } from "./VideoPreview";
+import { useState } from "react";
 
 interface Props {
 	contentType: ContentType;
@@ -19,6 +20,8 @@ interface Props {
 
 export const SubmitSuccessDialog = (props: Props) => {
 	const { contentType, mainVideoResult, onAccept } = props;
+
+	const [isDone, setIsDone] = useState(false);
 
 	const renderResult = (
 		// title: string,
@@ -88,7 +91,11 @@ export const SubmitSuccessDialog = (props: Props) => {
         </DialogDescription> */}
 			</DialogHeader>
 			<div className="flex flex-col gap-4">{renderResult(mainVideoResult)}</div>
-			<Button onClick={() => onAccept()}>Done</Button>
+			<Button onClick={() => {
+				onAccept()
+				setIsDone(true)
+			}}
+			disabled={isDone}>Done</Button>
 		</DialogContent>
 	);
 };

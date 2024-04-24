@@ -19,7 +19,7 @@ export const SubmittingDialog = (props: Props) => {
 		<DialogContent className="sm:max-w-[425px]" hasCloseButton={false}>
 			<DialogHeader>
 				<DialogTitle>
-					Uploading with {isArseeding ? "Everpay" : "Bundlr"}
+					Uploading with {isArseeding ? "Everpay" : "Turbo"}
 				</DialogTitle>
 				<DialogDescription>
 					Please wait while your data is uploading...
