@@ -122,7 +122,7 @@ export const GatherChat = ({
 											key={post.id}
 											className={`${toon?.isFollowing ? "bg-blue-100" : ""} ${
 												isUser ? "bg-gray-200" : ""
-											}`}
+											} break-words max-w-sm`}
 										>
 											<span
 												className={`text-muted-foreground text-underline px-1 ${
