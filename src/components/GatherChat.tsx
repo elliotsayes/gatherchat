@@ -93,8 +93,8 @@ export const GatherChat = ({
 					state={sidePanelState}
 					onSelectState={setSidePanelState}
 					activityFeed={(
-						<div className="h-[100%] flex flex-col gap-4 pb-6">
-							<ul className="flex-grow">
+						<div className="flex flex-col gap-4 px-4 py-4 min-h-min">
+							<ul className="w-[100%] overflow-y-auto">
 								{
 									aoPostsState.map((post) => {
 										const toon = [...aoUsersState.otherToons, aoUsersState.user].find((t) => t.id === post.author);
