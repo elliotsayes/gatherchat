@@ -11,7 +11,8 @@ import { ProfileView } from "./profile/ProfileView";
 import { SetupForm } from "./profile/SetupForm";
 import { type UploadInfo, UploadPage } from "./upload/UploadPage";
 import { timeAgo } from "@/lib/timeago";
-import { ChatBox } from "./upload/TextUpload";
+import { ChatBox } from "./upload/ChatBox";
+import { toast } from "sonner"
 
 interface GatherChatProps {
 	aoUsersState: AoUsersState;
@@ -73,16 +74,25 @@ export const GatherChat = ({
 							setSidePanelState("feed");
 						}}
 						onSavePosition={async (position) => {
-							const doUpdate = confirm("Update saved position?");
-							if (doUpdate) {
-								const res = await onUpdatePosition(position);
-								if (res) {
-									alert("Position updated!");
-								} else {
-									alert("Update failed!");
-								}
+							const res = await onUpdatePosition(position);
+							if (res) {
+								toast("Saved your home position!");
+								return true
+							// biome-ignore lint/style/noUselessElse: <explanation>
+							} else {
+								toast("Update failed!");
+								return false
 							}
-							return doUpdate;
+							// const doUpdate = confirm("Update saved position?");
+							// if (doUpdate) {
+							// 	const res = await onUpdatePosition(position);
+							// 	if (res) {
+							// 		alert("Position updated!");
+							// 	} else {
+							// 		alert("Update failed!");
+							// 	}
+							// }
+							// return doUpdate;
 						}}
 					/>
 				</div>
@@ -93,8 +103,8 @@ export const GatherChat = ({
 					state={sidePanelState}
 					onSelectState={setSidePanelState}
 					activityFeed={(
-						<div className="h-[100%] flex flex-col gap-4 pb-6">
-							<ul className="flex-grow">
+						<div className="min-h-min h-auto flex flex-col gap-4 py-4">
+							<ul className="w-[100%] min-h-0 max-h-full h-[calc(100vh-140px)] overflow-y-auto ">
 								{
 									aoPostsState.map((post) => {
 										const toon = [...aoUsersState.otherToons, aoUsersState.user].find((t) => t.id === post.author);
@@ -112,9 +122,12 @@ export const GatherChat = ({
 									})
 								}
 							</ul>
-							<ChatBox onSubmit={async (text) => {
-								await onUpload({type: "text", textOrTxId: text});
-							}} />
+							<div className="">
+								<ChatBox onSubmit={async (text) => {
+									await onUpload({type: "text", textOrTxId: text});
+									toast("Message sent!")
+								}} />
+							</div>
 						</div>
 					)}
 					upload={
@@ -124,6 +137,7 @@ export const GatherChat = ({
 								// Reset key
 								if (info) {
 									await onUpload(info);
+									toast("Media uploaded! 🎉")
 								}
 								setUploadPageKey(Date.now());
 							}}
@@ -137,10 +151,10 @@ export const GatherChat = ({
 								onChangeFollow={async (toonInfo) => {
 									if (toonInfo.isFollowing) {
 										await onUnfollow({address: toonInfo.id});
-										alert("Unfollowed!");
+										toast("Unfollowed!");
 									} else {
 										await onFollow({address: toonInfo.id});
-										alert("Followed!");
+										toast("Followed!");
 									}
 									setProileKey(Date.now());
 									setSelectedToon(undefined);
@@ -159,9 +173,9 @@ export const GatherChat = ({
 										avatarSeed: s.avatarSeed,
 									}).then((res) => {
 										if (res) {
-											alert("Profile updated!");
+											toast("Profile updated!");
 										} else {
-											alert("Update failed!");
+											toast("Update failed!");
 										}
 									});
 								}}

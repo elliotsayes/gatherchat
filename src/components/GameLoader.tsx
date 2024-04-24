@@ -10,6 +10,9 @@ import { GatherChat } from "./GatherChat";
 import { SetupForm } from "./profile/SetupForm";
 import type { UploadInfo } from "./upload/UploadPage";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Toaster } from "./ui/sonner";
+import { toast } from "sonner"
+import { Link } from "@tanstack/react-router"
 
 const aoGather = new AoGatherProvider({});
 
@@ -95,14 +98,28 @@ export const GameLoader = () => {
     })).sort((a, b) => a.created - b.created);
   }, [posts]);
 
+  if (window.arweaveWallet === undefined) {
+    return <div className="h-screen w-screen text-center flex flex-col justify-center">
+      <p className="text-xl">Please install <a href="https://www.arconnect.io/download" target='_blank' rel="noreferrer" className='text-blue-800'>ArConnect</a></p>
+    </div>
+  }
+
+  if (arweaveId === undefined) {
+    return <div className="h-screen w-screen text-center flex flex-col justify-center">
+      <p className="text-xl">Please connect ArConnect</p>
+    </div>
+  }
+
 	if (errorUsers !== null || errorPosts !== null) {
-    console.log({ users, posts })
-		return <div>Error!</div>;
+    return <div className="h-screen w-screen text-center flex flex-col justify-center">
+      <p className="text-xl">Error Loading</p>
+    </div>
 	}
 
 	if (users === undefined || posts === undefined) {
-    console.log({ users, posts })
-		return <div>Loading...</div>;
+    return <div className="h-screen w-screen text-center flex flex-col justify-center">
+      <p className="text-xl">Loading...</p>
+    </div>
 	}
 
 	if (usersState === undefined) {
@@ -124,7 +141,7 @@ export const GameLoader = () => {
                 position: { x: 3, y: 3 },
               })
               await refetchUsers();
-              alert("Registered!")
+              toast("Registered!")
             })();
           }}
         />
@@ -134,45 +151,54 @@ export const GameLoader = () => {
     )
 	}
 
-
 	return (
-		<GatherChat
-      aoUsersState={usersState}
-      aoPostsState={postsState ?? []}
-      onUpdateProfile={async (p) => {
-        const userPart: Partial<ContractUser> = {
-          avatar: p.avatarSeed,
-          name: p.name,
-        };
-        await aoGather.update(userPart);
-        refetchUsers();
-        return true;
-      } }
-      onUpdatePosition={async (p) => {
-        const userPart: Partial<ContractUser> = {
-          position: p,
-        };
-        await aoGather.update(userPart);
-        refetchUsers();
-        return true;
-      } }
-      onUpload={async (upload: UploadInfo): Promise<boolean> => {
-        await aoGather.post(upload);
-        refetchPosts();
-        return true;
-      }}
-      onFollow={async (data: { address: string }) => {
-        await aoGather.follow(data);
-        refetchUsers();
-        // window.location.reload();
-        return true;
-      }}
-      onUnfollow={async (data: { address: string }) => {
-        await aoGather.unfollow(data);
-        refetchUsers();
-        // window.location.reload();
-        return true;
-      }}
-    />
+    <div className="relative">
+      <div className='absolute bg-gradient-radial from-black/80 via-70% via-transparent to-transparent'>
+        <Link to={"/"}>
+          <img src="./assets/logo.png" width={200} alt='Gather Chat logo' />
+        </Link>
+      </div>
+      <GatherChat
+        aoUsersState={usersState}
+        aoPostsState={postsState ?? []}
+        onUpdateProfile={async (p) => {
+          const userPart: Partial<ContractUser> = {
+            avatar: p.avatarSeed,
+            name: p.name,
+          };
+          await aoGather.update(userPart);
+          refetchUsers();
+          return true;
+        } }
+        onUpdatePosition={async (p) => {
+          const userPart: Partial<ContractUser> = {
+            position: p,
+          };
+          await aoGather.update(userPart);
+          refetchUsers();
+          return true;
+        } }
+        onUpload={async (upload: UploadInfo): Promise<boolean> => {
+          await aoGather.post(upload);
+          refetchPosts();
+          return true;
+        }}
+        onFollow={async (data: { address: string }) => {
+          await aoGather.follow(data);
+          refetchUsers();
+          // window.location.reload();
+          return true;
+        }}
+        onUnfollow={async (data: { address: string }) => {
+          await aoGather.unfollow(data);
+          refetchUsers();
+          // window.location.reload();
+          return true;
+        }}
+      />
+      <Toaster
+        position="top-left"
+      />
+    </div>
 	);
 };

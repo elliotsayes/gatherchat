@@ -17,7 +17,12 @@ export const ChatBox = ({ onSubmit: onSubmitProp }: ChatBoxProps) => {
   return (
     <div className="flex flex-row gap-2">
       <Input type="text" onChange={(e) => setText(e.target.value)} value={text} />
-      <Button onClick={() => onSubmit()}>Send</Button>
+      <Button 
+        onClick={() => onSubmit()} 
+        disabled={text.length === 0}
+      >
+        Send
+      </Button>
     </div>
   )
 }
