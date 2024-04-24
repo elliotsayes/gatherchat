@@ -109,13 +109,14 @@ export const GatherChat = ({
 					onSelectState={setSidePanelState}
 					activityFeed={
 						<div className="min-h-min h-auto flex flex-col gap-4 py-4">
-							<ul className="w-[100%] min-h-0 max-h-full h-[calc(100vh-140px)] overflow-y-auto ">
+							<ul className="w-[100%] min-h-0 max-h-full h-[calc(100vh-140px)] overflow-y-auto px-2">
 								{aoPostsState.map((post) => {
 									const toon = [
 										...aoUsersState.otherToons,
 										aoUsersState.user,
 									].find((t) => t.id === post.author);
 									const isUser = aoUsersState.user.id === post.author;
+									const isLink = !isUser && toon;
 									return (
 										<li
 											key={post.id}
@@ -123,7 +124,13 @@ export const GatherChat = ({
 												isUser ? "bg-gray-200" : ""
 											}`}
 										>
-											<span className=" text-muted-foreground">
+											<span
+												className={`text-muted-foreground text-underline px-1 ${isLink ? 'cursor-pointer' : ''}`}
+												onClick={isLink ? () => {
+													setSelectedToon(toon)
+													setSidePanelState("profile")
+												} : undefined}
+											>
 												{" "}
 												{toon?.displayName ?? post.author}:{" "}
 											</span>
@@ -141,7 +148,7 @@ export const GatherChat = ({
 											)}
 											<span className="text-muted-foreground text-xs">
 												{" "}
-												{timeAgo.format(toon?.lastSeen ?? 0)}
+												{timeAgo.format(post.created)}
 											</span>
 										</li>
 									);
