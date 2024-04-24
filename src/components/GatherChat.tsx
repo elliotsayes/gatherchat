@@ -3,19 +3,15 @@ import {
 	ResizablePanel,
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import type {
-	AoPostsState,
-	AoToonSaved,
-	AoUsersState,
-} from "@/lib/schema/gameModel";
-import { timeAgo } from "@/lib/timeago";
+import type { AoUsersState, AoPostsState, AoToonSaved } from "@/lib/schema/gameModel";
 import { useRef, useState } from "react";
 import { SidePanel, type SidePanelState } from "./SidePanel";
 import { Game } from "./game/Game";
 import { ProfileView } from "./profile/ProfileView";
 import { SetupForm } from "./profile/SetupForm";
-import { ChatBox } from "./upload/TextUpload";
 import { type UploadInfo, UploadPage } from "./upload/UploadPage";
+import { timeAgo } from "@/lib/timeago";
+import { ChatBox } from "./upload/TextUpload";
 
 interface GatherChatProps {
 	aoUsersState: AoUsersState;
@@ -25,8 +21,8 @@ interface GatherChatProps {
 		avatarSeed: string;
 	}): Promise<boolean>;
 	onUpdatePosition(position: { x: number; y: number }): Promise<boolean>;
-	onFollow(data: { address: string }): Promise<boolean>;
-	onUnfollow(data: { address: string }): Promise<boolean>;
+	onFollow(data: {address: string}): Promise<boolean>;
+	onUnfollow(data: {address: string}): Promise<boolean>;
 	onUpload(upload: UploadInfo): Promise<boolean>;
 }
 
@@ -43,12 +39,11 @@ export const GatherChat = ({
 
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	const [sidePanelState, setSidePanelState] =
-		useState<SidePanelState>("profile");
+	const [sidePanelState, setSidePanelState] = useState<SidePanelState>("profile");
 
-	const [selectedToon, setSelectedToon] = useState<AoToonSaved | undefined>(
-		undefined,
-	);
+	const [selectedToon, setSelectedToon] = useState<
+		AoToonSaved | undefined
+	>(undefined);
 
 	const [lastResized, setLastResized] = useState(0);
 
@@ -97,53 +92,31 @@ export const GatherChat = ({
 				<SidePanel
 					state={sidePanelState}
 					onSelectState={setSidePanelState}
-					activityFeed={
+					activityFeed={(
 						<div className="h-[100%] flex flex-col gap-4 pb-6">
 							<ul className="flex-grow">
-								{aoPostsState.map((post) => {
-									const toon = [
-										...aoUsersState.otherToons,
-										aoUsersState.user,
-									].find((t) => t.id === post.author);
-									const isUser = aoUsersState.user.id === post.author;
-									return (
-										<li
-											key={post.id}
-											className={`${toon?.isFollowing ? "bg-blue-100" : ""} ${
-												isUser ? "bg-gray-200" : ""
-											}`}
-										>
-											<span className=" text-muted-foreground">
-												{" "}
-												{toon?.displayName ?? post.author}:{" "}
-											</span>
-											{post.type === "text" ? (
-												<span>{post.textOrTxId}</span>
-											) : (
-												<a
-													href={`https://arweave.net/${post.textOrTxId}`}
-													target="_blank"
-													className=" text-blue-400"
-													rel="noreferrer"
-												>
-													({post.type})
-												</a>
-											)}
-											<span className="text-muted-foreground text-xs">
-												{" "}
-												{timeAgo.format(toon?.lastSeen ?? 0)}
-											</span>
-										</li>
-									);
-								})}
+								{
+									aoPostsState.map((post) => {
+										const toon = [...aoUsersState.otherToons, aoUsersState.user].find((t) => t.id === post.author);
+										const isUser = aoUsersState.user.id === post.author;
+										return (
+											<li key={post.id} className={`${toon?.isFollowing ? 'bg-blue-100' : ''} ${isUser ? 'bg-gray-200' : ''}`}>
+												<span className=" text-muted-foreground"> {toon?.displayName ?? post.author}: </span>
+												{
+													post.type === "text" ? <span>{post.textOrTxId}</span> :
+													<a href={`https://arweave.net/${post.textOrTxId}`} target="_blank" className=" text-blue-400">({post.type})</a>
+												}
+												<span className="text-muted-foreground text-xs"> {timeAgo.format(toon?.lastSeen ?? 0)}</span>
+											</li>
+										)
+									})
+								}
 							</ul>
-							<ChatBox
-								onSubmit={async (text) => {
-									await onUpload({ type: "text", textOrTxId: text });
-								}}
-							/>
+							<ChatBox onSubmit={async (text) => {
+								await onUpload({type: "text", textOrTxId: text});
+							}} />
 						</div>
-					}
+					)}
 					upload={
 						<UploadPage
 							key={uploadPageKey}
@@ -163,10 +136,10 @@ export const GatherChat = ({
 								toonInfo={selectedToon}
 								onChangeFollow={async (toonInfo) => {
 									if (toonInfo.isFollowing) {
-										await onUnfollow({ address: toonInfo.id });
+										await onUnfollow({address: toonInfo.id});
 										alert("Unfollowed!");
 									} else {
-										await onFollow({ address: toonInfo.id });
+										await onFollow({address: toonInfo.id});
 										alert("Followed!");
 									}
 									setProileKey(Date.now());

@@ -34,9 +34,7 @@ export const SidePanel = ({
 			</TabsList>
 			<div className="flex flex-col flex-grow justify-stretch items-center bg-gray-50/50">
 				<div className="px-4 pt-2 bg-gray-50 h-[100%]">
-					<TabsContent value="feed" className="h-[100%]">
-						{activityFeed}
-					</TabsContent>
+					<TabsContent value="feed" className="h-[100%]">{activityFeed}</TabsContent>
 					<TabsContent value="upload">{upload}</TabsContent>
 					<TabsContent value="profile">{profile}</TabsContent>
 					{/* <TabsContent value="video">{video}</TabsContent> */}

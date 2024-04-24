@@ -1,8 +1,8 @@
 import type { AoToonSaved } from "@/lib/schema/gameModel";
-import { timeAgo } from "@/lib/timeago";
-import { trimId } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { AvatarStandalone } from "./AvatarStandalone";
+import { trimId } from "@/lib/utils";
+import { timeAgo } from "@/lib/timeago";
 
 interface ProfileViewProps {
 	toonInfo: AoToonSaved;
