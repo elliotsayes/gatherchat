@@ -26,6 +26,10 @@ type Props = {
 	onSelectToon: (toon: AoToonSaved) => void;
 	onViewFeed: () => void;
 	onSavePosition: (position: { x: number; y: number }) => Promise<boolean>;
+	targetOffset?: {
+		x: number,
+		y: number,
+	}
 };
 
 export const Game = ({
@@ -35,6 +39,7 @@ export const Game = ({
 	onSelectToon,
 	onViewFeed,
 	onSavePosition,
+	targetOffset: targetOffestProp,
 }: Props) => {
 	const [stageSize, setStageSize] = useState(fallbackStageSize);
 
@@ -113,7 +118,7 @@ export const Game = ({
 					setTargetOffset(targetOffset);
 				}}
 			>
-				<Spring to={{ ...targetOffset }}>
+				<Spring to={{ ...(targetOffestProp ?? targetOffset) }}>
 					{(props) => (
 						<Container {...props}>
 							{current.hasTag("SHOW_WORLD") && (

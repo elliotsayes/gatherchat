@@ -76,7 +76,7 @@ export const GatherChat = ({
 						onSavePosition={async (position) => {
 							const res = await onUpdatePosition(position);
 							if (res) {
-								toast("Position updated!");
+								toast("Saved your home position!");
 								return true
 							// biome-ignore lint/style/noUselessElse: <explanation>
 							} else {
