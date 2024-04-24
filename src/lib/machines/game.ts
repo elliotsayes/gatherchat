@@ -270,7 +270,7 @@ export const gameMachine = setup({
 					states: {
 						cooldown: {
 							after: {
-								2500: {
+								1000: {
 									target: "idle",
 								},
 							},

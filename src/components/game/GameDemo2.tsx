@@ -1,5 +1,5 @@
 import { Stage } from "@pixi/react";
-import { Container, Sprite } from "@pixi/react-animated";
+import { Container } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
 import { useMachine } from "@xstate/react";
 import { AlphaFilter } from "pixi.js";
@@ -26,15 +26,19 @@ type Props = {
 	onSelectToon: (toon: AoToonSaved) => void;
 	onViewFeed: () => void;
 	onSavePosition: (position: { x: number; y: number }) => Promise<boolean>;
+	targetOffset?: {
+		x: number;
+		y: number;
+	};
 };
 
-export const Game = ({
+export const GameDemo2 = ({
 	parentRef,
 	lastResized,
 	aoStateProp: aoState,
 	onSelectToon,
 	onViewFeed,
-	onSavePosition,
+	targetOffset: targetOffestProp,
 }: Props) => {
 	const [stageSize, setStageSize] = useState(fallbackStageSize);
 
@@ -113,7 +117,7 @@ export const Game = ({
 					setTargetOffset(targetOffset);
 				}}
 			>
-				<Spring to={{ ...targetOffset }}>
+				<Spring to={{ ...(targetOffestProp ?? targetOffset) }}>
 					{(props) => (
 						<Container {...props}>
 							{current.hasTag("SHOW_WORLD") && (
@@ -138,16 +142,18 @@ export const Game = ({
 											{...props}
 										>
 											<Tilemap3 />
-											{aoState.user.savedPosition !== undefined && (
-												<Sprite
-													image={"assets/sprite/purple.png"}
-													width={tileSizeX}
-													height={tileSizeY}
-													x={tileSizeX * aoState.user.savedPosition.x}
-													y={tileSizeY * aoState.user.savedPosition.y}
-													filters={[veryTransparent]}
-												/>
-											)}
+											{/* {
+												aoState.user.savedPosition !== undefined && (
+													<Sprite
+														image={"assets/sprite/purple.png"}
+														width={tileSizeX}
+														height={tileSizeY}
+														x={tileSizeX * aoState.user.savedPosition.x}
+														y={tileSizeY * aoState.user.savedPosition.y}
+														filters={[veryTransparent]}
+													/>
+												)
+											} */}
 											{current.hasTag("SHOW_OBJECTS") && (
 												<InteractableSprite
 													image="assets/sprite/board.png"
@@ -231,7 +237,7 @@ export const Game = ({
 													}
 												})}
 											<InteractableSprite
-												active={false}
+												// active={false}
 												image="assets/sprite/cal.png"
 												scale={4}
 												anchor={{ x: 0.5, y: 0.5 }}
@@ -267,7 +273,7 @@ export const Game = ({
 												y={tileSizeY * 1.25}
 											/>
 											<InteractableSprite
-												active={false}
+												// active={false}
 												image="assets/sprite/tv.png"
 												scale={4}
 												anchor={{ x: 0.5, y: 0.5 }}
@@ -320,7 +326,7 @@ export const Game = ({
 										scale={3}
 										isPlaying={true}
 									/>
-									{current.matches({
+									{/* {current.matches({
 										roaming: {
 											save: "idle",
 										},
@@ -337,7 +343,7 @@ export const Game = ({
 											filters={[slightlyTransparent]}
 											y={20}
 										/>
-									)}
+									)} */}
 								</Container>
 							)}
 						</Container>

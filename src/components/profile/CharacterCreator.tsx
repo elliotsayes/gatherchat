@@ -82,7 +82,7 @@ export const CharacterCreator = ({
 						return (
 							<OptionSlider
 								key={category}
-								label={toTitleCase(category)}
+								label={`${toTitleCase(category)} color`}
 								valueCount={colorMaxs[index]}
 								value={colorIndicies[index]}
 								onChange={(value) => {
