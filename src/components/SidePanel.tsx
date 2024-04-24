@@ -32,7 +32,7 @@ export const SidePanel = ({
 				<TabsTrigger value="profile">Profile</TabsTrigger>
 				{/* <TabsTrigger value="video">Video</TabsTrigger> */}
 			</TabsList>
-			<div className="flex overflow-y-auto">
+			<div className="flex">
 				<TabsContent value="feed">{activityFeed}</TabsContent>
 				<TabsContent value="upload">{upload}</TabsContent>
 				<TabsContent value="profile">{profile}</TabsContent>

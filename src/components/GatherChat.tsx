@@ -103,8 +103,8 @@ export const GatherChat = ({
 					state={sidePanelState}
 					onSelectState={setSidePanelState}
 					activityFeed={(
-						<div className="flex flex-col gap-4 px-4 py-4 min-h-min">
-							<ul className="w-[100%] overflow-y-auto">
+						<div className="min-h-min h-auto flex flex-col gap-4 py-4">
+							<ul className="w-[100%] min-h-0 max-h-full h-[calc(100vh-140px)] overflow-y-auto ">
 								{
 									aoPostsState.map((post) => {
 										const toon = [...aoUsersState.otherToons, aoUsersState.user].find((t) => t.id === post.author);
@@ -122,10 +122,12 @@ export const GatherChat = ({
 									})
 								}
 							</ul>
-							<ChatBox onSubmit={async (text) => {
-								await onUpload({type: "text", textOrTxId: text});
-								toast("Message sent!")
-							}} />
+							<div className="">
+								<ChatBox onSubmit={async (text) => {
+									await onUpload({type: "text", textOrTxId: text});
+									toast("Message sent!")
+								}} />
+							</div>
 						</div>
 					)}
 					upload={
