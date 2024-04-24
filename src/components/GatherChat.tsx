@@ -73,16 +73,25 @@ export const GatherChat = ({
 							setSidePanelState("feed");
 						}}
 						onSavePosition={async (position) => {
-							const doUpdate = confirm("Update saved position?");
-							if (doUpdate) {
-								const res = await onUpdatePosition(position);
-								if (res) {
-									alert("Position updated!");
-								} else {
-									alert("Update failed!");
-								}
+							const res = await onUpdatePosition(position);
+							if (res) {
+								alert("Position updated!");
+								return true
+							// biome-ignore lint/style/noUselessElse: <explanation>
+							} else {
+								alert("Update failed!");
+								return false
 							}
-							return doUpdate;
+							// const doUpdate = confirm("Update saved position?");
+							// if (doUpdate) {
+							// 	const res = await onUpdatePosition(position);
+							// 	if (res) {
+							// 		alert("Position updated!");
+							// 	} else {
+							// 		alert("Update failed!");
+							// 	}
+							// }
+							// return doUpdate;
 						}}
 					/>
 				</div>
