@@ -58,6 +58,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.7.0",
+    "@tanstack/router-devtools": "^1.29.2",
+    "@tanstack/router-vite-plugin": "^1.30.0",
     "@types/bun": "^1.1.0",
     "@types/mime-types": "^2.1.4",
     "@types/node": "^20.12.7",
