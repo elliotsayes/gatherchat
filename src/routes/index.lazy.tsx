@@ -1,4 +1,10 @@
-import { Game } from '@/components/game/Game'
+import { GameDemo2 } from '@/components/game/GameDemo2'
+import { buttonVariants } from '@/components/ui/button'
+import { AoProvider } from '@/lib/ao'
+import { aoGatherProcessId, type ArweaveID, type ContractUser } from '@/lib/ao-gather'
+import type { AoToonSaved } from '@/lib/schema/gameModel'
+import { cn } from '@/lib/utils'
+import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
 // import {
@@ -12,12 +18,50 @@ export const Route = createLazyFileRoute('/')({
   component: Index,
 })
 
+const aoProvider = new AoProvider({
+  processId: aoGatherProcessId,
+})
+
+const placeholderUser: AoToonSaved = {
+  avatarSeed: "a1204030b070a01",
+  displayName: "You?",
+  id: "",
+  isFollowing: false,
+  lastSeen: 0,
+  savedPosition: { x: 10, y: 5}
+}
+
 function Index() {
   const containerRef = useRef<HTMLDivElement>(null)
 	const [targetOffset, setTargetOffset] = useState({
 		x: 0,
 		y: 0,
 	});
+
+  const { data: otherToons } = useQuery({
+    queryKey: ["gatherUsers"],
+    queryFn: async () => {
+      const { Messages } = await aoProvider.ao.dryrun({
+        process: aoProvider.processId,
+        tags: [{ name: "Action", value: "GetUsers" }],
+      });
+      const json = JSON.parse(Messages[0].Data) as Record<ArweaveID, ContractUser>;
+
+      const otherToons: AoToonSaved[] = Object.entries(json)
+			.map(([id, toon]) => {
+				return {
+					id,
+					avatarSeed: toon.avatar,
+					displayName: toon.name,
+					savedPosition: { x: toon.position.x, y: toon.position.y },
+					isFollowing: false,
+					...toon,
+				};
+			})
+			.filter(Boolean) as AoToonSaved[];
+      return otherToons
+    }
+  })
 
   return (
     <div ref={containerRef} className='w-[100%] h-[100%] relative'
@@ -63,25 +107,23 @@ function Index() {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu> */}
-      <div className='z-10 absolute w-[100%] h-[100%] text-white bg-gray-800/80'>
-        <h3>Welcome Home!</h3>
-        <Link to="/game">
-          Play game
-        </Link>
+      <div className='z-10 absolute w-[100%] h-[100%] text-white bg-gray-800/80 flex flex-col justify-center items-center'>
+        <img src="./assets/logo.png" width={400} alt='Gather Chat logo' />
+        <div>
+          <ol>
+            <li className='h-12 pl-2'><span className='font-mono'>1.  </span><span className='pl-3'>Install <a href="https://www.arconnect.io/download" target='_blank' rel="noreferrer" className='text-blue-200'>ArConnect</a></span></li>
+            <li className='h-12 pl-2'><span className='font-mono'>2.  </span><span className='pl-3'>Set up a wallet</span></li>
+            <li className='h-12 pl-2'><span className='font-mono'>3.  </span><Link to="/game" className={cn(buttonVariants({ variant: "default" }))}>Play Gather Chat!</Link></li>
+          </ol>
+        </div>
       </div>
       <div className='z-0 absolute w-[100%] h-[100%]'>
-        <Game
-          parentRef={containerRef} lastResized={0}
+        <GameDemo2
+          parentRef={containerRef}
+          lastResized={0}
           aoStateProp={{
-            user: {
-              avatarSeed: 'a1204030b070a01',
-              displayName: "TEST",
-              id: "TEST",
-              isFollowing: false,
-              lastSeen: 0,
-              savedPosition: {x : 10, y: 6}
-            },
-            otherToons: []
+            user: placeholderUser,
+            otherToons: otherToons ?? []
           }}
           onSelectToon={() => {}}
           onViewFeed={() => {}}

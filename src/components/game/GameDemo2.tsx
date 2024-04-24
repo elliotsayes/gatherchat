@@ -26,15 +26,20 @@ type Props = {
 	onSelectToon: (toon: AoToonSaved) => void;
 	onViewFeed: () => void;
 	onSavePosition: (position: { x: number; y: number }) => Promise<boolean>;
+	targetOffset?: {
+		x: number,
+		y: number,
+	}
 };
 
-export const Game = ({
+export const GameDemo2 = ({
 	parentRef,
 	lastResized,
 	aoStateProp: aoState,
 	onSelectToon,
 	onViewFeed,
 	onSavePosition,
+	targetOffset: targetOffestProp,
 }: Props) => {
 	const [stageSize, setStageSize] = useState(fallbackStageSize);
 
@@ -113,7 +118,7 @@ export const Game = ({
 					setTargetOffset(targetOffset);
 				}}
 			>
-				<Spring to={{ ...(targetOffset) }}>
+				<Spring to={{ ...(targetOffestProp ?? targetOffset) }}>
 					{(props) => (
 						<Container {...props}>
 							{current.hasTag("SHOW_WORLD") && (
@@ -138,7 +143,7 @@ export const Game = ({
 											{...props}
 										>
 											<Tilemap3 />
-											{
+											{/* {
 												aoState.user.savedPosition !== undefined && (
 													<Sprite
 														image={"assets/sprite/purple.png"}
@@ -149,7 +154,7 @@ export const Game = ({
 														filters={[veryTransparent]}
 													/>
 												)
-											}
+											} */}
 											{current.hasTag("SHOW_OBJECTS") && (
 												<InteractableSprite
 													image="assets/sprite/board.png"
@@ -322,7 +327,7 @@ export const Game = ({
 										scale={3}
 										isPlaying={true}
 									/>
-									{current.matches({
+									{/* {current.matches({
 										roaming: {
 											save: "idle",
 										},
@@ -339,7 +344,7 @@ export const Game = ({
 											filters={[slightlyTransparent]}
 											y={20}
 										/>
-									)}
+									)} */}
 								</Container>
 							)}
 						</Container>

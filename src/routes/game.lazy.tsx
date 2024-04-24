@@ -1,5 +1,5 @@
 import { GameLoader } from '@/components/GameLoader'
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { createLazyFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/game')({
   component: Game,

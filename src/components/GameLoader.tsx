@@ -12,6 +12,7 @@ import type { UploadInfo } from "./upload/UploadPage";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Toaster } from "./ui/sonner";
 import { toast } from "sonner"
+import { Link } from "@tanstack/react-router"
 
 const aoGather = new AoGatherProvider({});
 
@@ -97,14 +98,28 @@ export const GameLoader = () => {
     })).sort((a, b) => a.created - b.created);
   }, [posts]);
 
+  if (window.arweaveWallet === undefined) {
+    return <div className="h-screen w-screen text-center flex flex-col justify-center">
+      <p className="text-xl">Please install <a href="https://www.arconnect.io/download" target='_blank' rel="noreferrer" className='text-blue-800'>ArConnect</a></p>
+    </div>
+  }
+
+  if (arweaveId === undefined) {
+    return <div className="h-screen w-screen text-center flex flex-col justify-center">
+      <p className="text-xl">Please connect ArConnect</p>
+    </div>
+  }
+
 	if (errorUsers !== null || errorPosts !== null) {
-    console.log({ users, posts })
-		return <div>Error!</div>;
+    return <div className="h-screen w-screen text-center flex flex-col justify-center">
+      <p className="text-xl">Error Loading</p>
+    </div>
 	}
 
 	if (users === undefined || posts === undefined) {
-    console.log({ users, posts })
-		return <div>Loading...</div>;
+    return <div className="h-screen w-screen text-center flex flex-col justify-center">
+      <p className="text-xl">Loading...</p>
+    </div>
 	}
 
 	if (usersState === undefined) {
@@ -136,9 +151,13 @@ export const GameLoader = () => {
     )
 	}
 
-
 	return (
-    <>
+    <div className="relative">
+      <div className='absolute bg-gradient-radial from-black/80 via-70% via-transparent to-transparent'>
+        <Link to={"/"}>
+          <img src="./assets/logo.png" width={200} alt='Gather Chat logo' />
+        </Link>
+      </div>
       <GatherChat
         aoUsersState={usersState}
         aoPostsState={postsState ?? []}
@@ -180,6 +199,6 @@ export const GameLoader = () => {
       <Toaster
         position="top-left"
       />
-    </>
+    </div>
 	);
 };
