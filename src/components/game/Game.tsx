@@ -231,7 +231,7 @@ export const Game = ({
 													}
 												})}
 											<InteractableSprite
-												// active={false}
+												active={false}
 												image="assets/sprite/cal.png"
 												scale={4}
 												anchor={{ x: 0.5, y: 0.5 }}
@@ -267,7 +267,7 @@ export const Game = ({
 												y={tileSizeY * 1.25}
 											/>
 											<InteractableSprite
-												// active={false}
+												active={false}
 												image="assets/sprite/tv.png"
 												scale={4}
 												anchor={{ x: 0.5, y: 0.5 }}
