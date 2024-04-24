@@ -151,8 +151,18 @@ function Index() {
 					</ol>
 				</div>
 			</div>
-      <div className="z-20 absolute w-[100%] bottom-0 text-white flex flex-col justify-end items-center py-4">
-        <p>Created by Elliot Sayes. Source on <a href="https://github.com/elliotsayes/gatherchat" target="_black" className="underline text-blue-200">Github</a>.</p>
+			<div className="z-20 absolute w-[100%] bottom-0 text-white flex flex-col justify-end items-center py-4">
+				<p>
+					Created by Elliot Sayes. Source on{" "}
+					<a
+						href="https://github.com/elliotsayes/gatherchat"
+						target="_black"
+						className="underline text-blue-200"
+					>
+						Github
+					</a>
+					.
+				</p>
 			</div>
 			<div className="z-0 absolute w-[100%] h-[100%]">
 				<GameDemo2

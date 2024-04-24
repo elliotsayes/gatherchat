@@ -125,11 +125,17 @@ export const GatherChat = ({
 											}`}
 										>
 											<span
-												className={`text-muted-foreground text-underline px-1 ${isLink ? 'cursor-pointer' : ''}`}
-												onClick={isLink ? () => {
-													setSelectedToon(toon)
-													setSidePanelState("profile")
-												} : undefined}
+												className={`text-muted-foreground text-underline px-1 ${
+													isLink ? "cursor-pointer" : ""
+												}`}
+												onClick={
+													isLink
+														? () => {
+																setSelectedToon(toon);
+																setSidePanelState("profile");
+															}
+														: undefined
+												}
 											>
 												{" "}
 												{toon?.displayName ?? post.author}:{" "}
