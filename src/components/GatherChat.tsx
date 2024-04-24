@@ -11,7 +11,7 @@ import { ProfileView } from "./profile/ProfileView";
 import { SetupForm } from "./profile/SetupForm";
 import { type UploadInfo, UploadPage } from "./upload/UploadPage";
 import { timeAgo } from "@/lib/timeago";
-import { ChatBox } from "./upload/TextUpload";
+import { ChatBox } from "./upload/ChatBox";
 
 interface GatherChatProps {
 	aoUsersState: AoUsersState;
