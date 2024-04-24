@@ -10,6 +10,8 @@ import { GatherChat } from "./GatherChat";
 import { SetupForm } from "./profile/SetupForm";
 import type { UploadInfo } from "./upload/UploadPage";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Toaster } from "./ui/sonner";
+import { toast } from "sonner"
 
 const aoGather = new AoGatherProvider({});
 
@@ -124,7 +126,7 @@ export const GameLoader = () => {
                 position: { x: 3, y: 3 },
               })
               await refetchUsers();
-              alert("Registered!")
+              toast("Registered!")
             })();
           }}
         />
@@ -136,43 +138,48 @@ export const GameLoader = () => {
 
 
 	return (
-		<GatherChat
-      aoUsersState={usersState}
-      aoPostsState={postsState ?? []}
-      onUpdateProfile={async (p) => {
-        const userPart: Partial<ContractUser> = {
-          avatar: p.avatarSeed,
-          name: p.name,
-        };
-        await aoGather.update(userPart);
-        refetchUsers();
-        return true;
-      } }
-      onUpdatePosition={async (p) => {
-        const userPart: Partial<ContractUser> = {
-          position: p,
-        };
-        await aoGather.update(userPart);
-        refetchUsers();
-        return true;
-      } }
-      onUpload={async (upload: UploadInfo): Promise<boolean> => {
-        await aoGather.post(upload);
-        refetchPosts();
-        return true;
-      }}
-      onFollow={async (data: { address: string }) => {
-        await aoGather.follow(data);
-        refetchUsers();
-        // window.location.reload();
-        return true;
-      }}
-      onUnfollow={async (data: { address: string }) => {
-        await aoGather.unfollow(data);
-        refetchUsers();
-        // window.location.reload();
-        return true;
-      }}
-    />
+    <>
+      <GatherChat
+        aoUsersState={usersState}
+        aoPostsState={postsState ?? []}
+        onUpdateProfile={async (p) => {
+          const userPart: Partial<ContractUser> = {
+            avatar: p.avatarSeed,
+            name: p.name,
+          };
+          await aoGather.update(userPart);
+          refetchUsers();
+          return true;
+        } }
+        onUpdatePosition={async (p) => {
+          const userPart: Partial<ContractUser> = {
+            position: p,
+          };
+          await aoGather.update(userPart);
+          refetchUsers();
+          return true;
+        } }
+        onUpload={async (upload: UploadInfo): Promise<boolean> => {
+          await aoGather.post(upload);
+          refetchPosts();
+          return true;
+        }}
+        onFollow={async (data: { address: string }) => {
+          await aoGather.follow(data);
+          refetchUsers();
+          // window.location.reload();
+          return true;
+        }}
+        onUnfollow={async (data: { address: string }) => {
+          await aoGather.unfollow(data);
+          refetchUsers();
+          // window.location.reload();
+          return true;
+        }}
+      />
+      <Toaster
+        position="top-left"
+      />
+    </>
 	);
 };

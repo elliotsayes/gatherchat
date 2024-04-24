@@ -12,6 +12,7 @@ import { SetupForm } from "./profile/SetupForm";
 import { type UploadInfo, UploadPage } from "./upload/UploadPage";
 import { timeAgo } from "@/lib/timeago";
 import { ChatBox } from "./upload/ChatBox";
+import { toast } from "sonner"
 
 interface GatherChatProps {
 	aoUsersState: AoUsersState;
@@ -75,11 +76,11 @@ export const GatherChat = ({
 						onSavePosition={async (position) => {
 							const res = await onUpdatePosition(position);
 							if (res) {
-								alert("Position updated!");
+								toast("Position updated!");
 								return true
 							// biome-ignore lint/style/noUselessElse: <explanation>
 							} else {
-								alert("Update failed!");
+								toast("Update failed!");
 								return false
 							}
 							// const doUpdate = confirm("Update saved position?");
@@ -123,6 +124,7 @@ export const GatherChat = ({
 							</ul>
 							<ChatBox onSubmit={async (text) => {
 								await onUpload({type: "text", textOrTxId: text});
+								toast("Message sent!")
 							}} />
 						</div>
 					)}
@@ -133,6 +135,7 @@ export const GatherChat = ({
 								// Reset key
 								if (info) {
 									await onUpload(info);
+									toast("Media uploaded! 🎉")
 								}
 								setUploadPageKey(Date.now());
 							}}
@@ -146,10 +149,10 @@ export const GatherChat = ({
 								onChangeFollow={async (toonInfo) => {
 									if (toonInfo.isFollowing) {
 										await onUnfollow({address: toonInfo.id});
-										alert("Unfollowed!");
+										toast("Unfollowed!");
 									} else {
 										await onFollow({address: toonInfo.id});
-										alert("Followed!");
+										toast("Followed!");
 									}
 									setProileKey(Date.now());
 									setSelectedToon(undefined);
@@ -168,9 +171,9 @@ export const GatherChat = ({
 										avatarSeed: s.avatarSeed,
 									}).then((res) => {
 										if (res) {
-											alert("Profile updated!");
+											toast("Profile updated!");
 										} else {
-											alert("Update failed!");
+											toast("Update failed!");
 										}
 									});
 								}}
