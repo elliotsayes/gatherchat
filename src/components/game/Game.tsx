@@ -5,7 +5,7 @@ import { useMachine } from "@xstate/react";
 import { AlphaFilter } from "pixi.js";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { gameMachine } from "../../lib/machines/game";
-import type { AoUsersState, AoToonSaved } from "../../lib/schema/gameModel";
+import type { AoToonSaved, AoUsersState } from "../../lib/schema/gameModel";
 import InteractableSprite from "./InteractableSprite";
 import InteractableToon from "./InteractableToon";
 import NamedAvatar from "./NamedAvatar";
@@ -138,18 +138,16 @@ export const Game = ({
 											{...props}
 										>
 											<Tilemap3 />
-											{
-												aoState.user.savedPosition !== undefined && (
-													<Sprite
-														image={"assets/sprite/purple.png"}
-														width={tileSizeX}
-														height={tileSizeY}
-														x={tileSizeX * aoState.user.savedPosition.x}
-														y={tileSizeY * aoState.user.savedPosition.y}
-														filters={[veryTransparent]}
-													/>
-												)
-											}
+											{aoState.user.savedPosition !== undefined && (
+												<Sprite
+													image={"assets/sprite/purple.png"}
+													width={tileSizeX}
+													height={tileSizeY}
+													x={tileSizeX * aoState.user.savedPosition.x}
+													y={tileSizeY * aoState.user.savedPosition.y}
+													filters={[veryTransparent]}
+												/>
+											)}
 											{current.hasTag("SHOW_OBJECTS") && (
 												<InteractableSprite
 													image="assets/sprite/board.png"
