@@ -1,11 +1,11 @@
 import { Stage } from "@pixi/react";
-import { Container, Sprite } from "@pixi/react-animated";
+import { Container } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
 import { useMachine } from "@xstate/react";
 import { AlphaFilter } from "pixi.js";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { gameMachine } from "../../lib/machines/game";
-import type { AoUsersState, AoToonSaved } from "../../lib/schema/gameModel";
+import type { AoToonSaved, AoUsersState } from "../../lib/schema/gameModel";
 import InteractableSprite from "./InteractableSprite";
 import InteractableToon from "./InteractableToon";
 import NamedAvatar from "./NamedAvatar";
@@ -27,9 +27,9 @@ type Props = {
 	onViewFeed: () => void;
 	onSavePosition: (position: { x: number; y: number }) => Promise<boolean>;
 	targetOffset?: {
-		x: number,
-		y: number,
-	}
+		x: number;
+		y: number;
+	};
 };
 
 export const GameDemo2 = ({
@@ -38,7 +38,6 @@ export const GameDemo2 = ({
 	aoStateProp: aoState,
 	onSelectToon,
 	onViewFeed,
-	onSavePosition,
 	targetOffset: targetOffestProp,
 }: Props) => {
 	const [stageSize, setStageSize] = useState(fallbackStageSize);

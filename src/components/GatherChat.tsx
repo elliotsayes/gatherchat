@@ -3,16 +3,20 @@ import {
 	ResizablePanel,
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import type { AoUsersState, AoPostsState, AoToonSaved } from "@/lib/schema/gameModel";
+import type {
+	AoPostsState,
+	AoToonSaved,
+	AoUsersState,
+} from "@/lib/schema/gameModel";
+import { timeAgo } from "@/lib/timeago";
 import { useRef, useState } from "react";
+import { toast } from "sonner";
 import { SidePanel, type SidePanelState } from "./SidePanel";
 import { Game } from "./game/Game";
 import { ProfileView } from "./profile/ProfileView";
 import { SetupForm } from "./profile/SetupForm";
-import { type UploadInfo, UploadPage } from "./upload/UploadPage";
-import { timeAgo } from "@/lib/timeago";
 import { ChatBox } from "./upload/ChatBox";
-import { toast } from "sonner"
+import { type UploadInfo, UploadPage } from "./upload/UploadPage";
 
 interface GatherChatProps {
 	aoUsersState: AoUsersState;
@@ -22,8 +26,8 @@ interface GatherChatProps {
 		avatarSeed: string;
 	}): Promise<boolean>;
 	onUpdatePosition(position: { x: number; y: number }): Promise<boolean>;
-	onFollow(data: {address: string}): Promise<boolean>;
-	onUnfollow(data: {address: string}): Promise<boolean>;
+	onFollow(data: { address: string }): Promise<boolean>;
+	onUnfollow(data: { address: string }): Promise<boolean>;
 	onUpload(upload: UploadInfo): Promise<boolean>;
 }
 
@@ -40,11 +44,12 @@ export const GatherChat = ({
 
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	const [sidePanelState, setSidePanelState] = useState<SidePanelState>("profile");
+	const [sidePanelState, setSidePanelState] =
+		useState<SidePanelState>("profile");
 
-	const [selectedToon, setSelectedToon] = useState<
-		AoToonSaved | undefined
-	>(undefined);
+	const [selectedToon, setSelectedToon] = useState<AoToonSaved | undefined>(
+		undefined,
+	);
 
 	const [lastResized, setLastResized] = useState(0);
 
@@ -77,11 +82,11 @@ export const GatherChat = ({
 							const res = await onUpdatePosition(position);
 							if (res) {
 								toast("Saved your home position!");
-								return true
-							// biome-ignore lint/style/noUselessElse: <explanation>
+								return true;
+								// biome-ignore lint/style/noUselessElse: <explanation>
 							} else {
 								toast("Update failed!");
-								return false
+								return false;
 							}
 							// const doUpdate = confirm("Update saved position?");
 							// if (doUpdate) {
@@ -102,34 +107,56 @@ export const GatherChat = ({
 				<SidePanel
 					state={sidePanelState}
 					onSelectState={setSidePanelState}
-					activityFeed={(
+					activityFeed={
 						<div className="min-h-min h-auto flex flex-col gap-4 py-4">
 							<ul className="w-[100%] min-h-0 max-h-full h-[calc(100vh-140px)] overflow-y-auto ">
-								{
-									aoPostsState.map((post) => {
-										const toon = [...aoUsersState.otherToons, aoUsersState.user].find((t) => t.id === post.author);
-										const isUser = aoUsersState.user.id === post.author;
-										return (
-											<li key={post.id} className={`${toon?.isFollowing ? 'bg-blue-100' : ''} ${isUser ? 'bg-gray-200' : ''}`}>
-												<span className=" text-muted-foreground"> {toon?.displayName ?? post.author}: </span>
-												{
-													post.type === "text" ? <span>{post.textOrTxId}</span> :
-													<a href={`https://arweave.net/${post.textOrTxId}`} target="_blank" className=" text-blue-400">({post.type})</a>
-												}
-												<span className="text-muted-foreground text-xs"> {timeAgo.format(toon?.lastSeen ?? 0)}</span>
-											</li>
-										)
-									})
-								}
+								{aoPostsState.map((post) => {
+									const toon = [
+										...aoUsersState.otherToons,
+										aoUsersState.user,
+									].find((t) => t.id === post.author);
+									const isUser = aoUsersState.user.id === post.author;
+									return (
+										<li
+											key={post.id}
+											className={`${toon?.isFollowing ? "bg-blue-100" : ""} ${
+												isUser ? "bg-gray-200" : ""
+											}`}
+										>
+											<span className=" text-muted-foreground">
+												{" "}
+												{toon?.displayName ?? post.author}:{" "}
+											</span>
+											{post.type === "text" ? (
+												<span>{post.textOrTxId}</span>
+											) : (
+												<a
+													href={`https://arweave.net/${post.textOrTxId}`}
+													target="_blank"
+													className=" text-blue-400"
+													rel="noreferrer"
+												>
+													({post.type})
+												</a>
+											)}
+											<span className="text-muted-foreground text-xs">
+												{" "}
+												{timeAgo.format(toon?.lastSeen ?? 0)}
+											</span>
+										</li>
+									);
+								})}
 							</ul>
 							<div className="">
-								<ChatBox onSubmit={async (text) => {
-									await onUpload({type: "text", textOrTxId: text});
-									toast("Message sent!")
-								}} />
+								<ChatBox
+									onSubmit={async (text) => {
+										await onUpload({ type: "text", textOrTxId: text });
+										toast("Message sent!");
+									}}
+								/>
 							</div>
 						</div>
-					)}
+					}
 					upload={
 						<UploadPage
 							key={uploadPageKey}
@@ -137,7 +164,7 @@ export const GatherChat = ({
 								// Reset key
 								if (info) {
 									await onUpload(info);
-									toast("Media uploaded! 🎉")
+									toast("Media uploaded! 🎉");
 								}
 								setUploadPageKey(Date.now());
 							}}
@@ -150,10 +177,10 @@ export const GatherChat = ({
 								toonInfo={selectedToon}
 								onChangeFollow={async (toonInfo) => {
 									if (toonInfo.isFollowing) {
-										await onUnfollow({address: toonInfo.id});
+										await onUnfollow({ address: toonInfo.id });
 										toast("Unfollowed!");
 									} else {
-										await onFollow({address: toonInfo.id});
+										await onFollow({ address: toonInfo.id });
 										toast("Followed!");
 									}
 									setProileKey(Date.now());

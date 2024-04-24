@@ -1,10 +1,10 @@
-import { GameLoader } from '@/components/GameLoader'
-import { createLazyFileRoute, Link } from '@tanstack/react-router'
+import { GameLoader } from "@/components/GameLoader";
+import { createLazyFileRoute } from "@tanstack/react-router";
 
-export const Route = createLazyFileRoute('/game')({
-  component: Game,
-})
+export const Route = createLazyFileRoute("/game")({
+	component: Game,
+});
 
 function Game() {
-  return <GameLoader />
+	return <GameLoader />;
 }
