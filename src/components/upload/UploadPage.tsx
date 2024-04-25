@@ -138,7 +138,7 @@ export const UploadPage = ({ onDone }: UploadPageProps) => {
 									}`}
 									disabled={!canSumbit}
 								>
-									Upload With Bundlr
+									Upload With Turbo
 								</Button>
 							</TooltipTrigger>
 							<TooltipContent>

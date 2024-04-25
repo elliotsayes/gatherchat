@@ -16,15 +16,15 @@ import {
 export const getUploadFee = async (fileSize: number, token: string) => {
 	if (fileSize < 10 * 1024) return BigNumber(0);
 
-	const bundlr = new WebIrys({
-		url: config.bundlrNode,
+	const turbo = new WebIrys({
+		url: config.bundlerUrl,
 		token,
 	});
-	const fee = await bundlr.getPrice(fileSize);
+	const fee = await turbo.getPrice(fileSize);
 	return fee;
 };
 
-// Function to connect to bundlr instance
+// Function to connect to turbo instance
 const connectInstance = async (token: string) => {
 	const injectedArweave = window.arweaveWallet;
 	await injectedArweave.connect([
@@ -32,17 +32,17 @@ const connectInstance = async (token: string) => {
 		"SIGNATURE",
 		"SIGN_TRANSACTION",
 	]);
-	const bundlr = new WebIrys({
-		url: config.bundlrNode,
+	const turbo = new WebIrys({
+		url: config.bundlerUrl,
 		token,
 		wallet: {
 			provider: injectedArweave,
 		},
 	});
-	await bundlr.ready();
+	await turbo.ready();
 	return {
-		instance: bundlr,
-		address: bundlr.address!,
+		instance: turbo,
+		address: turbo.address!,
 	};
 };
 
@@ -51,7 +51,7 @@ const getBalance = async (instance: WebIrys) => {
 	return instance.getLoadedBalance();
 };
 
-// Function to upload file to bundlr
+// Function to upload file to turbo
 const uploadFile = async (
 	instance: WebIrys,
 	file: File,
@@ -76,7 +76,7 @@ const uploadFile = async (
 	};
 };
 
-export const uploadVideosToBundlr = async (
+export const uploadVideosToTurbo = async (
 	contentType: ContentType,
 	mainVideo: File,
 	token: string,
@@ -140,7 +140,7 @@ export const uploadVideosToBundlr = async (
 	const mainVideoResult = await uploadFile(instance, mainVideo, mainVideoTags);
 
 	log?.("SKIPPING: Registering atomic asset with Warp...");
-	// const result = await ensureRegistered(mainVideoResult.id, config.bundlrNode);
+	// const result = await ensureRegistered(mainVideoResult.id, config.turboNode);
 	// log?.(`Registered with Warp: ${JSON.stringify(await result.json())}`);
 
 	try {

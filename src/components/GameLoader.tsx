@@ -224,7 +224,7 @@ export const GameLoader = () => {
 					return true;
 				}}
 			/>
-			<Toaster position="top-left" />
+			<Toaster position="bottom-left" />
 		</div>
 	);
 };

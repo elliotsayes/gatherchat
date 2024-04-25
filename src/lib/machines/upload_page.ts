@@ -4,7 +4,7 @@ import type { ContentType, UploadResult } from "@/lib/upload";
 import mime from "mime-types";
 import { type EventObject, assign, fromCallback, setup } from "xstate";
 import type { z } from "zod";
-import { uploadVideosToBundlr } from "../bundlr";
+import { uploadVideosToTurbo } from "../turbo";
 
 type Events =
 	| {
@@ -144,7 +144,7 @@ export const uploadPageMachine = setup({
 						: "text"
 				: "text";
 
-			uploadVideosToBundlr(
+			uploadVideosToTurbo(
 				contentType,
 				mainVideo!,
 				"arweave",
