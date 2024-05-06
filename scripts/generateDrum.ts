@@ -1,4 +1,4 @@
-import { write } from "bun";
+import * as fs from "node:fs";
 
 type FrameSet = {
 	name: string;
@@ -97,7 +97,7 @@ function frameSetToFrames(frameSet: FrameSet): Record<string, Frame> {
 	return Object.assign({}, ...frames);
 }
 
-write(
+fs.writeFileSync(
 	"./public/assets/tiles/drum.json",
 	JSON.stringify(
 		{

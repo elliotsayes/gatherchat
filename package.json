@@ -6,13 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "test": "bun test",
-    "format": "bunx @biomejs/biome format --write ./src ./scripts",
-    "lint": "bunx @biomejs/biome lint --apply ./src ./scripts",
-    "lint-unsafe": "bunx @biomejs/biome lint --apply-unsafe ./src ./scripts",
-    "check": "bunx @biomejs/biome check --apply ./src ./scripts",
-    "check-unsafe": "bunx @biomejs/biome check --apply-unsafe ./src ./scripts",
-    "gen": "bun run ./scripts/generateDrum.ts",
+    "test": "vitest",
+    "format": "npx @biomejs/biome format --write ./src ./scripts",
+    "lint": "npx @biomejs/biome lint --apply ./src ./scripts",
+    "lint-unsafe": "npx @biomejs/biome lint --apply-unsafe ./src ./scripts",
+    "check": "npx @biomejs/biome check --apply ./src ./scripts",
+    "check-unsafe": "npx @biomejs/biome check --apply-unsafe ./src ./scripts",
+    "gen": "npx tsx ./scripts/generateDrum.ts",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -39,6 +39,7 @@
     "@xstate/react": "^4.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "eventemitter3": "^5.0.1",
     "filesize": "^10.1.1",
     "javascript-time-ago": "^2.5.10",
     "lucide-react": "^0.372.0",
@@ -61,7 +62,6 @@
     "@biomejs/biome": "^1.7.0",
     "@tanstack/router-devtools": "^1.29.2",
     "@tanstack/router-vite-plugin": "^1.30.0",
-    "@types/bun": "^1.1.0",
     "@types/mime-types": "^2.1.4",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.66",
@@ -72,8 +72,11 @@
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
+    "tsc": "^2.0.4",
+    "tsx": "^4.9.3",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
-    "vite-plugin-pwa": "^0.19.8"
+    "vite-plugin-pwa": "^0.19.8",
+    "vitest": "^1.6.0"
   }
 }

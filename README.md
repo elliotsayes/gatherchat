@@ -1,10 +1,10 @@
 # Instructions
 
-- Install: `bun install`
-- Run: `bun run dev`
-- Lint: `bun run lint`
-- Build: `bun run build`
-- Test: `bun run test`
+- Install: `npm install`
+- Run: `npm run dev`
+- Lint: `npm run lint`
+- Build: `npm run build`
+- Test: `npm run test`
 
 # Original Readme Below
 

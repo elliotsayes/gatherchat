@@ -1,4 +1,334 @@
-// Bun Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generateSpriteData > should generate sprite data 1`] = `
+{
+  "animations": {
+    "idle": [
+      "idle0",
+      "idle1",
+      "idle2",
+      "idle3",
+    ],
+    "jump": [
+      "jump0",
+      "jump1",
+      "jump2",
+      "jump3",
+      "jump4",
+      "jump5",
+      "jump6",
+    ],
+    "no_anim": [
+      "no_anim0",
+    ],
+    "run": [
+      "run0",
+      "run1",
+      "run2",
+      "run3",
+    ],
+  },
+  "frames": {
+    "idle0": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 24,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "idle1": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 16,
+        "y": 24,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "idle2": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 32,
+        "y": 24,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "idle3": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 48,
+        "y": 24,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "jump0": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 72,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "jump1": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 16,
+        "y": 72,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "jump2": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 32,
+        "y": 72,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "jump3": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 48,
+        "y": 72,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "jump4": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 64,
+        "y": 72,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "jump5": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 80,
+        "y": 72,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "jump6": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 96,
+        "y": 72,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "no_anim0": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "run0": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 48,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "run1": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 16,
+        "y": 48,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "run2": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 32,
+        "y": 48,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "run3": {
+      "frame": {
+        "h": 24,
+        "w": 16,
+        "x": 48,
+        "y": 48,
+      },
+      "sourceSize": {
+        "h": 24,
+        "w": 16,
+      },
+      "spriteSourceSize": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 0,
+      },
+    },
+  },
+  "meta": {
+    "format": "RGBA8888",
+    "image": "/api/sprite/generate?seed=123",
+    "scale": 1,
+    "size": {
+      "h": 24,
+      "w": 16,
+    },
+  },
+}
+`;
 
 exports[`generateSpriteData should generate sprite data 1`] = `
 {
