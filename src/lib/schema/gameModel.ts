@@ -5,6 +5,16 @@ export type Position = {
 	y: number;
 };
 
+export type Dimension = {
+	w: number;
+	h: number;
+};
+
+export type Rect = {
+	pos: Position;
+	dim: Dimension;
+}
+
 export type AoToonBase = {
 	id: string;
 	avatarSeed: string;

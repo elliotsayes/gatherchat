@@ -2,24 +2,35 @@ import { Stage } from "@pixi/react";
 import { Container, Sprite } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
 import { AlphaFilter } from "pixi.js";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import InteractableSprite from "./InteractableSprite";
+import { useCallback, useEffect, useState } from "react";
 import InteractableToon from "./InteractableToon";
 import NamedAvatar from "./NamedAvatar";
-import { Tilemap3, blockLocations } from "./TileMap3";
 import type {
 	ArweaveID,
 	ContractPosition,
 	ContractRoom,
 	ContractUser,
 } from "@/lib/ao-gather";
+import type { Position } from "@/lib/schema/gameModel";
+import { type FaceDirection, type MovementKey, keyToMovementMap, movementKeys, useMovement } from "./useMovement";
 
-const tileSizeX = 64;
-const tileSizeY = 64;
+const veryTransparent = new AlphaFilter(0.3);
+const slightlyTransparent = new AlphaFilter(0.6);
 
-const fallbackStageSize = {
+const tileSize = {
+	x: 64,
+	y: 64,
+}
+
+const stageSizeFallback = {
 	width: 800,
 	height: 600,
+};
+
+export type RenderEngineWorld = {
+	tileSet: React.ReactNode;
+	sprites: React.ReactNode;
+	collision: (pos: Position) => boolean;
 };
 
 export type RenderEngineState = {
@@ -27,7 +38,7 @@ export type RenderEngineState = {
 	player: {
 		id: ArweaveID;
 		profile: ContractUser;
-		savedPosition: ContractPosition;
+		savedPosition?: ContractPosition;
 
 		// Transient
 		localPosition: ContractPosition;
@@ -51,8 +62,7 @@ export type RenderEngineState = {
 };
 
 export type RenderEngineEvents = {
-	onViewFeed: () => void;
-	onMovementKey: (key: string) => void;
+	onPositionUpdate: (params: {newPosition?: Position, newDirection?: FaceDirection }) => void;
 	onPlayerClick: (playerId: ArweaveID) => void;
 };
 
@@ -67,6 +77,8 @@ type Props = {
 	parentRef: React.RefObject<HTMLDivElement>;
 	lastResized: number;
 
+	world: RenderEngineWorld;
+
 	state: RenderEngineState;
 	events: RenderEngineEvents;
 	flags: RenderEngineFlags;
@@ -76,11 +88,14 @@ export const RenderEngine = ({
 	parentRef,
 	lastResized,
 
+	world,
+
 	state,
 	events,
 	flags,
 }: Props) => {
-	const [stageSize, setStageSize] = useState(fallbackStageSize);
+	// Used for automatic resizing of the render element
+	const [stageSize, setStageSize] = useState(stageSizeFallback);
 
 	const resizeStage = useCallback(() => {
 		if (parentRef.current) {
@@ -102,13 +117,17 @@ export const RenderEngine = ({
 		};
 	}, [resizeStage, lastResized]);
 
+	// User for the camera offset on mouse move
 	const [targetOffset, setTargetOffset] = useState({
 		x: 0,
 		y: 0,
 	});
 
-	const veryTransparent = useMemo(() => new AlphaFilter(0.3), []);
-	const slightlyTransparent = useMemo(() => new AlphaFilter(0.6), []);
+	const movementDispatch = useMovement({
+		localPosition: state.player.localPosition,
+		onPositionUpdate: events.onPositionUpdate,
+		collision: world.collision,
+	});
 
 	return (
 		<>
@@ -121,9 +140,10 @@ export const RenderEngine = ({
 				style={{ outline: "none" }}
 				tabIndex={0}
 				onKeyDown={(e) => {
-					if (e.key !== "Tab") {
+					//@ts-expect-error
+					if (movementKeys.includes(e.key)) {
 						e.preventDefault();
-						events.onMovementKey(e.key);
+						movementDispatch(keyToMovementMap[e.key as MovementKey]);
 					}
 				}}
 				onMouseMove={(e) => {
@@ -159,43 +179,31 @@ export const RenderEngine = ({
 									to={{
 										x:
 											stageSize.width / 2 -
-											(state.player.localPosition.x + 1) * tileSizeX +
-											tileSizeX / 2,
+											(state.player.localPosition.x + 1) * tileSize.x +
+											tileSize.x / 2,
 										y:
 											stageSize.height / 2 -
-											(state.player.localPosition.y + 1) * tileSizeY +
-											tileSizeY / 2,
+											(state.player.localPosition.y + 1) * tileSize.y +
+											tileSize.y / 2,
 									}}
 								>
 									{(props) => (
 										<Container
 											anchor={{ x: 0.5, y: 0.5 }}
-											// filters={
-											// 	current.matches("saving") ? [slightlyTransparent] : []
-											// }
 											{...props}
 										>
-											<Tilemap3 />
+											{world.tileSet}
 											{state.player.savedPosition !== undefined && (
 												<Sprite
 													image={"assets/sprite/purple.png"}
-													width={tileSizeX}
-													height={tileSizeY}
-													x={tileSizeX * state.player.savedPosition.x}
-													y={tileSizeY * state.player.savedPosition.y}
+													width={tileSize.x}
+													height={tileSize.y}
+													x={tileSize.x * state.player.savedPosition.x}
+													y={tileSize.y * state.player.savedPosition.y}
 													filters={[veryTransparent]}
 												/>
 											)}
-											{flags.showObjects && (
-												<InteractableSprite
-													image="assets/sprite/board.png"
-													scale={4}
-													anchor={{ x: 0.5, y: 0.45 }}
-													onclick={() => events.onViewFeed()}
-													x={tileSizeX * 5}
-													y={tileSizeY * 1.25}
-												/>
-											)}
+											{flags.showObjects && world.sprites}
 											{flags.showOtherPlayers &&
 												state.otherPlayers.map((otherPlayer) => {
 													// check if within two tiles
@@ -216,12 +224,12 @@ export const RenderEngine = ({
 																seed={otherPlayer.profile.name}
 																scale={3}
 																x={
-																	otherPlayer.savedPosition.x * tileSizeX +
-																	tileSizeX / 2
+																	otherPlayer.savedPosition.x * tileSize.x +
+																	tileSize.x / 2
 																}
 																y={
-																	otherPlayer.savedPosition.y * tileSizeY +
-																	tileSizeY / 2
+																	otherPlayer.savedPosition.y * tileSize.y +
+																	tileSize.y / 2
 																}
 																isPlaying={true}
 																animationName={"idle"}
@@ -243,12 +251,12 @@ export const RenderEngine = ({
 																seed={otherPlayer.profile.avatar}
 																scale={3}
 																x={
-																	otherPlayer.savedPosition.x * tileSizeX +
-																	tileSizeX / 2
+																	otherPlayer.savedPosition.x * tileSize.x +
+																	tileSize.x / 2
 																}
 																y={
-																	otherPlayer.savedPosition.y * tileSizeY +
-																	tileSizeY / 2
+																	otherPlayer.savedPosition.y * tileSize.y +
+																	tileSize.y / 2
 																}
 																isPlaying={true}
 																animationName={"idle"}
@@ -262,73 +270,6 @@ export const RenderEngine = ({
 														);
 													}
 												})}
-											<InteractableSprite
-												active={false}
-												image="assets/sprite/cal.png"
-												scale={4}
-												anchor={{ x: 0.5, y: 0.5 }}
-												// onclick={() => onViewFeed()}
-												x={tileSizeX * 2}
-												y={tileSizeY * 1}
-											/>
-											<InteractableSprite
-												active={false}
-												image="assets/sprite/couch.png"
-												scale={4}
-												anchor={{ x: 0.5, y: 0.5 }}
-												// onclick={() => onViewFeed()}
-												x={tileSizeX * 19}
-												y={tileSizeY * 2}
-											/>
-											<InteractableSprite
-												active={false}
-												image="assets/sprite/mona.png"
-												scale={4}
-												anchor={{ x: 0.5, y: 0.5 }}
-												// onclick={() => onViewFeed()}
-												x={tileSizeX * 8}
-												y={tileSizeY * 1.25}
-											/>
-											<InteractableSprite
-												active={false}
-												image="assets/sprite/stary.png"
-												scale={4}
-												anchor={{ x: 0.5, y: 0.5 }}
-												// onclick={() => onViewFeed()}
-												x={tileSizeX * 11}
-												y={tileSizeY * 1.25}
-											/>
-											<InteractableSprite
-												active={false}
-												image="assets/sprite/tv.png"
-												scale={4}
-												anchor={{ x: 0.5, y: 0.5 }}
-												// onclick={() => onViewFeed()}
-												x={tileSizeX * 14}
-												y={tileSizeY * 1}
-											/>
-											<InteractableSprite
-												active={false}
-												image="assets/sprite/scream.png"
-												scale={4}
-												anchor={{ x: 0.5, y: 0.5 }}
-												// onclick={() => onViewFeed()}
-												x={tileSizeX * 17}
-												y={tileSizeY * 1.25}
-											/>
-											{blockLocations.map((blockLocation, i) => (
-												<InteractableSprite
-													active={false}
-													key={i.toString()}
-													zIndex={100}
-													image="assets/sprite/tree.png"
-													scale={4}
-													anchor={{ x: 0.5, y: 0.5 }}
-													// onclick={() => onViewFeed()}
-													x={tileSizeX * (blockLocation.x + 0.5)}
-													y={tileSizeY * (blockLocation.y + 1)}
-												/>
-											))}
 										</Container>
 									)}
 								</Spring>
