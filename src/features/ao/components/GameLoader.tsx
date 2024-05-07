@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { throttle } from "throttle-debounce";
 import {
 	GatherChat,
 	type UploadInfo,
@@ -139,6 +140,22 @@ export const GameLoader = () => {
 			.sort((a, b) => a.created - b.created);
 	}, [posts]);
 
+	const throttledUpdatePosition = useMemo(
+		() =>
+			throttle(
+				250,
+				async (args) => {
+					await aoGather.updatePosition(args);
+					await refetchUsers();
+				},
+				{
+					noTrailing: false,
+					noLeading: false,
+				},
+			),
+		[refetchUsers],
+	);
+
 	if (window.arweaveWallet === undefined) {
 		return (
 			<div className="h-screen w-screen text-center flex flex-col justify-center">
@@ -231,11 +248,10 @@ export const GameLoader = () => {
 					return true;
 				}}
 				onUpdatePosition={async (position) => {
-					await aoGather.updatePosition({
+					throttledUpdatePosition({
 						roomId: roomId,
 						position,
 					});
-					refetchUsers();
 					return true;
 				}}
 				onUpload={async (upload: UploadInfo): Promise<boolean> => {
