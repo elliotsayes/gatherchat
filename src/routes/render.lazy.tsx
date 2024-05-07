@@ -24,7 +24,7 @@ function Render() {
 	const world = useMemo(() => createWorld({
 		w: widthSlider,
 		h: heightSlider,
-	}, windowGapSlider), [widthSlider, heightSlider, windowGapSlider]);
+	}, "room", windowGapSlider), [widthSlider, heightSlider, windowGapSlider]);
 
 	return (
 		<div>

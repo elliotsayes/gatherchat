@@ -170,8 +170,11 @@ export const ObstacleLayout = PixiComponent<Props, CompositeTilemap>(
 	},
 );
 
+export type ObstacleTileSets = "room";
+
 export const createWorld = (
 	roomDimensions: Dimension,
+	tileSet: ObstacleTileSets = "room",
 	windowGapSlider = 4,
 ) => {
 	const blockLocations = getBlockLocations(
@@ -187,7 +190,7 @@ export const createWorld = (
 		tileSet: (
 			<TileLoader alias="drum" src="assets/tiles/drum.json">
 				<ObstacleLayout
-					tileSet={"room"}
+					tileSet={tileSet}
 					roomSizeTiles={roomDimensions}
 					windowSpacing={windowGapSlider}
 				/>
