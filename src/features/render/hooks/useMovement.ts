@@ -138,7 +138,8 @@ export function useMovement({
 	}) => void;
 	collision: (args: Position) => boolean;
 }) {
-	const [optimisticState, setOptimisticState] = useState<PlayerTransform>(initialState);
+	const [optimisticState, setOptimisticState] =
+		useState<PlayerTransform>(initialState);
 
 	const executeMovement = useCallback(
 		(direction: MovementDirection) => {
@@ -146,15 +147,17 @@ export function useMovement({
 			const candidateDirection = faceDirections.includes(direction)
 				? (direction as FaceDirection)
 				: undefined;
-			const testPosition = calculateNextPosition(optimisticState.position, direction);
+			const testPosition = calculateNextPosition(
+				optimisticState.position,
+				direction,
+			);
 
-			const newPosition = collision(testPosition)
-				? undefined
-				: testPosition;
-			
-			const newDirection = optimisticState.direction === candidateDirection
-				? undefined
-				: candidateDirection;
+			const newPosition = collision(testPosition) ? undefined : testPosition;
+
+			const newDirection =
+				optimisticState.direction === candidateDirection
+					? undefined
+					: candidateDirection;
 
 			setOptimisticState({
 				position: newPosition ?? optimisticState.position,
@@ -183,6 +186,7 @@ export function useMovement({
 	return {
 		optimisticState,
 		activeMovement,
-		move: (direction: MovementDirection) => dispatch({ type: "move", direction })
+		move: (direction: MovementDirection) =>
+			dispatch({ type: "move", direction }),
 	};
 }

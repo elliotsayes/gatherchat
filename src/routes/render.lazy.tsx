@@ -2,7 +2,6 @@
 import InteractableSprite from "@/features/render/components/InteractableSprite";
 import { RenderEngine } from "@/features/render/components/RenderEngine";
 import { TileLoader } from "@/features/render/components/TileLoader";
-import type { Position } from "@/features/render/lib/schema";
 import {
 	ObstacleLayout,
 	blockLocations,
@@ -27,8 +26,6 @@ function Render() {
 	const [widthSlider, setWidthSlider] = useState(21);
 	const [heightSlider, setHeightSlider] = useState(12);
 	const [windowGapSlider, setWindowGapSlider] = useState(3);
-
-	const [position, setPosition] = useState<Position>({ x: 10, y: 5 });
 
 	return (
 		<div>
@@ -212,9 +209,6 @@ function Render() {
 					events={{
 						onPositionUpdate: ({ newPosition, newDirection }): void => {
 							console.log({ newPosition, newDirection });
-							if (newPosition) {
-								setPosition(newPosition);
-							}
 						},
 						onPlayerClick: (): void => {
 							throw new Error("Function not implemented.");

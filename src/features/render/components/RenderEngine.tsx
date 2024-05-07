@@ -9,7 +9,7 @@ import { Stage } from "@pixi/react";
 import { Container, Sprite } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
 import { AlphaFilter } from "pixi.js";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import InteractableToon from "../../avatar/components/InteractableToon";
 import NamedAvatar from "../../avatar/components/NamedAvatar";
 import {
@@ -19,6 +19,7 @@ import {
 	movementKeys,
 	useMovement,
 } from "../hooks/useMovement";
+import { useResizableStage } from "../hooks/useResizableStage";
 
 const veryTransparent = new AlphaFilter(0.3);
 const slightlyTransparent = new AlphaFilter(0.6);
@@ -26,11 +27,6 @@ const slightlyTransparent = new AlphaFilter(0.6);
 const tileSize = {
 	x: 64,
 	y: 64,
-};
-
-const stageSizeFallback = {
-	width: 800,
-	height: 600,
 };
 
 export type RenderEngineWorld = {
@@ -100,28 +96,7 @@ export const RenderEngine = ({
 	events,
 	flags,
 }: Props) => {
-	// Used for automatic resizing of the render element
-	const [stageSize, setStageSize] = useState(stageSizeFallback);
-
-	const resizeStage = useCallback(() => {
-		if (parentRef.current) {
-			const { clientWidth, clientHeight } = parentRef.current;
-			console.log("resizeStage", clientWidth, clientHeight);
-			setStageSize({
-				width: clientWidth,
-				height: clientHeight,
-			});
-		}
-	}, [parentRef.current]);
-
-	useEffect(() => {
-		console.log({ lastResized });
-		resizeStage();
-		window.addEventListener("resize", resizeStage);
-		return () => {
-			window.removeEventListener("resize", resizeStage);
-		};
-	}, [resizeStage, lastResized]);
+	const stageSize = useResizableStage(parentRef, lastResized);
 
 	// User for the camera offset on mouse move
 	const [targetOffset, setTargetOffset] = useState({
@@ -129,11 +104,7 @@ export const RenderEngine = ({
 		y: 0,
 	});
 
-	const {
-		optimisticState,
-		activeMovement,
-		move,
-	} = useMovement({
+	const { optimisticState, activeMovement, move } = useMovement({
 		initialState: {
 			position: state.player.savedPosition ?? state.room.spawnPosition,
 			direction: "right",
@@ -289,7 +260,9 @@ export const RenderEngine = ({
 									<NamedAvatar
 										name={state.player.profile.name}
 										seed={state.player.profile.avatar}
-										animationName={activeMovement.state === "moving" ? "run" : "idle"}
+										animationName={
+											activeMovement.state === "moving" ? "run" : "idle"
+										}
 										flipX={optimisticState.direction === "left"}
 										scale={3}
 										isPlaying={true}
