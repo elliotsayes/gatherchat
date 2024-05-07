@@ -85,7 +85,8 @@ export const GatherChat = ({
 									/>
 								</TileLoader>
 							),
-							sprites: <></>,
+							spritesBg: <></>,
+							spritesFg: <></>,
 							collision: () => false,
 						}}
 						state={{

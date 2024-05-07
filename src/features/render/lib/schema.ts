@@ -16,4 +16,4 @@ export type Rect = {
 export type Bounds = {
 	tl: Position;
 	br: Position;
-}
+};

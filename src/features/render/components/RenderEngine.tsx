@@ -31,7 +31,8 @@ const tileSize = {
 
 export type RenderEngineWorld = {
 	tileSet: React.ReactNode;
-	sprites: React.ReactNode;
+	spritesBg: React.ReactNode;
+	spritesFg: React.ReactNode;
 	collision: (pos: Position) => boolean;
 };
 
@@ -184,7 +185,7 @@ export const RenderEngine = ({
 													filters={[veryTransparent]}
 												/>
 											)}
-											{flags.showObjects && world.sprites}
+											{flags.showObjects && world.spritesBg}
 											{flags.showOtherPlayers &&
 												state.otherPlayers.map((otherPlayer) => {
 													// check if within two tiles
@@ -268,6 +269,26 @@ export const RenderEngine = ({
 										isPlaying={true}
 									/>
 								</Container>
+							)}
+							{flags.showWorld && flags.showObjects && (
+								<Spring
+									to={{
+										x:
+											stageSize.width / 2 -
+											(optimisticState.position.x + 1) * tileSize.x +
+											tileSize.x / 2,
+										y:
+											stageSize.height / 2 -
+											(optimisticState.position.y + 1) * tileSize.y +
+											tileSize.y / 2,
+									}}
+								>
+									{(props) => (
+										<Container anchor={{ x: 0.5, y: 0.5 }} {...props}>
+											{world.spritesFg}
+										</Container>
+									)}
+								</Spring>
 							)}
 						</Container>
 					)}

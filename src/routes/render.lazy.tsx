@@ -1,7 +1,5 @@
 import { RenderEngine } from "@/features/render/components/RenderEngine";
-import {
-	createWorld,
-} from "@/features/rooms/components/ObstacleLayout";
+import { createWorld } from "@/features/rooms/components/ObstacleLayout";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
 
@@ -20,11 +18,31 @@ function Render() {
 	const [widthSlider, setWidthSlider] = useState(21);
 	const [heightSlider, setHeightSlider] = useState(12);
 	const [windowGapSlider, setWindowGapSlider] = useState(3);
+	const [blockSpacingWidthSlider, setBlockSpacingWidthSlider] = useState(4);
+	const [blockSpacingHeightSlider, setBlockSpacingHeightSlider] = useState(4);
 
-	const world = useMemo(() => createWorld({
-		w: widthSlider,
-		h: heightSlider,
-	}, "room", windowGapSlider), [widthSlider, heightSlider, windowGapSlider]);
+	const world = useMemo(
+		() =>
+			createWorld(
+				{
+					w: widthSlider,
+					h: heightSlider,
+				},
+				{
+					w: blockSpacingWidthSlider,
+					h: blockSpacingHeightSlider,
+				},
+				"room",
+				windowGapSlider,
+			),
+		[
+			widthSlider,
+			heightSlider,
+			blockSpacingWidthSlider,
+			blockSpacingHeightSlider,
+			windowGapSlider,
+		],
+	);
 
 	return (
 		<div>
@@ -51,6 +69,32 @@ function Render() {
 						onChange={(e) => setHeightSlider(Number.parseInt(e.target.value))}
 					/>
 					{heightSlider}
+				</label>
+				<label>
+					Block Spacing Width:
+					<input
+						type="range"
+						min={1}
+						max={10}
+						value={blockSpacingWidthSlider}
+						onChange={(e) =>
+							setBlockSpacingWidthSlider(Number.parseInt(e.target.value))
+						}
+					/>
+					{blockSpacingWidthSlider}
+				</label>
+				<label>
+					Block Spacing Height:
+					<input
+						type="range"
+						min={1}
+						max={10}
+						value={blockSpacingHeightSlider}
+						onChange={(e) =>
+							setBlockSpacingHeightSlider(Number.parseInt(e.target.value))
+						}
+					/>
+					{blockSpacingHeightSlider}
 				</label>
 				<label>
 					Window Gap:
