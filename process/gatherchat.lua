@@ -11,13 +11,61 @@ Users = Users or {
     name = "Test User :)",
     avatar = "a1204030b070a01", -- pixel art seed
     status = "Hello, World!",
-    position = {
-      x = 4,
-      y = 5,
-    },
+    currentRoom = "WelcomeLobby",
     following = {
-      "testUser2",
+      -- testUser2 = true,
     },
+  },
+}
+
+DefaultRooms = {
+  "WelcomeLobby",
+  "ChillZone",
+  "HolidayHangout",
+}
+
+-- Key: Room ID
+Rooms = Rooms or {
+  WelcomeLobby = {
+    created = 1713833416559,
+    lastActivity = 1713833416559,
+    name = "WelcomeLobby",
+    description = "Welcome to the Lobby!",
+    theme = "clubhouse1",
+    spawnPosition = {
+      x = 5,
+      y = 4,
+    },
+    playerPositions = {
+      testUser1 = {
+        x = 4,
+        y = 5,
+      },
+    },
+  },
+  ChillZone = {
+    created = 1713833416559,
+    lastActivity = 1713833416559,
+    name = "ChillZone",
+    description = "Take it easy ;)",
+    theme = "clubhouse2",
+    spawnPosition = {
+      x = 5,
+      y = 4,
+    },
+    playerPositions = {}
+  },
+  HolidayHangout = {
+    created = 1713833416559,
+    lastActivity = 1713833416559,
+    name = "HolidayHangout",
+    description = "Sun, sand, and sea~",
+    theme = "beach1",
+    spawnPosition = {
+      x = 5,
+      y = 4,
+    },
+    playerPositions = {}
   },
 }
 
@@ -26,9 +74,10 @@ Posts = Posts or {
   testPost1 = {
     created = 1713833416559,
     author = "testUser1",
-    type = "text", -- if "video"/"image" then "TextOrTxId" is a TxId
+    room = "WelcomeLobby",
+    type = "text", -- if "video" or "image" then "TextOrTxId" is a TxId
     textOrTxId = "Welcome to GatherChat!",
-  }
+  },
 }
 
 Handlers.add(
@@ -36,6 +85,36 @@ Handlers.add(
   Handlers.utils.hasMatchingTag("Action", "GetUsers"),
   function(msg)
     ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Users) })
+  end
+)
+
+Handlers.add(
+  "GetDefaultRooms",
+  Handlers.utils.hasMatchingTag("Action", "GetDefaultRooms"),
+  function(msg)
+    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(DefaultRooms) })
+  end
+)
+
+Handlers.add(
+  "GetRoom",
+  Handlers.utils.hasMatchingTag("Action", "GetRoom"),
+  function(msg)
+    if string.len(msg.Data) > 0 then
+      local data = json.decode(msg.Data)
+      if data.roomId then
+        local room = Rooms[data.roomId]
+        if room then
+          ao.send({ Target = msg.From, Status = "OK", Data = json.encode(room) })
+        else
+          ao.send({ Target = msg.From, Status = "Error", Message = "Room not found." })
+        end
+      else
+        ao.send({ Target = msg.From, Status = "Error", Message = "Missing roomId." })
+      end
+    else
+      ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Rooms) })
+    end
   end
 )
 
@@ -62,7 +141,7 @@ Handlers.add(
     Users[address].name = data.name
     Users[address].avatar = data.avatar
     Users[address].status = data.status
-    Users[address].position = data.position
+    Users[address].currentRoom = data.currentRoom
 
     ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Users[address]) })
   end
@@ -70,8 +149,8 @@ Handlers.add(
 
 
 Handlers.add(
-  "Update",
-  Handlers.utils.hasMatchingTag("Action", "Update"),
+  "UpdateUser",
+  Handlers.utils.hasMatchingTag("Action", "UpdateUser"),
   function(msg)
     local address = msg.Owner;
     Users[address].lastSeen = msg.Timestamp
@@ -81,15 +160,37 @@ Handlers.add(
       if data.name then Users[address].name = data.name end
       if data.avatar then Users[address].avatar = data.avatar end
       if data.status then Users[address].status = data.status end
-      if data.position then
-        Users[address].position = {
-          x = data.position.x,
-          y = data.position.y,
-        }
-      end
+      if data.currentRoom then Users[address].currentRoom = data.currentRoom end
     end
 
     ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Users[address]) })
+  end
+)
+
+Handlers.add(
+  "UpdatePosition",
+  Handlers.utils.hasMatchingTag("Action", "UpdatePosition"),
+  function(msg)
+    local address = msg.Owner;
+    Users[address].lastSeen = msg.Timestamp
+
+    if string.len(msg.Data) > 0 then
+      local data = json.decode(msg.Data)
+      if data.roomId then
+        if Rooms[data.roomId] then
+          Rooms[data.roomId].playerPositions[address] = {
+            x = data.position.x,
+            y = data.position.y,
+          }
+        else
+          ao.send({ Target = msg.From, Status = "Error", Message = "Room not found." })
+        end
+      else
+        ao.send({ Target = msg.From, Status = "Error", Message = "Missing roomId." })
+      end
+    else
+      ao.send({ Target = msg.From, Status = "Error", Message = "Missing data." })
+    end
   end
 )
 
@@ -104,14 +205,13 @@ Handlers.add(
     Users[address].following[data.address] = true
 
     local Notification = {
-      source = address,
-      type = "Follow",
-      address = msg.Owner,
+      Source = address,
+      Type = "Follow",
     }
 
-    local FollowedUserProcess = Users[data.address].processId
-    if FollowedUserProcess then
-      ao.send({ Target = FollowedUserProcess, Status = "OK", Action = "Notification", Data = json.encode(Notification) })
+    local followedUserProcess = Users[data.address].processId
+    if followedUserProcess then
+      ao.send({ Target = followedUserProcess, Status = "OK", Action = "Notification", Data = json.encode(Notification) })
     end
 
     ao.send({ Target = msg.From, Status = "OK" })
@@ -145,6 +245,7 @@ Handlers.add(
     Posts[postId].author = address
 
     local data = json.decode(msg.Data)
+    Posts[postId].room = data.room
     Posts[postId].type = data.type
     Posts[postId].textOrTxId = data.textOrTxId
 
@@ -154,15 +255,13 @@ Handlers.add(
     --   Post = Posts[postId],
     -- }
 
-    -- -- Get all users following this user
-    -- for _, user in pairs(Users) do
-    --   if user.following.contains(address) then
-    --     ao.send({
-    --       Target = user.processId,
-    --       Status = "OK",
-    --       Action = "Notification",
-    --       Data = json.encode(Notification),
-    --     })
+    -- -- Notify all users following this user
+    -- for follower, isFollowing in pairs(Users[address].following) do
+    --   if isFollowing then
+    --     local followerProcess = Users[follower].processId
+    --     if followerProcess then
+    --       ao.send({ Target = followerProcess, Status = "OK", Action = "Notification", Data = json.encode(Notification) })
+    --     end
     --   end
     -- end
 
