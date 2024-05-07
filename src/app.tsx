@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-router";
 import ReactDOM from "react-dom/client";
 import "./globals.css";
-import { queryClient } from "./lib/query";
+import { queryClient } from "./ao/lib/query";
 import { loadSw } from "./loadSw";
 
 // Import the generated route tree

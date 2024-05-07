@@ -1,12 +1,12 @@
-import { GameDemo2 } from "@/components/game/GameDemo2";
+import { GameDemo2 } from "@/_old/components/GameDemo2";
 import { buttonVariants } from "@/components/ui/button";
-import { AoProvider } from "@/lib/ao";
+import { AoProvider } from "@/ao/lib/ao";
 import {
 	type ArweaveID,
 	type ContractUser,
 	aoGatherProcessId,
-} from "@/lib/ao-gather";
-import type { AoToonSaved } from "@/lib/schema/gameModel";
+} from "@/ao/lib/ao-gather";
+import type { AoToonSaved } from "@/_old/lib/model";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Link, createLazyFileRoute } from "@tanstack/react-router";
@@ -60,7 +60,7 @@ function Index() {
 						id,
 						avatarSeed: toon.avatar,
 						displayName: toon.name,
-						savedPosition: { x: toon.position.x, y: toon.position.y },
+						savedPosition: { x: 5, y: 5 },
 						isFollowing: false,
 						...toon,
 					};

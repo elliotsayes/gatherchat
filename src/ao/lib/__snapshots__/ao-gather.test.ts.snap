@@ -1,0 +1,144 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AoGatherProvider > should be able to get a specific room 1`] = `
+{
+  "created": 1713833416559,
+  "description": "Welcome to the Lobby!",
+  "lastActivity": 1713833416559,
+  "name": "WelcomeLobby",
+  "playerPositions": {
+    "0cQJ5Hd4oCaL57CWP-Pqe5_e0D4_ZDWuxKBgR9ke1SI": {
+      "x": 3,
+      "y": 5,
+    },
+    "testUser1": {
+      "x": 4,
+      "y": 5,
+    },
+  },
+  "spawnPosition": {
+    "x": 5,
+    "y": 4,
+  },
+  "theme": "clubhouse1",
+}
+`;
+
+exports[`AoGatherProvider > should be able to get all posts 1`] = `
+{
+  "testPost1": {
+    "author": "testUser1",
+    "created": 1713833416559,
+    "room": "WelcomeLobby",
+    "textOrTxId": "Welcome to GatherChat!",
+    "type": "text",
+  },
+  "testPost2": {
+    "author": "testUser1",
+    "created": 1713833416559,
+    "room": "HolidayHangout",
+    "textOrTxId": "I love being on holiday!",
+    "type": "text",
+  },
+}
+`;
+
+exports[`AoGatherProvider > should be able to get all rooms 1`] = `
+{
+  "ChillZone": {
+    "created": 1713833416559,
+    "description": "Take it easy ;)",
+    "lastActivity": 1713833416559,
+    "name": "ChillZone",
+    "playerPositions": [],
+    "spawnPosition": {
+      "x": 5,
+      "y": 4,
+    },
+    "theme": "clubhouse2",
+  },
+  "HolidayHangout": {
+    "created": 1713833416559,
+    "description": "Sun, sand, and sea~",
+    "lastActivity": 1713833416559,
+    "name": "HolidayHangout",
+    "playerPositions": {
+      "0cQJ5Hd4oCaL57CWP-Pqe5_e0D4_ZDWuxKBgR9ke1SI": {
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "spawnPosition": {
+      "x": 5,
+      "y": 4,
+    },
+    "theme": "beach1",
+  },
+  "WelcomeLobby": {
+    "created": 1713833416559,
+    "description": "Welcome to the Lobby!",
+    "lastActivity": 1713833416559,
+    "name": "WelcomeLobby",
+    "playerPositions": {
+      "0cQJ5Hd4oCaL57CWP-Pqe5_e0D4_ZDWuxKBgR9ke1SI": {
+        "x": 3,
+        "y": 5,
+      },
+      "testUser1": {
+        "x": 4,
+        "y": 5,
+      },
+    },
+    "spawnPosition": {
+      "x": 5,
+      "y": 4,
+    },
+    "theme": "clubhouse1",
+  },
+}
+`;
+
+exports[`AoGatherProvider > should be able to get posts from a specific room 1`] = `
+{
+  "testPost1": {
+    "author": "testUser1",
+    "created": 1713833416559,
+    "room": "WelcomeLobby",
+    "textOrTxId": "Welcome to GatherChat!",
+    "type": "text",
+  },
+}
+`;
+
+exports[`AoGatherProvider > should be able to get room index 1`] = `
+[
+  "WelcomeLobby",
+  "ChillZone",
+  "HolidayHangout",
+]
+`;
+
+exports[`AoGatherProvider > should be able to get users 1`] = `
+{
+  "0cQJ5Hd4oCaL57CWP-Pqe5_e0D4_ZDWuxKBgR9ke1SI": {
+    "avatar": "a0e18040d080701",
+    "created": 1715059534165,
+    "currentRoom": "HolidayHangout",
+    "following": [],
+    "lastSeen": 1715073721406,
+    "name": "Test",
+    "processId": "0cQJ5Hd4oCaL57CWP-Pqe5_e0D4_ZDWuxKBgR9ke1SI",
+    "status": "Test",
+  },
+  "testUser1": {
+    "avatar": "a1204030b070a01",
+    "created": 1713833416559,
+    "currentRoom": "WelcomeLobby",
+    "following": [],
+    "lastSeen": 1713833416559,
+    "name": "Test User :)",
+    "processId": "id",
+    "status": "Hello, World!",
+  },
+}
+`;

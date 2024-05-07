@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-import { buildGenerator } from "./sprite/generate";
+import { buildGenerator } from "./avatar/lib/generate";
 
 self.addEventListener(
 	"message",
