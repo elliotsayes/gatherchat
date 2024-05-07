@@ -8,8 +8,7 @@ import {
 	type spawn,
 	type unmonitor,
 } from "@permaweb/aoconnect";
-/* @ts-ignore */
-import type { Services } from "@permaweb/aoconnect/dist/index.common";
+// import type { Services } from "node_modules/@permaweb/aoconnect/dist/index.common";
 
 export interface AoClient {
 	processId: string;
@@ -42,10 +41,10 @@ export class AoProvider implements AoClient {
 	constructor(params: {
 		processId: string;
 		scheduler?: string;
-		connectConfig?: Services;
+		// connectConfig?: Services;
 	}) {
 		this.processId = params.processId;
 		this.scheduler = params.scheduler;
-		this.ao = connect(params.connectConfig);
+		this.ao = connect();
 	}
 }

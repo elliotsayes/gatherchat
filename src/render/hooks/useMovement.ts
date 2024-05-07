@@ -1,5 +1,5 @@
 import type { Position } from "@/_old/lib/model";
-import { type Reducer, useCallback, useReducer, useState } from "react";
+import { type Reducer, useCallback, useReducer } from "react";
 
 export const movementKeys = [
 	"ArrowUp",

@@ -20,7 +20,7 @@ import { SetupForm } from "../../profile/components/SetupForm";
 const aoGather = new AoGatherProvider({});
 
 export const GameLoader = () => {
-	const [roomId, setRoomId] = useState("WelcomeLobby");
+	const [roomId, _] = useState("WelcomeLobby");
 
 	const {
 		data: users,
@@ -39,8 +39,8 @@ export const GameLoader = () => {
 
 	const {
 		data: room,
-		error: errorRoom,
-		refetch: refetchRoom,
+		// error: errorRoom,
+		// refetch: refetchRoom,
 	} = useQuery({
 		queryKey: ["room", roomId],
 		queryFn: async () => {

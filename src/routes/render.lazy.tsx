@@ -1,5 +1,5 @@
 import type { Position } from "@/_old/lib/model";
-import { AoGatherProvider } from "@/ao/lib/ao-gather";
+// import { AoGatherProvider } from "@/ao/lib/ao-gather";
 import InteractableSprite from "@/render/components/InteractableSprite";
 import { RenderEngine } from "@/render/components/RenderEngine";
 import { TileLoader } from "@/render/components/TileLoader";
@@ -19,7 +19,7 @@ export const tileSize = {
 	y: 64,
 };
 
-const aoGather = new AoGatherProvider();
+// const aoGather = new AoGatherProvider();
 
 function Render() {
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -214,11 +214,12 @@ function Render() {
 					}}
 					events={{
 						onPositionUpdate: ({ newPosition, newDirection }): void => {
+							console.log({ newPosition, newDirection });
 							if (newPosition) {
 								setPosition(newPosition);
 							}
 						},
-						onPlayerClick: (playerId: string): void => {
+						onPlayerClick: (): void => {
 							throw new Error("Function not implemented.");
 						},
 					}}

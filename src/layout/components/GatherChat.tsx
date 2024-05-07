@@ -2,7 +2,6 @@ import type {
 	AoPostsState,
 	AoToonSaved,
 	AoUsersState,
-	Position,
 } from "@/_old/lib/model";
 import type { ContractPost } from "@/ao/lib/ao-gather";
 import {
@@ -16,7 +15,6 @@ import { TileLoader } from "@/render/components/TileLoader";
 import { ObstacleLayout } from "@/rooms/components/ObstacleLayout";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { Game } from "../../_old/components/Game";
 import { ChatBox } from "../../post/components/ChatBox";
 import { ProfileView } from "../../profile/components/ProfileView";
 import { SetupForm } from "../../profile/components/SetupForm";
@@ -59,7 +57,6 @@ export const GatherChat = ({
 
 	const [lastResized, setLastResized] = useState(0);
 
-	const [uploadPageKey, setUploadPageKey] = useState(0);
 	const [profileKey, setProileKey] = useState(0);
 
 	return (
@@ -74,7 +71,7 @@ export const GatherChat = ({
 				<div ref={containerRef} className="h-screen">
 					<RenderEngine
 						parentRef={containerRef}
-						lastResized={0}
+						lastResized={lastResized}
 						world={{
 							tileSet: (
 								<TileLoader alias="drum" src="assets/tiles/drum.json">
@@ -89,7 +86,7 @@ export const GatherChat = ({
 								</TileLoader>
 							),
 							sprites: <></>,
-							collision: (pos: Position) => false,
+							collision: () => false,
 						}}
 						state={{
 							room: {
@@ -125,6 +122,7 @@ export const GatherChat = ({
 						}}
 						events={{
 							onPositionUpdate: ({ newPosition, newDirection }): void => {
+								console.log({ newPosition, newDirection });
 								if (newPosition) {
 									onUpdatePosition(newPosition);
 								}

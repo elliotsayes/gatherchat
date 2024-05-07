@@ -1,6 +1,4 @@
 import { createDataItemSigner } from "@permaweb/aoconnect";
-/* @ts-ignore */
-import type { Services } from "@permaweb/aoconnect/dist/index.common";
 import type Arweave from "arweave";
 import EventEmitter from "eventemitter3";
 import { AoProvider } from "./ao";
@@ -99,12 +97,12 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 		processId?: string;
 		arweave?: Arweave;
 		scheduler?: string;
-		connectConfig?: Services;
+		// connectConfig?: Services;
 	} = {}) {
 		super({
 			processId: processId,
 			scheduler: params.scheduler,
-			connectConfig: params.connectConfig,
+			// connectConfig: params.connectConfig,
 		});
 		this.signer = signer;
 		this.arweave = arweave;
