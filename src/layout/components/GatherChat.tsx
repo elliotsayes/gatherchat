@@ -5,7 +5,7 @@ import {
 	ResizablePanel,
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { timeAgo } from "@/lib/timeago";
+import { timeAgo } from "@/utils";
 import { RenderEngine } from "@/render/components/RenderEngine";
 import { TileLoader } from "@/render/components/TileLoader";
 import { ObstacleLayout } from "@/rooms/components/ObstacleLayout";

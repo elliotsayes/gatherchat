@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { toTitleCase } from "@/lib/utils";
+import { toTitleCase } from "@/utils";
 import { useCallback, useMemo, useState } from "react";
 import { AvatarStandalone } from "../../avatar/components/AvatarStandalone";
 import { serialize } from "../../avatar/lib/edit";

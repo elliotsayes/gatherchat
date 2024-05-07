@@ -7,7 +7,7 @@ import {
 	aoGatherProcessId,
 } from "@/ao/lib/ao-gather";
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Link, createLazyFileRoute } from "@tanstack/react-router";
 import { useRef, useState } from "react";
