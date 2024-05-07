@@ -1,7 +1,6 @@
 import { createDataItemSigner } from "@permaweb/aoconnect";
 /* @ts-ignore */
 import type { Services } from "@permaweb/aoconnect/dist/index.common";
-import { type Signer, ArconnectSigner } from "arbundles";
 import type Arweave from "arweave";
 import EventEmitter from "eventemitter3";
 import { AoProvider } from "./ao";
@@ -62,7 +61,7 @@ export type ContractPost = {
 export type ContractPostWritable = Omit<ContractPost, "created" | "author">;
 
 export interface AoGather {
-	signer: Signer;
+	signer: unknown;
 	arweave: Arweave;
 	getUsers(): Promise<Record<ArweaveID, ContractUser>>;
 	getRoomIndex(): Promise<RoomIndex>;
@@ -87,20 +86,17 @@ export const gatherEventEmitter = new EventEmitter();
 
 // Class AoGatherProvider extends from AoProvider and implements the AoGather interface
 export class AoGatherProvider extends AoProvider implements AoGather {
-	signer: Signer;
+	signer: unknown;
 	arweave: Arweave;
 	updateInterval?: NodeJS.Timeout;
 
 	constructor({
 		arweave = defaultArweave,
 		processId = aoGatherProcessId,
-		signer = new ArconnectSigner(
-			window.arweaveWallet,
-			defaultArweave as unknown as any,
-		),
+		signer = window.arweaveWallet,
 		...params
 	}: {
-		signer?: Signer;
+		signer?: unknown;
 		processId?: string;
 		arweave?: Arweave;
 		scheduler?: string;
@@ -232,8 +228,8 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 	}: { roomId: string; position: ContractPosition }): Promise<this> {
 		const registrationId = await this.ao.message({
 			process: this.processId,
-			data: JSON.stringify({ roomId, position }),
 			tags: [{ name: "Action", value: "UpdatePosition" }],
+			data: JSON.stringify({ roomId, position }),
 			signer: createDataItemSigner(this.signer),
 		});
 		console.debug(
