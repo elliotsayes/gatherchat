@@ -217,6 +217,7 @@ function Render() {
 							},
 						}}
 						flags={{
+							enableMovement: true,
 							showWorld: true,
 							showPlayer: true,
 							showOtherPlayers: true,

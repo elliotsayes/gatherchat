@@ -67,6 +67,8 @@ export type RenderEngineEvents = {
 };
 
 export type RenderEngineFlags = {
+	enableMovement: boolean;
+
 	showWorld: boolean;
 	showPlayer: boolean;
 	showOtherPlayers: boolean;
@@ -141,7 +143,7 @@ export const RenderEngine = ({
 				tabIndex={0}
 				onKeyDown={(e) => {
 					//@ts-expect-error
-					if (movementKeys.includes(e.key)) {
+					if (flags.enableMovement && movementKeys.includes(e.key)) {
 						e.preventDefault();
 						movementDispatch(keyToMovementMap[e.key as MovementKey]);
 					}
