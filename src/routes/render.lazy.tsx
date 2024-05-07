@@ -1,10 +1,13 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { RenderEngine } from "@/components/game/RenderEngine";
 import { useRef } from "react";
+import { AoGatherProvider } from "@/lib/ao-gather";
 
 export const Route = createLazyFileRoute("/render")({
 	component: Render,
 });
+
+const aoGather = new AoGatherProvider();
 
 function Render() {
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -59,7 +62,21 @@ function Render() {
 						throw new Error("Function not implemented.");
 					},
 					onMovementKey: (key: string): void => {
-						throw new Error("Function not implemented.");
+						console.log(key);
+						aoGather.register({
+							name: "Test",
+							avatar: "a1204030b070a01",
+							status: "Test",
+							currentRoom: "HolidayHangout",
+							following: {},
+						})
+						aoGather.updatePosition({
+							roomId: "HolidayHangout",
+							position: {
+								x: 0,
+								y: 0,
+							},
+						})
 					},
 					onPlayerClick: (playerId: string): void => {
 						throw new Error("Function not implemented.");
