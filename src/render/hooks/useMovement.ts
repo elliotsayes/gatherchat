@@ -1,5 +1,5 @@
 import type { Position } from "@/_old/lib/model";
-import { useCallback, useReducer, useState, type Reducer } from "react";
+import { type Reducer, useCallback, useReducer, useState } from "react";
 
 export const movementKeys = [
 	"ArrowUp",
@@ -52,111 +52,116 @@ export function calculateNextPosition(
 
 type ActiveMovementState = {
 	state: "idle" | "moving";
-  queuedDirection?: MovementDirection;
+	queuedDirection?: MovementDirection;
 };
 
-type ActiveMovementEvent = {
-	type: "move";
-	direction: MovementDirection;
-} | {
-	type: "stop";
-};
+type ActiveMovementEvent =
+	| {
+			type: "move";
+			direction: MovementDirection;
+	  }
+	| {
+			type: "stop";
+	  };
 
-const activeMovementReducer = ({
-  execute,
-  stop,
-}: {
-  execute: (direction: MovementDirection) => void;
-  stop: () => void;
-}): Reducer<ActiveMovementState, ActiveMovementEvent> => (
-  movementState: ActiveMovementState,
-  movementEvent: ActiveMovementEvent,
-) => {
-  switch(movementState.state) {
-    case "idle": {
-      switch(movementEvent.type) {
-        case "move": {
-          execute(movementEvent.direction)
+const activeMovementReducer =
+	({
+		execute,
+		stop,
+	}: {
+		execute: (direction: MovementDirection) => void;
+		stop: () => void;
+	}): Reducer<ActiveMovementState, ActiveMovementEvent> =>
+	(movementState: ActiveMovementState, movementEvent: ActiveMovementEvent) => {
+		switch (movementState.state) {
+			case "idle": {
+				switch (movementEvent.type) {
+					case "move": {
+						execute(movementEvent.direction);
 
-          setTimeout(() => {
-            stop();
-          }	, 200);
+						setTimeout(() => {
+							stop();
+						}, 200);
 
-          return {
-            state: "moving",
-          };
-        }
-      }
-      break;
-    }
-    case "moving": {
-      switch (movementEvent.type) {
-        case "stop": {
-          if (movementState.queuedDirection) {
-            execute(movementState.queuedDirection);
+						return {
+							state: "moving",
+						};
+					}
+				}
+				break;
+			}
+			case "moving": {
+				switch (movementEvent.type) {
+					case "stop": {
+						if (movementState.queuedDirection) {
+							execute(movementState.queuedDirection);
 
-            setTimeout(() => {
-              stop();
-            }	, 200);
+							setTimeout(() => {
+								stop();
+							}, 200);
 
-            return {
-              state: "moving",
-              queuedDirection: undefined,
-            }
-          }
-          return {
-            state: "idle",
-          };
-        }
-        case "move": {
-          return {
-            state: "moving",
-            queuedDirection: movementEvent.direction,
-          }
-        }
-      }
-    }
-  }
-  return movementState;
-}
+							return {
+								state: "moving",
+								queuedDirection: undefined,
+							};
+						}
+						return {
+							state: "idle",
+						};
+					}
+					case "move": {
+						return {
+							state: "moving",
+							queuedDirection: movementEvent.direction,
+						};
+					}
+				}
+			}
+		}
+		return movementState;
+	};
 
 export function useMovement({
-  localPosition,
-  onPositionUpdate,
-  collision,
+	localPosition,
+	onPositionUpdate,
+	collision,
 }: {
-  localPosition: Position;
-  onPositionUpdate: (args: { newPosition?: Position; newDirection?: FaceDirection }) => void;
-  collision: (args: Position) => boolean;
+	localPosition: Position;
+	onPositionUpdate: (args: {
+		newPosition?: Position;
+		newDirection?: FaceDirection;
+	}) => void;
+	collision: (args: Position) => boolean;
 }) {
-  const executeMovement = useCallback((direction: MovementDirection) => {
-    // @ts-expect-error
-    const newDirection = faceDirections.includes(direction) 
-      ? direction as FaceDirection
-      : undefined;
-    const newPosition = calculateNextPosition(
-      localPosition,
-      direction,
-    );
-    
-    if (collision(newPosition)) return;
+	const executeMovement = useCallback(
+		(direction: MovementDirection) => {
+			// @ts-expect-error
+			const newDirection = faceDirections.includes(direction)
+				? (direction as FaceDirection)
+				: undefined;
+			const newPosition = calculateNextPosition(localPosition, direction);
 
-    onPositionUpdate({
-      newPosition,
-      newDirection,
-    });
-  }, [localPosition, onPositionUpdate, collision])
+			if (collision(newPosition)) return;
 
-  const stopMovement = useCallback(() => {
-    movementDispatch({ type: "stop" });
-  }, []);
+			onPositionUpdate({
+				newPosition,
+				newDirection,
+			});
+		},
+		[localPosition, onPositionUpdate, collision],
+	);
 
-  const [_, movementDispatch] = useReducer(
-    activeMovementReducer({ execute: executeMovement, stop: stopMovement }), 
-    {
-      state: "idle",
-    },
-  );
+	const stopMovement = useCallback(() => {
+		movementDispatch({ type: "stop" });
+	}, []);
 
-  return (direction: MovementDirection) => movementDispatch({ type: "move", direction });
+	const [_, movementDispatch] = useReducer(
+		activeMovementReducer({ execute: executeMovement, stop: stopMovement }),
+		{
+			state: "idle",
+		},
+	);
+
+	return (direction: MovementDirection) =>
+		movementDispatch({ type: "move", direction });
 }

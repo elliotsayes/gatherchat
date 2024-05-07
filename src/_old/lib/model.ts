@@ -13,7 +13,7 @@ export type Dimension = {
 export type Rect = {
 	pos: Position;
 	dim: Dimension;
-}
+};
 
 export type AoToonBase = {
 	id: string;

@@ -92,7 +92,7 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 	constructor({
 		arweave = defaultArweave,
 		processId = aoGatherProcessId,
-		signer = (window?.arweaveWallet) ?? defaultArweave,
+		signer = window?.arweaveWallet ?? defaultArweave,
 		...params
 	}: {
 		signer?: unknown;

@@ -1,17 +1,21 @@
+import type { AoPostsState, AoToonSaved, AoUsersState } from "@/_old/lib/model";
 import { AoGatherProvider, type ContractUser } from "@/ao/lib/ao-gather";
-import type {
-	AoPostsState,
-	AoToonSaved,
-	AoUsersState,
-} from "@/_old/lib/model";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { GatherChat, type UploadInfo } from "../../layout/components/GatherChat";
-import { SetupForm } from "../../profile/components/SetupForm";
-import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from "../../components/ui/card";
 import { Toaster } from "../../components/ui/sonner";
+import {
+	GatherChat,
+	type UploadInfo,
+} from "../../layout/components/GatherChat";
+import { SetupForm } from "../../profile/components/SetupForm";
 
 const aoGather = new AoGatherProvider({});
 

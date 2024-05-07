@@ -6,9 +6,9 @@ import { AlphaFilter } from "pixi.js";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { gameMachine } from "../../_old/lib/machine";
 import type { AoToonSaved, AoUsersState } from "../../_old/lib/model";
-import InteractableSprite from "../../render/components/InteractableSprite";
 import InteractableToon from "../../avatar/components/InteractableToon";
 import NamedAvatar from "../../avatar/components/NamedAvatar";
+import InteractableSprite from "../../render/components/InteractableSprite";
 import { Tilemap3, blockLocations } from "./TileMap3";
 
 const tileSizeX = 64;

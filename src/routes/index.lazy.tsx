@@ -1,12 +1,12 @@
 import { GameDemo2 } from "@/_old/components/GameDemo2";
-import { buttonVariants } from "@/components/ui/button";
+import type { AoToonSaved } from "@/_old/lib/model";
 import { AoProvider } from "@/ao/lib/ao";
 import {
 	type ArweaveID,
 	type ContractUser,
 	aoGatherProcessId,
 } from "@/ao/lib/ao-gather";
-import type { AoToonSaved } from "@/_old/lib/model";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Link, createLazyFileRoute } from "@tanstack/react-router";

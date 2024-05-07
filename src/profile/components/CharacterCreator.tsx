@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { toTitleCase } from "@/lib/utils";
 import { useCallback, useMemo, useState } from "react";
+import { AvatarStandalone } from "../../avatar/components/AvatarStandalone";
 import { serialize } from "../../avatar/lib/edit";
 import { deserialize } from "../../avatar/lib/generate";
 import {
@@ -8,7 +9,6 @@ import {
 	colorCategories,
 	colorThemes,
 } from "../../avatar/lib/shared";
-import { AvatarStandalone } from "../../avatar/components/AvatarStandalone";
 import OptionSlider from "./OptionSlider";
 
 interface CharacterCreatorProps {

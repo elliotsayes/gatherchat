@@ -1,3 +1,10 @@
+import type { Position } from "@/_old/lib/model";
+import type {
+	ArweaveID,
+	ContractPosition,
+	ContractRoom,
+	ContractUser,
+} from "@/ao/lib/ao-gather";
 import { Stage } from "@pixi/react";
 import { Container, Sprite } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
@@ -5,14 +12,13 @@ import { AlphaFilter } from "pixi.js";
 import { useCallback, useEffect, useState } from "react";
 import InteractableToon from "../../avatar/components/InteractableToon";
 import NamedAvatar from "../../avatar/components/NamedAvatar";
-import type {
-	ArweaveID,
-	ContractPosition,
-	ContractRoom,
-	ContractUser,
-} from "@/ao/lib/ao-gather";
-import type { Position } from "@/_old/lib/model";
-import { type FaceDirection, type MovementKey, keyToMovementMap, movementKeys, useMovement } from "../hooks/useMovement";
+import {
+	type FaceDirection,
+	type MovementKey,
+	keyToMovementMap,
+	movementKeys,
+	useMovement,
+} from "../hooks/useMovement";
 
 const veryTransparent = new AlphaFilter(0.3);
 const slightlyTransparent = new AlphaFilter(0.6);
@@ -20,7 +26,7 @@ const slightlyTransparent = new AlphaFilter(0.6);
 const tileSize = {
 	x: 64,
 	y: 64,
-}
+};
 
 const stageSizeFallback = {
 	width: 800,
@@ -62,7 +68,10 @@ export type RenderEngineState = {
 };
 
 export type RenderEngineEvents = {
-	onPositionUpdate: (params: {newPosition?: Position, newDirection?: FaceDirection }) => void;
+	onPositionUpdate: (params: {
+		newPosition?: Position;
+		newDirection?: FaceDirection;
+	}) => void;
 	onPlayerClick: (playerId: ArweaveID) => void;
 };
 
@@ -190,10 +199,7 @@ export const RenderEngine = ({
 									}}
 								>
 									{(props) => (
-										<Container
-											anchor={{ x: 0.5, y: 0.5 }}
-											{...props}
-										>
+										<Container anchor={{ x: 0.5, y: 0.5 }} {...props}>
 											{world.tileSet}
 											{state.player.savedPosition !== undefined && (
 												<Sprite

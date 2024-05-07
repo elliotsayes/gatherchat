@@ -1,11 +1,14 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
 import type { Position } from "@/_old/lib/model";
 import { AoGatherProvider } from "@/ao/lib/ao-gather";
-import { useRef, useState } from "react";
-import { ObstacleLayout, blockLocations } from "@/rooms/components/ObstacleLayout";
 import InteractableSprite from "@/render/components/InteractableSprite";
-import { TileLoader } from "@/render/components/TileLoader";
 import { RenderEngine } from "@/render/components/RenderEngine";
+import { TileLoader } from "@/render/components/TileLoader";
+import {
+	ObstacleLayout,
+	blockLocations,
+} from "@/rooms/components/ObstacleLayout";
+import { createLazyFileRoute } from "@tanstack/react-router";
+import { useRef, useState } from "react";
 
 export const Route = createLazyFileRoute("/render")({
 	component: Render,
@@ -60,7 +63,9 @@ function Render() {
 						min={1}
 						max={5}
 						value={windowGapSlider}
-						onChange={(e) => setWindowGapSlider(Number.parseInt(e.target.value))}
+						onChange={(e) =>
+							setWindowGapSlider(Number.parseInt(e.target.value))
+						}
 					/>
 					{windowGapSlider}
 				</label>
@@ -69,7 +74,6 @@ function Render() {
 				<RenderEngine
 					parentRef={containerRef}
 					lastResized={0}
-
 					world={{
 						collision: () => true,
 						tileSet: (
@@ -148,26 +152,29 @@ function Render() {
 									x={tileSize.x * 17}
 									y={tileSize.y * 1.25}
 								/>
-							{blockLocations({
-								w: widthSlider,
-								h: heightSlider,
-							}, {
-								w: 4,
-								h: 4,
-							}).map((blockLocation, i) => (
-								<InteractableSprite
-									active={false}
-									key={i.toString()}
-									zIndex={100}
-									image="assets/sprite/tree.png"
-									scale={4}
-									anchor={{ x: 0.5, y: 0.5 }}
-									// onclick={() => onViewFeed()}
-									x={tileSize.x * (blockLocation.x + 0.5)}
-									y={tileSize.y * (blockLocation.y + 1)}
-								/>
-							))}
-						</>
+								{blockLocations(
+									{
+										w: widthSlider,
+										h: heightSlider,
+									},
+									{
+										w: 4,
+										h: 4,
+									},
+								).map((blockLocation, i) => (
+									<InteractableSprite
+										active={false}
+										key={i.toString()}
+										zIndex={100}
+										image="assets/sprite/tree.png"
+										scale={4}
+										anchor={{ x: 0.5, y: 0.5 }}
+										// onclick={() => onViewFeed()}
+										x={tileSize.x * (blockLocation.x + 0.5)}
+										y={tileSize.y * (blockLocation.y + 1)}
+									/>
+								))}
+							</>
 						),
 					}}
 					state={{
@@ -181,9 +188,7 @@ function Render() {
 								x: 0,
 								y: 0,
 							},
-							playerPositions: {
-
-							},
+							playerPositions: {},
 						},
 						player: {
 							id: "",
@@ -208,7 +213,7 @@ function Render() {
 						otherPlayers: [],
 					}}
 					events={{
-						onPositionUpdate: ({newPosition, newDirection}): void => {
+						onPositionUpdate: ({ newPosition, newDirection }): void => {
 							if (newPosition) {
 								setPosition(newPosition);
 							}

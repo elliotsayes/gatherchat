@@ -1,26 +1,26 @@
-import {
-	ResizableHandle,
-	ResizablePanel,
-	ResizablePanelGroup,
-} from "@/components/ui/resizable";
 import type {
 	AoPostsState,
 	AoToonSaved,
 	AoUsersState,
 	Position,
 } from "@/_old/lib/model";
+import type { ContractPost } from "@/ao/lib/ao-gather";
+import {
+	ResizableHandle,
+	ResizablePanel,
+	ResizablePanelGroup,
+} from "@/components/ui/resizable";
 import { timeAgo } from "@/lib/timeago";
+import { RenderEngine } from "@/render/components/RenderEngine";
+import { TileLoader } from "@/render/components/TileLoader";
+import { ObstacleLayout } from "@/rooms/components/ObstacleLayout";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { SidePanel, type SidePanelState } from "./SidePanel";
 import { Game } from "../../_old/components/Game";
+import { ChatBox } from "../../post/components/ChatBox";
 import { ProfileView } from "../../profile/components/ProfileView";
 import { SetupForm } from "../../profile/components/SetupForm";
-import { ChatBox } from "../../post/components/ChatBox";
-import type { ContractPost } from "@/ao/lib/ao-gather";
-import { RenderEngine } from "@/render/components/RenderEngine";
-import { ObstacleLayout } from "@/rooms/components/ObstacleLayout";
-import { TileLoader } from "@/render/components/TileLoader";
+import { SidePanel, type SidePanelState } from "./SidePanel";
 
 export type UploadInfo = Pick<ContractPost, "type" | "textOrTxId">;
 
@@ -86,58 +86,63 @@ export const GatherChat = ({
 										}}
 										windowSpacing={3}
 									/>
-							</TileLoader>
+								</TileLoader>
 							),
 							sprites: <></>,
 							collision: (pos: Position) => false,
 						}}
 						state={{
-						room: {
-							created: 0,
-							lastActivity: 0,
-							name: "",
-							description: "",
-							theme: "",
-							spawnPosition: {
-								x: 0,
-								y: 0
-							},
-							playerPositions: {}
-						},
-						player: {
-							id: "",
-							profile: {
-								processId: "",
+							room: {
 								created: 0,
-								lastSeen: 0,
-								name: aoUsersState.user.displayName,
-								avatar: aoUsersState.user.avatarSeed,
-								status: "",
-								currentRoom: "",
-								following: {}
+								lastActivity: 0,
+								name: "",
+								description: "",
+								theme: "",
+								spawnPosition: {
+									x: 0,
+									y: 0,
+								},
+								playerPositions: {},
 							},
-							savedPosition: aoUsersState.user.savedPosition,
-							localPosition: aoUsersState.user.savedPosition,
-							localDirection: "left",
-							isRunning: false
-						},
-						otherPlayers: []
-					}} events={{
-						onPositionUpdate: ({ newPosition, newDirection }): void => {
-							if (newPosition) {
-								onUpdatePosition(newPosition);
-							}
-						},
-						onPlayerClick: (playerId: string): void => {
-							setSelectedToon(aoUsersState.otherToons.find((t) => t.id === playerId));
-						}
-					}} flags={{
-						enableMovement: true,
-						showWorld: true,
-						showPlayer: true,
-						showOtherPlayers: true,
-						showObjects: true
-					}}					/>
+							player: {
+								id: "",
+								profile: {
+									processId: "",
+									created: 0,
+									lastSeen: 0,
+									name: aoUsersState.user.displayName,
+									avatar: aoUsersState.user.avatarSeed,
+									status: "",
+									currentRoom: "",
+									following: {},
+								},
+								savedPosition: aoUsersState.user.savedPosition,
+								localPosition: aoUsersState.user.savedPosition,
+								localDirection: "left",
+								isRunning: false,
+							},
+							otherPlayers: [],
+						}}
+						events={{
+							onPositionUpdate: ({ newPosition, newDirection }): void => {
+								if (newPosition) {
+									onUpdatePosition(newPosition);
+								}
+							},
+							onPlayerClick: (playerId: string): void => {
+								setSelectedToon(
+									aoUsersState.otherToons.find((t) => t.id === playerId),
+								);
+							},
+						}}
+						flags={{
+							enableMovement: true,
+							showWorld: true,
+							showPlayer: true,
+							showOtherPlayers: true,
+							showObjects: true,
+						}}
+					/>
 				</div>
 			</ResizablePanel>
 			<ResizableHandle withHandle />
@@ -207,9 +212,7 @@ export const GatherChat = ({
 							</div>
 						</div>
 					}
-					upload={
-						<p>TODO</p>
-					}
+					upload={<p>TODO</p>}
 					profile={
 						selectedToon ? (
 							<ProfileView

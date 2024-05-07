@@ -9,7 +9,10 @@ export const blockSpacing: Dimension = {
 	h: 4,
 };
 
-export const blockLocations = (roomSizeTiles: Dimension, blockSpacing: Dimension) => {
+export const blockLocations = (
+	roomSizeTiles: Dimension,
+	blockSpacing: Dimension,
+) => {
 	const locations: { x: number; y: number }[] = [];
 	for (let x = 0; x < roomSizeTiles.w; x++) {
 		for (let y = 0; y < roomSizeTiles.h; y++) {
@@ -96,24 +99,27 @@ const setupInstance = (instance: CompositeTilemap, props: Props) => {
 			}
 		}
 	}
-}
+};
 
-export const ObstacleLayout = PixiComponent<Props, CompositeTilemap>("ObstacleLayout", {
-	create: (props: Props) => {
-		const instance = new CompositeTilemap();
-		
-		setupInstance(instance, props);
+export const ObstacleLayout = PixiComponent<Props, CompositeTilemap>(
+	"ObstacleLayout",
+	{
+		create: (props: Props) => {
+			const instance = new CompositeTilemap();
 
-		return instance;
+			setupInstance(instance, props);
+
+			return instance;
+		},
+		// didMount: async (instance) => {},
+		applyProps: (instance, oldProps: Props, newProps: Props) => {
+			const { ...oldP } = oldProps;
+			const { ...newP } = newProps;
+
+			setupInstance(instance, newP);
+
+			// apply rest props to instance
+			applyDefaultProps(instance, oldP, newP);
+		},
 	},
-	// didMount: async (instance) => {},
-	applyProps: (instance, oldProps: Props, newProps: Props) => {
-		const { ...oldP } = oldProps;
-		const { ...newP } = newProps;
-
-		setupInstance(instance, newP);
-
-		// apply rest props to instance
-		applyDefaultProps(instance, oldP, newP);
-	},
-});
+);

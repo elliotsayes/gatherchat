@@ -1,9 +1,5 @@
 import { and, assign, setup } from "xstate";
-import {
-	blockLocations,
-	roomTilesX,
-	roomTilesY,
-} from "../components/TileMap3";
+import { blockLocations, roomTilesX, roomTilesY } from "../components/TileMap3";
 
 export const movementKeys = [
 	"ArrowUp",
