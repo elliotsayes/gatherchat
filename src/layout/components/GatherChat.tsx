@@ -1,8 +1,4 @@
-import type {
-	AoPostsState,
-	AoToonSaved,
-	AoUsersState,
-} from "@/_old/lib/model";
+import type { AoPostsState, AoToonSaved, AoUsersState } from "@/_old/lib/model";
 import type { ContractPost } from "@/ao/lib/ao-gather";
 import {
 	ResizableHandle,

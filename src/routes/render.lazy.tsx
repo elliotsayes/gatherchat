@@ -1,8 +1,8 @@
-import type { Position } from "@/render/lib/schema";
 // import { AoGatherProvider } from "@/ao/lib/ao-gather";
 import InteractableSprite from "@/render/components/InteractableSprite";
 import { RenderEngine } from "@/render/components/RenderEngine";
 import { TileLoader } from "@/render/components/TileLoader";
+import type { Position } from "@/render/lib/schema";
 import {
 	ObstacleLayout,
 	blockLocations,
