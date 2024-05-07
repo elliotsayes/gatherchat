@@ -1,7 +1,7 @@
 import { createDataItemSigner } from "@permaweb/aoconnect";
 /* @ts-ignore */
 import type { Services } from "@permaweb/aoconnect/dist/index.common";
-import type { ArconnectSigner, ArweaveSigner } from "arbundles";
+import { type Signer, ArconnectSigner } from "arbundles";
 import type Arweave from "arweave";
 import EventEmitter from "eventemitter3";
 import { AoProvider } from "./ao";
@@ -61,21 +61,8 @@ export type ContractPost = {
 
 export type ContractPostWritable = Omit<ContractPost, "created" | "author">;
 
-// export type ContractState = {
-//     users: Record<ArweaveID, User>
-//     posts: Record<ArweaveID, Post>;
-//     // connections: Record<ArweaveID, EncryptedAoRTCContractConnectionState>;
-//     // CreateConnection(params: { Guest: ArweavePublicKey, Offer: string }): Promise<string>
-//     // AcceptConnection(params: { Answer: string }): Promise<string>
-//     // AddIceCandidate(params: { Candidate: string }): Promise<string>
-// }
-
-// Base interfaces for WebRTC functionalities
-export type GatherSigner = ArweaveSigner | ArconnectSigner;
-
-// Interface defining the structure for AoGather which includes a signer of type RtcSigner and WebRTC management
 export interface AoGather {
-	// signer: GatherSigner;
+	signer: Signer;
 	arweave: Arweave;
 	getUsers(): Promise<Record<ArweaveID, ContractUser>>;
 	getRoomIndex(): Promise<RoomIndex>;
@@ -100,17 +87,17 @@ export const gatherEventEmitter = new EventEmitter();
 
 // Class AoGatherProvider extends from AoProvider and implements the AoGather interface
 export class AoGatherProvider extends AoProvider implements AoGather {
-	// signer: GatherSigner;
+	signer: Signer;
 	arweave: Arweave;
-	updateInterval: any;
+	updateInterval?: NodeJS.Timeout;
 
 	constructor({
 		arweave = defaultArweave,
 		processId = aoGatherProcessId,
-		// signer = new ArconnectSigner(window.arweaveWallet, defaultArweave as any),
+		signer = new ArconnectSigner(window.arweaveWallet, defaultArweave as unknown as any),
 		...params
 	}: {
-		signer?: GatherSigner;
+		signer?: Signer;
 		processId?: string;
 		arweave?: Arweave;
 		scheduler?: string;
@@ -121,7 +108,7 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			scheduler: params.scheduler,
 			connectConfig: params.connectConfig,
 		});
-		// this.signer = signer;
+		this.signer = signer;
 		this.arweave = arweave;
 	}
 
@@ -162,12 +149,8 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 		return this;
 	}
 
-	/**
-	 * @description - Updates the connections for all peers associated with the current user, both Host and Guest connections, answers offers
-	 * and sends offers to new connections, checks for renegotiation and sends new offers if needed
-	 */
 	async updateData(): Promise<void> {
-		console.log("Updating connection states");
+		console.log("TODO: Periodic update");
 	}
 
 	async getUsers(): Promise<Record<ArweaveID, ContractUser>> {
@@ -219,7 +202,7 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			process: this.processId,
 			data: JSON.stringify(userNew),
 			tags: [{ name: "Action", value: "Register" }],
-			signer: createDataItemSigner(window.arweaveWallet),
+			signer: createDataItemSigner(this.signer),
 		});
 		console.debug(`User registered with id ${registrationId}`);
 
@@ -231,7 +214,7 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			process: this.processId,
 			data: JSON.stringify(userUpdate),
 			tags: [{ name: "Action", value: "UpdateUser" }],
-			signer: createDataItemSigner(window.arweaveWallet),
+			signer: createDataItemSigner(this.signer),
 		});
 		console.debug(`User updated with id ${registrationId}`);
 
@@ -246,7 +229,7 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			process: this.processId,
 			data: JSON.stringify({ roomId, position }),
 			tags: [{ name: "Action", value: "UpdatePosition" }],
-			signer: createDataItemSigner(window.arweaveWallet),
+			signer: createDataItemSigner(this.signer),
 		});
 		console.debug(
 			`User position in ${roomId} to ${JSON.stringify(
@@ -261,7 +244,7 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			process: this.processId,
 			data: JSON.stringify(post),
 			tags: [{ name: "Action", value: "CreatePost" }],
-			signer: createDataItemSigner(window.arweaveWallet),
+			signer: createDataItemSigner(this.signer),
 		});
 		console.debug(`Created post with id ${registrationId}`);
 
@@ -273,7 +256,7 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			process: this.processId,
 			data: JSON.stringify(data),
 			tags: [{ name: "Action", value: "Follow" }],
-			signer: createDataItemSigner(window.arweaveWallet),
+			signer: createDataItemSigner(this.signer),
 		});
 		console.debug(`Followed ${data.address} with id ${registrationId}`);
 
@@ -285,7 +268,7 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			process: this.processId,
 			data: JSON.stringify(data),
 			tags: [{ name: "Action", value: "Unfollow" }],
-			signer: createDataItemSigner(window.arweaveWallet),
+			signer: createDataItemSigner(this.signer),
 		});
 		console.debug(`Unfollowed ${data.address} with id ${registrationId}`);
 
