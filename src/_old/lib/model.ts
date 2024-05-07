@@ -1,19 +1,5 @@
+import type { Position } from "@/render/lib/schema";
 import type { ContractPost } from "../../ao/lib/ao-gather";
-
-export type Position = {
-	x: number;
-	y: number;
-};
-
-export type Dimension = {
-	w: number;
-	h: number;
-};
-
-export type Rect = {
-	pos: Position;
-	dim: Dimension;
-};
 
 export type AoToonBase = {
 	id: string;

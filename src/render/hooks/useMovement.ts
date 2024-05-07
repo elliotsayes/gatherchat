@@ -1,4 +1,4 @@
-import type { Position } from "@/_old/lib/model";
+import type { Position } from "@/render/lib/schema";
 import { type Reducer, useCallback, useReducer } from "react";
 
 export const movementKeys = [

@@ -1,4 +1,4 @@
-import type { Position } from "@/_old/lib/model";
+import type { Position } from "@/render/lib/schema";
 // import { AoGatherProvider } from "@/ao/lib/ao-gather";
 import InteractableSprite from "@/render/components/InteractableSprite";
 import { RenderEngine } from "@/render/components/RenderEngine";

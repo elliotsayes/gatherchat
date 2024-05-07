@@ -1,4 +1,4 @@
-import type { Position } from "@/_old/lib/model";
+import type { Position } from "@/render/lib/schema";
 import type {
 	ArweaveID,
 	ContractPosition,
