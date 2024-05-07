@@ -2,21 +2,22 @@ import { createDataItemSigner } from "@permaweb/aoconnect";
 /* @ts-ignore */
 import type { Services } from "@permaweb/aoconnect/dist/index.common";
 import { ArconnectSigner, type ArweaveSigner } from "arbundles";
-import Arweave from "arweave";
+import type Arweave from "arweave";
 import EventEmitter from "eventemitter3";
 import { AoProvider } from "./ao";
+import { defaultArweave } from "./arweave";
 
 export const aoGatherProcessId = "bSw7XwUs6xdhPeUb4OwmdYxNIqst7ksKQXYeCM6t0kM";
-export const defaultArweave = Arweave.init({
-	host: "arweave.net",
-	protocol: "https",
-	port: 443,
-});
 
 export type ArweaveID = string;
 export type ArweavePublicKey = string;
 export type ConnectionID = ArweaveID;
 export type ArweaveAddress = ArweaveID;
+
+export type ContractPosition = {
+	x: number;
+	y: number;
+};
 
 export type ContractUser = {
 	processId: ArweaveID; // personal process id of the user for things like notification, mail, etc.
@@ -25,10 +26,7 @@ export type ContractUser = {
 	name: string;
 	avatar: string;
 	status: string;
-	position: {
-		x: number;
-		y: number;
-	};
+	currentRoom: string;
 	following: {
 		[address: string]: boolean;
 	};
@@ -36,12 +34,32 @@ export type ContractUser = {
 	// preferences: UserSettings;
 };
 
+export type ContractUserWritable = Omit<
+	ContractUser,
+	"processId" | "created" | "lastSeen"
+>;
+
+export type ContractRoom = {
+	created: number;
+	lastActivity: number;
+	name: string;
+	description: string;
+	theme: string;
+	spawnPosition: ContractPosition;
+	playerPositions: Record<ArweaveID, ContractPosition>;
+};
+
+export type DefaultRooms = Array<ContractRoom>;
+
 export type ContractPost = {
 	created: number;
 	author: string;
+	room: string;
 	type: string;
 	textOrTxId: string;
 };
+
+export type ContractPostWritable = Omit<ContractPost, "created" | "author">;
 
 // export type ContractState = {
 //     users: Record<ArweaveID, User>
@@ -60,15 +78,21 @@ export interface AoGather {
 	signer: GatherSigner;
 	arweave: Arweave;
 	getUsers(): Promise<Record<ArweaveID, ContractUser>>;
-	getPosts(params: { userId: ArweaveID }): Promise<
+	getRoom(params: { roomId?: string }): Promise<
+		Record<ArweaveID, ContractRoom>
+	>;
+	getPosts(params: { roomId?: string }): Promise<
 		Record<ArweaveID, ContractPost>
 	>; // queries contract for all connections associated with a user
-	register(params: Partial<ContractUser>): Promise<this>;
-	update(params: Partial<ContractUser>): Promise<this>;
-	post(params: Partial<ContractPost>): Promise<this>;
-	follow(params: {
-		address: string;
+	register(params: ContractUserWritable): Promise<this>;
+	updateUser(params: Partial<ContractUserWritable>): Promise<this>;
+	updatePosition(params: {
+		roomId: string;
+		position: ContractPosition;
 	}): Promise<this>;
+	post(params: ContractPostWritable): Promise<this>;
+	follow(params: { address: string }): Promise<this>;
+	unfollow(params: { address: string }): Promise<this>;
 }
 
 export const gatherEventEmitter = new EventEmitter();
@@ -153,9 +177,20 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 		return JSON.parse(Messages[0].Data) as Record<ArweaveID, ContractUser>;
 	}
 
+	async getRoom({
+		roomId,
+	}: { roomId?: string | undefined }): Promise<Record<string, ContractRoom>> {
+		const { Messages } = await this.ao.dryrun({
+			process: this.processId,
+			tags: [{ name: "Action", value: "GetRoom" }],
+			data: JSON.stringify({ roomId }),
+		});
+		return JSON.parse(Messages[0].Data) as Record<ArweaveID, ContractRoom>;
+	}
+
 	async getPosts({
-		userId,
-	}: { userId?: ArweaveID } = {}): Promise<Record<ArweaveID, ContractPost>> {
+		roomId,
+	}: { roomId?: string } = {}): Promise<Record<ArweaveID, ContractPost>> {
 		const { Messages } = await this.ao.dryrun({
 			process: this.processId,
 			tags: [{ name: "Action", value: "GetPosts" }],
@@ -165,17 +200,17 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			ContractPost
 		>;
 		// return all posts if no userId or signer is provided
-		if (!userId) return posts;
+		if (!roomId) return posts;
 		// return all posts for a specific user if userId is provided
 		return Object.fromEntries(
-			Object.entries(posts).filter(([_, value]) => value.author === userId),
+			Object.entries(posts).filter(([_, value]) => value.room === roomId),
 		);
 	}
 
-	async register(user: Partial<ContractUser>): Promise<this> {
+	async register(userNew: ContractUserWritable): Promise<this> {
 		const registrationId = await this.ao.message({
 			process: this.processId,
-			data: JSON.stringify(user),
+			data: JSON.stringify(userNew),
 			tags: [{ name: "Action", value: "Register" }],
 			signer: createDataItemSigner(window.arweaveWallet),
 		});
@@ -184,11 +219,11 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 		return this;
 	}
 
-	async update(user: Partial<ContractUser>): Promise<this> {
+	async updateUser(userUpdate: Partial<ContractUserWritable>): Promise<this> {
 		const registrationId = await this.ao.message({
 			process: this.processId,
-			data: JSON.stringify(user),
-			tags: [{ name: "Action", value: "Update" }],
+			data: JSON.stringify(userUpdate),
+			tags: [{ name: "Action", value: "UpdateUser" }],
 			signer: createDataItemSigner(window.arweaveWallet),
 		});
 		console.debug(`User updated with id ${registrationId}`);
@@ -196,7 +231,25 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 		return this;
 	}
 
-	async post(post: Partial<ContractPost>): Promise<this> {
+	async updatePosition({
+		roomId,
+		position,
+	}: { roomId: string; position: ContractPosition }): Promise<this> {
+		const registrationId = await this.ao.message({
+			process: this.processId,
+			data: JSON.stringify({ roomId, position }),
+			tags: [{ name: "Action", value: "UpdatePosition" }],
+			signer: createDataItemSigner(window.arweaveWallet),
+		});
+		console.debug(
+			`User position in ${roomId} to ${JSON.stringify(
+				position,
+			)} with id ${registrationId}`,
+		);
+		return this;
+	}
+
+	async post(post: ContractPostWritable): Promise<this> {
 		const registrationId = await this.ao.message({
 			process: this.processId,
 			data: JSON.stringify(post),
@@ -227,7 +280,7 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			tags: [{ name: "Action", value: "Unfollow" }],
 			signer: createDataItemSigner(window.arweaveWallet),
 		});
-		console.debug(`Followed ${data.address} with id ${registrationId}`);
+		console.debug(`Unfollowed ${data.address} with id ${registrationId}`);
 
 		return this;
 	}

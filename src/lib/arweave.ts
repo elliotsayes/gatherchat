@@ -1,10 +1,14 @@
 import Arweave from "arweave";
 
-const arweave = new Arweave({});
+export const defaultArweave = Arweave.init({
+	host: "arweave.net",
+	protocol: "https",
+	port: 443,
+});
 
 export const addressFromPublicKey = async (
 	publicKey: Buffer,
 ): Promise<string> => {
-	const owner = arweave.utils.bufferTob64Url(publicKey);
-	return await arweave.wallets.ownerToAddress(owner);
+	const owner = defaultArweave.utils.bufferTob64Url(publicKey);
+	return await defaultArweave.wallets.ownerToAddress(owner);
 };
