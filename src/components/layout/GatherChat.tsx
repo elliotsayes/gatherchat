@@ -114,9 +114,6 @@ export const GatherChat = ({
 									following: {},
 								},
 								savedPosition: aoUsersState.user.savedPosition,
-								localPosition: aoUsersState.user.savedPosition,
-								localDirection: "left",
-								isRunning: false,
 							},
 							otherPlayers: [],
 						}}

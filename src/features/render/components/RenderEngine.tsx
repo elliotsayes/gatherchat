@@ -45,11 +45,6 @@ export type RenderEngineState = {
 		id: ArweaveID;
 		profile: ContractUser;
 		savedPosition?: ContractPosition;
-
-		// Transient
-		localPosition: ContractPosition;
-		localDirection: "left" | "right";
-		isRunning: boolean;
 	};
 	otherPlayers: Array<{
 		id: ArweaveID;
@@ -134,8 +129,15 @@ export const RenderEngine = ({
 		y: 0,
 	});
 
-	const movementDispatch = useMovement({
-		localPosition: state.player.localPosition,
+	const {
+		optimisticState,
+		activeMovement,
+		move,
+	} = useMovement({
+		initialState: {
+			position: state.player.savedPosition ?? state.room.spawnPosition,
+			direction: "right",
+		},
 		onPositionUpdate: events.onPositionUpdate,
 		collision: world.collision,
 	});
@@ -154,7 +156,7 @@ export const RenderEngine = ({
 					//@ts-expect-error
 					if (flags.enableMovement && movementKeys.includes(e.key)) {
 						e.preventDefault();
-						movementDispatch(keyToMovementMap[e.key as MovementKey]);
+						move(keyToMovementMap[e.key as MovementKey]);
 					}
 				}}
 				onMouseMove={(e) => {
@@ -190,11 +192,11 @@ export const RenderEngine = ({
 									to={{
 										x:
 											stageSize.width / 2 -
-											(state.player.localPosition.x + 1) * tileSize.x +
+											(optimisticState.position.x + 1) * tileSize.x +
 											tileSize.x / 2,
 										y:
 											stageSize.height / 2 -
-											(state.player.localPosition.y + 1) * tileSize.y +
+											(optimisticState.position.y + 1) * tileSize.y +
 											tileSize.y / 2,
 									}}
 								>
@@ -215,7 +217,7 @@ export const RenderEngine = ({
 											{flags.showOtherPlayers &&
 												state.otherPlayers.map((otherPlayer) => {
 													// check if within two tiles
-													const selfPos = state.player.localPosition;
+													const selfPos = optimisticState.position;
 													const otherPos = otherPlayer.savedPosition;
 
 													const distance =
@@ -287,8 +289,8 @@ export const RenderEngine = ({
 									<NamedAvatar
 										name={state.player.profile.name}
 										seed={state.player.profile.avatar}
-										animationName={state.player.isRunning ? "run" : "idle"}
-										flipX={state.player.localDirection === "left"}
+										animationName={activeMovement.state === "moving" ? "run" : "idle"}
+										flipX={optimisticState.direction === "left"}
 										scale={3}
 										isPlaying={true}
 									/>

@@ -1,5 +1,5 @@
 import type { Position } from "@/features/render/lib/schema";
-import { type Reducer, useCallback, useReducer } from "react";
+import { type Reducer, useCallback, useReducer, useState } from "react";
 
 export const movementKeys = [
 	"ArrowUp",
@@ -121,47 +121,68 @@ const activeMovementReducer =
 		return movementState;
 	};
 
+type PlayerTransform = {
+	position: Position;
+	direction: FaceDirection;
+};
+
 export function useMovement({
-	localPosition,
+	initialState,
 	onPositionUpdate,
 	collision,
 }: {
-	localPosition: Position;
+	initialState: PlayerTransform;
 	onPositionUpdate: (args: {
 		newPosition?: Position;
 		newDirection?: FaceDirection;
 	}) => void;
 	collision: (args: Position) => boolean;
 }) {
+	const [optimisticState, setOptimisticState] = useState<PlayerTransform>(initialState);
+
 	const executeMovement = useCallback(
 		(direction: MovementDirection) => {
 			// @ts-expect-error
-			const newDirection = faceDirections.includes(direction)
+			const candidateDirection = faceDirections.includes(direction)
 				? (direction as FaceDirection)
 				: undefined;
-			const newPosition = calculateNextPosition(localPosition, direction);
+			const testPosition = calculateNextPosition(optimisticState.position, direction);
 
-			if (collision(newPosition)) return;
+			const newPosition = collision(testPosition)
+				? undefined
+				: testPosition;
+			
+			const newDirection = optimisticState.direction === candidateDirection
+				? undefined
+				: candidateDirection;
+
+			setOptimisticState({
+				position: newPosition ?? optimisticState.position,
+				direction: newDirection ?? optimisticState.direction,
+			});
 
 			onPositionUpdate({
 				newPosition,
 				newDirection,
 			});
 		},
-		[localPosition, onPositionUpdate, collision],
+		[optimisticState, onPositionUpdate, collision],
 	);
 
 	const stopMovement = useCallback(() => {
-		movementDispatch({ type: "stop" });
+		dispatch({ type: "stop" });
 	}, []);
 
-	const [_, movementDispatch] = useReducer(
+	const [activeMovement, dispatch] = useReducer(
 		activeMovementReducer({ execute: executeMovement, stop: stopMovement }),
 		{
 			state: "idle",
 		},
 	);
 
-	return (direction: MovementDirection) =>
-		movementDispatch({ type: "move", direction });
+	return {
+		optimisticState,
+		activeMovement,
+		move: (direction: MovementDirection) => dispatch({ type: "move", direction })
+	};
 }

@@ -75,7 +75,7 @@ function Render() {
 					parentRef={containerRef}
 					lastResized={0}
 					world={{
-						collision: () => true,
+						collision: () => false,
 						tileSet: (
 							<TileLoader alias="drum" src="assets/tiles/drum.json">
 								<ObstacleLayout
@@ -206,9 +206,6 @@ function Render() {
 								x: 0,
 								y: 0,
 							},
-							localPosition: position,
-							localDirection: "left",
-							isRunning: false,
 						},
 						otherPlayers: [],
 					}}

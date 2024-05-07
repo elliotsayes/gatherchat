@@ -57,7 +57,7 @@ export const GameLoader = () => {
 				roomId,
 			});
 		},
-		refetchInterval: 5000,
+		refetchInterval: 500,
 		// enabled: arweaveId !== undefined,
 	});
 
