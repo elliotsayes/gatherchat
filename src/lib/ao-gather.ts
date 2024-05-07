@@ -1,13 +1,13 @@
 import { createDataItemSigner } from "@permaweb/aoconnect";
 /* @ts-ignore */
 import type { Services } from "@permaweb/aoconnect/dist/index.common";
-import { ArconnectSigner, type ArweaveSigner } from "arbundles";
+import type { ArconnectSigner, ArweaveSigner } from "arbundles";
 import type Arweave from "arweave";
 import EventEmitter from "eventemitter3";
 import { AoProvider } from "./ao";
 import { defaultArweave } from "./arweave";
 
-export const aoGatherProcessId = "bSw7XwUs6xdhPeUb4OwmdYxNIqst7ksKQXYeCM6t0kM";
+export const aoGatherProcessId = "_dxDnCZ5sEtaxMJCyA6GZth5CBC_CPU3qvedOsKq5uM";
 
 export type ArweaveID = string;
 export type ArweavePublicKey = string;
@@ -49,7 +49,7 @@ export type ContractRoom = {
 	playerPositions: Record<ArweaveID, ContractPosition>;
 };
 
-export type DefaultRooms = Array<ContractRoom>;
+export type RoomIndex = Array<ContractRoom>;
 
 export type ContractPost = {
 	created: number;
@@ -75,13 +75,14 @@ export type GatherSigner = ArweaveSigner | ArconnectSigner;
 
 // Interface defining the structure for AoGather which includes a signer of type RtcSigner and WebRTC management
 export interface AoGather {
-	signer: GatherSigner;
+	// signer: GatherSigner;
 	arweave: Arweave;
 	getUsers(): Promise<Record<ArweaveID, ContractUser>>;
-	getRoom(params: { roomId?: string }): Promise<
+	getRoomIndex(): Promise<RoomIndex>;
+	getRoom(params?: { roomId: string }): Promise<
 		Record<ArweaveID, ContractRoom>
 	>;
-	getPosts(params: { roomId?: string }): Promise<
+	getPosts(params?: { roomId: string }): Promise<
 		Record<ArweaveID, ContractPost>
 	>; // queries contract for all connections associated with a user
 	register(params: ContractUserWritable): Promise<this>;
@@ -99,14 +100,14 @@ export const gatherEventEmitter = new EventEmitter();
 
 // Class AoGatherProvider extends from AoProvider and implements the AoGather interface
 export class AoGatherProvider extends AoProvider implements AoGather {
-	signer: GatherSigner;
+	// signer: GatherSigner;
 	arweave: Arweave;
 	updateInterval: any;
 
 	constructor({
 		arweave = defaultArweave,
 		processId = aoGatherProcessId,
-		signer = new ArconnectSigner(window.arweaveWallet, defaultArweave as any),
+		// signer = new ArconnectSigner(window.arweaveWallet, defaultArweave as any),
 		...params
 	}: {
 		signer?: GatherSigner;
@@ -120,7 +121,7 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			scheduler: params.scheduler,
 			connectConfig: params.connectConfig,
 		});
-		this.signer = signer;
+		// this.signer = signer;
 		this.arweave = arweave;
 	}
 
@@ -177,13 +178,19 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 		return JSON.parse(Messages[0].Data) as Record<ArweaveID, ContractUser>;
 	}
 
-	async getRoom({
-		roomId,
-	}: { roomId?: string | undefined }): Promise<Record<string, ContractRoom>> {
+	async getRoomIndex(): Promise<RoomIndex> {
+		const { Messages } = await this.ao.dryrun({
+			process: this.processId,
+			tags: [{ name: "Action", value: "GetRoomIndex" }],
+		});
+		return JSON.parse(Messages[0].Data) as RoomIndex;
+	}
+
+	async getRoom(params?: { roomId: string }): Promise<Record<string, ContractRoom>> {
 		const { Messages } = await this.ao.dryrun({
 			process: this.processId,
 			tags: [{ name: "Action", value: "GetRoom" }],
-			data: JSON.stringify({ roomId }),
+			data: params !== undefined ? JSON.stringify(params) : undefined,
 		});
 		return JSON.parse(Messages[0].Data) as Record<ArweaveID, ContractRoom>;
 	}

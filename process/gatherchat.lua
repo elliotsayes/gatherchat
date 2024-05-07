@@ -78,6 +78,13 @@ Posts = Posts or {
     type = "text", -- if "video" or "image" then "TextOrTxId" is a TxId
     textOrTxId = "Welcome to GatherChat!",
   },
+  testPost2 = {
+    created = 1713833416559,
+    author = "testUser1",
+    room = "HolidayHangout",
+    type = "text", -- if "video" or "image" then "TextOrTxId" is a TxId
+    textOrTxId = "I love being on holiday!",
+  },
 }
 
 Handlers.add(
@@ -89,8 +96,8 @@ Handlers.add(
 )
 
 Handlers.add(
-  "GetDefaultRooms",
-  Handlers.utils.hasMatchingTag("Action", "GetDefaultRooms"),
+  "GetRoomIndex",
+  Handlers.utils.hasMatchingTag("Action", "GetRoomIndex"),
   function(msg)
     ao.send({ Target = msg.From, Status = "OK", Data = json.encode(DefaultRooms) })
   end
@@ -102,7 +109,7 @@ Handlers.add(
   function(msg)
     if string.len(msg.Data) > 0 then
       local data = json.decode(msg.Data)
-      if data.roomId then
+      if type(data) == "table" then
         local room = Rooms[data.roomId]
         if room then
           ao.send({ Target = msg.From, Status = "OK", Data = json.encode(room) })
@@ -122,7 +129,7 @@ Handlers.add(
   function(msg)
     if string.len(msg.Data) > 0 then
       local data = json.decode(msg.Data)
-      if data.roomId then
+      if type(data) == "table" then
         local RoomPosts = {}
         for postId, post in pairs(Posts) do
           if post.room == data.roomId then
@@ -157,7 +164,6 @@ Handlers.add(
     ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Users[address]) })
   end
 )
-
 
 Handlers.add(
   "UpdateUser",
