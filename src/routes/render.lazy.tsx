@@ -1,12 +1,12 @@
 // import { AoGatherProvider } from "@/ao/lib/ao-gather";
-import InteractableSprite from "@/render/components/InteractableSprite";
-import { RenderEngine } from "@/render/components/RenderEngine";
-import { TileLoader } from "@/render/components/TileLoader";
-import type { Position } from "@/render/lib/schema";
+import InteractableSprite from "@/features/render/components/InteractableSprite";
+import { RenderEngine } from "@/features/render/components/RenderEngine";
+import { TileLoader } from "@/features/render/components/TileLoader";
+import type { Position } from "@/features/render/lib/schema";
 import {
 	ObstacleLayout,
 	blockLocations,
-} from "@/rooms/components/ObstacleLayout";
+} from "@/features/rooms/components/ObstacleLayout";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 

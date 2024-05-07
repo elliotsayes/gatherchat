@@ -5,7 +5,7 @@ import {
 	createRouter,
 } from "@tanstack/react-router";
 import ReactDOM from "react-dom/client";
-import { queryClient } from "./ao/lib/query";
+import { queryClient } from "./features/ao/lib/query";
 import "./globals.css";
 import { loadSw } from "./loadSw";
 

@@ -1,3 +1,4 @@
+import InteractableSprite from "@/features/render/components/InteractableSprite";
 import { Stage } from "@pixi/react";
 import { Container } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
@@ -6,7 +7,6 @@ import { AlphaFilter } from "pixi.js";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import InteractableToon from "../../avatar/components/InteractableToon";
 import NamedAvatar from "../../avatar/components/NamedAvatar";
-import InteractableSprite from "../../render/components/InteractableSprite";
 import { gameMachine } from "../lib/machine";
 import type { AoToonSaved, AoUsersState } from "../lib/model";
 import { Tilemap3, blockLocations } from "./TileMap3";

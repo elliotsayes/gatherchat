@@ -2,7 +2,7 @@ import {
 	zExpires,
 	zPaymentAddress,
 	type zUdlInputSchema,
-} from "@/udl/lib/schema";
+} from "@/features/udl/lib/schema";
 import type { z } from "zod";
 
 // const udlV1LicenseTxId = "yRj4a5KMctX_uOmKWCFJIjmY8DeJcusVk6-HzLiM_t8";

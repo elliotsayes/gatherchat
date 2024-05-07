@@ -3,8 +3,8 @@ import type {
 	ContractPosition,
 	ContractRoom,
 	ContractUser,
-} from "@/ao/lib/ao-gather";
-import type { Position } from "@/render/lib/schema";
+} from "@/features/ao/lib/ao-gather";
+import type { Position } from "@/features/render/lib/schema";
 import { Stage } from "@pixi/react";
 import { Container, Sprite } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";

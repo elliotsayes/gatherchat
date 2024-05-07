@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { randomSeed } from "@/avatar/lib/edit";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -14,6 +13,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { randomSeed } from "@/features/avatar/lib/edit";
 import { useState } from "react";
 import { CharacterCreator } from "./CharacterCreator";
 

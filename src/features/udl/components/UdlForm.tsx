@@ -25,7 +25,7 @@ import {
 	zLicenseFeeCurrency,
 	zLicenseType,
 	zUdlInputSchema,
-} from "@/udl/lib/schema";
+} from "@/features/udl/lib/schema";
 import { formatTagHuman } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ResetIcon } from "@radix-ui/react-icons";

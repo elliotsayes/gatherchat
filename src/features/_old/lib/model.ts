@@ -1,4 +1,4 @@
-import type { Position } from "@/render/lib/schema";
+import type { Position } from "@/features/render/lib/schema";
 import type { ContractPost } from "../../ao/lib/ao-gather";
 
 export type AoToonBase = {

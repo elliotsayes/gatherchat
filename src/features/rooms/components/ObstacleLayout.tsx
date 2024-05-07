@@ -1,4 +1,4 @@
-import type { Dimension } from "@/render/lib/schema";
+import type { Dimension } from "@/features/render/lib/schema";
 import { PixiComponent, applyDefaultProps } from "@pixi/react";
 import { CompositeTilemap } from "@pixi/tilemap";
 

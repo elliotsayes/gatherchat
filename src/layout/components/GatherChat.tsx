@@ -1,19 +1,23 @@
-import type { AoPostsState, AoToonSaved, AoUsersState } from "@/_old/lib/model";
-import type { ContractPost } from "@/ao/lib/ao-gather";
 import {
 	ResizableHandle,
 	ResizablePanel,
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import type {
+	AoPostsState,
+	AoToonSaved,
+	AoUsersState,
+} from "@/features/_old/lib/model";
+import type { ContractPost } from "@/features/ao/lib/ao-gather";
+import { RenderEngine } from "@/features/render/components/RenderEngine";
+import { TileLoader } from "@/features/render/components/TileLoader";
+import { ObstacleLayout } from "@/features/rooms/components/ObstacleLayout";
 import { timeAgo } from "@/utils";
-import { RenderEngine } from "@/render/components/RenderEngine";
-import { TileLoader } from "@/render/components/TileLoader";
-import { ObstacleLayout } from "@/rooms/components/ObstacleLayout";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { ChatBox } from "../../post/components/ChatBox";
-import { ProfileView } from "../../profile/components/ProfileView";
-import { SetupForm } from "../../profile/components/SetupForm";
+import { ChatBox } from "../../features/post/components/ChatBox";
+import { ProfileView } from "../../features/profile/components/ProfileView";
+import { SetupForm } from "../../features/profile/components/SetupForm";
 import { SidePanel, type SidePanelState } from "./SidePanel";
 
 export type UploadInfo = Pick<ContractPost, "type" | "textOrTxId">;
