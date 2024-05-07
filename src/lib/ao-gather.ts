@@ -94,7 +94,10 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 	constructor({
 		arweave = defaultArweave,
 		processId = aoGatherProcessId,
-		signer = new ArconnectSigner(window.arweaveWallet, defaultArweave as unknown as any),
+		signer = new ArconnectSigner(
+			window.arweaveWallet,
+			defaultArweave as unknown as any,
+		),
 		...params
 	}: {
 		signer?: Signer;
@@ -169,7 +172,9 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 		return JSON.parse(Messages[0].Data) as RoomIndex;
 	}
 
-	async getRoom(params?: { roomId: string }): Promise<Record<string, ContractRoom>> {
+	async getRoom(params?: { roomId: string }): Promise<
+		Record<string, ContractRoom>
+	> {
 		const { Messages } = await this.ao.dryrun({
 			process: this.processId,
 			tags: [{ name: "Action", value: "GetRoom" }],
