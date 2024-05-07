@@ -12,3 +12,8 @@ export type Rect = {
 	pos: Position;
 	dim: Dimension;
 };
+
+export type Bounds = {
+	tl: Position;
+	br: Position;
+}

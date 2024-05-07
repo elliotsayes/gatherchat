@@ -1,13 +1,9 @@
-// import { AoGatherProvider } from "@/ao/lib/ao-gather";
-import InteractableSprite from "@/features/render/components/InteractableSprite";
 import { RenderEngine } from "@/features/render/components/RenderEngine";
-import { TileLoader } from "@/features/render/components/TileLoader";
 import {
-	ObstacleLayout,
-	blockLocations,
+	createWorld,
 } from "@/features/rooms/components/ObstacleLayout";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 export const Route = createLazyFileRoute("/render")({
 	component: Render,
@@ -18,14 +14,17 @@ export const tileSize = {
 	y: 64,
 };
 
-// const aoGather = new AoGatherProvider();
-
 function Render() {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	const [widthSlider, setWidthSlider] = useState(21);
 	const [heightSlider, setHeightSlider] = useState(12);
 	const [windowGapSlider, setWindowGapSlider] = useState(3);
+
+	const world = useMemo(() => createWorld({
+		w: widthSlider,
+		h: heightSlider,
+	}, windowGapSlider), [widthSlider, heightSlider, windowGapSlider]);
 
 	return (
 		<div>
@@ -71,109 +70,7 @@ function Render() {
 				<RenderEngine
 					parentRef={containerRef}
 					lastResized={0}
-					world={{
-						collision: () => false,
-						tileSet: (
-							<TileLoader alias="drum" src="assets/tiles/drum.json">
-								<ObstacleLayout
-									tileSet={"room"}
-									roomSizeTiles={{
-										w: widthSlider,
-										h: heightSlider,
-									}}
-									windowSpacing={windowGapSlider}
-								/>
-							</TileLoader>
-						),
-						sprites: (
-							<>
-								<InteractableSprite
-									image="assets/sprite/board.png"
-									scale={4}
-									anchor={{ x: 0.5, y: 0.45 }}
-									// onclick={() => events.onViewFeed()}
-									x={tileSize.x * 5}
-									y={tileSize.y * 1.25}
-								/>
-								<InteractableSprite
-									active={false}
-									image="assets/sprite/cal.png"
-									scale={4}
-									anchor={{ x: 0.5, y: 0.5 }}
-									// onclick={() => onViewFeed()}
-									x={tileSize.x * 2}
-									y={tileSize.y * 1}
-								/>
-								<InteractableSprite
-									active={false}
-									image="assets/sprite/couch.png"
-									scale={4}
-									anchor={{ x: 0.5, y: 0.5 }}
-									// onclick={() => onViewFeed()}
-									x={tileSize.x * 19}
-									y={tileSize.y * 2}
-								/>
-								<InteractableSprite
-									active={false}
-									image="assets/sprite/mona.png"
-									scale={4}
-									anchor={{ x: 0.5, y: 0.5 }}
-									// onclick={() => onViewFeed()}
-									x={tileSize.x * 8}
-									y={tileSize.y * 1.25}
-								/>
-								<InteractableSprite
-									active={false}
-									image="assets/sprite/stary.png"
-									scale={4}
-									anchor={{ x: 0.5, y: 0.5 }}
-									// onclick={() => onViewFeed()}
-									x={tileSize.x * 11}
-									y={tileSize.y * 1.25}
-								/>
-								<InteractableSprite
-									active={false}
-									image="assets/sprite/tv.png"
-									scale={4}
-									anchor={{ x: 0.5, y: 0.5 }}
-									// onclick={() => onViewFeed()}
-									x={tileSize.x * 14}
-									y={tileSize.y * 1}
-								/>
-								<InteractableSprite
-									active={false}
-									image="assets/sprite/scream.png"
-									scale={4}
-									anchor={{ x: 0.5, y: 0.5 }}
-									// onclick={() => onViewFeed()}
-									x={tileSize.x * 17}
-									y={tileSize.y * 1.25}
-								/>
-								{blockLocations(
-									{
-										w: widthSlider,
-										h: heightSlider,
-									},
-									{
-										w: 4,
-										h: 4,
-									},
-								).map((blockLocation, i) => (
-									<InteractableSprite
-										active={false}
-										key={i.toString()}
-										zIndex={100}
-										image="assets/sprite/tree.png"
-										scale={4}
-										anchor={{ x: 0.5, y: 0.5 }}
-										// onclick={() => onViewFeed()}
-										x={tileSize.x * (blockLocation.x + 0.5)}
-										y={tileSize.y * (blockLocation.y + 1)}
-									/>
-								))}
-							</>
-						),
-					}}
+					world={world}
 					state={{
 						room: {
 							created: 0,
@@ -200,8 +97,8 @@ function Render() {
 								following: {},
 							},
 							savedPosition: {
-								x: 0,
-								y: 0,
+								x: 5,
+								y: 5,
 							},
 						},
 						otherPlayers: [],
