@@ -7,10 +7,15 @@ import {
 	AoGatherProvider,
 	type ContractUser,
 } from "@/features/ao/lib/ao-gather";
+import { SetupForm } from "@/features/profile/components/SetupForm";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import {
+	GatherChat,
+	type UploadInfo,
+} from "../../../components/layout/GatherChat";
 import {
 	Card,
 	CardContent,
@@ -18,11 +23,6 @@ import {
 	CardTitle,
 } from "../../../components/ui/card";
 import { Toaster } from "../../../components/ui/sonner";
-import {
-	GatherChat,
-	type UploadInfo,
-} from "../../../layout/components/GatherChat";
-import { SetupForm } from "../../profile/components/SetupForm";
 
 const aoGather = new AoGatherProvider({});
 
