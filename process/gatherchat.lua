@@ -109,12 +109,10 @@ Handlers.add(
         else
           ao.send({ Target = msg.From, Status = "Error", Message = "Room not found." })
         end
-      else
-        ao.send({ Target = msg.From, Status = "Error", Message = "Missing roomId." })
+        return
       end
-    else
-      ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Rooms) })
     end
+    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Rooms) })
   end
 )
 
@@ -122,6 +120,19 @@ Handlers.add(
   "GetPosts",
   Handlers.utils.hasMatchingTag("Action", "GetPosts"),
   function(msg)
+    if string.len(msg.Data) > 0 then
+      local data = json.decode(msg.Data)
+      if data.roomId then
+        local RoomPosts = {}
+        for postId, post in pairs(Posts) do
+          if post.room == data.roomId then
+            RoomPosts[postId] = post
+          end
+        end
+        ao.send({ Target = msg.From, Status = "OK", Data = json.encode(RoomPosts) })
+        return
+      end
+    end
     ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Posts) })
   end
 )
@@ -182,15 +193,14 @@ Handlers.add(
             x = data.position.x,
             y = data.position.y,
           }
+          ao.send({ Target = msg.From, Status = "OK" })
         else
           ao.send({ Target = msg.From, Status = "Error", Message = "Room not found." })
         end
-      else
-        ao.send({ Target = msg.From, Status = "Error", Message = "Missing roomId." })
+        return
       end
-    else
-      ao.send({ Target = msg.From, Status = "Error", Message = "Missing data." })
     end
+    ao.send({ Target = msg.From, Status = "Error", Message = "Missing roomId." })
   end
 )
 
