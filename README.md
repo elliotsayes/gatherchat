@@ -4,6 +4,10 @@ Read this guide to get started with the project.
 
 ## Basic Instructions
 
+Prerequisites:
+- Node.js 21.x
+
+Scripts:
 - Install: `npm install`
 - Run: `npm run dev`
 - Lint: `npm run lint`
@@ -20,6 +24,18 @@ Read this guide to get started with the project.
 - [#/game route](src/routes/game.lazy.tsx) (src/routes/game.lazy.tsx)
 - [#/render route (demo of RoomLayout)](src/routes/render.lazy.tsx) (src/routes/render.lazy.tsx)
 
+## Key libraries
+- [React](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [shadcn/ui](https://ui.shadcn.com/)
+- Game rendering: [pixi.js](https://pixijs.com/)
+  - [@pixi/react](https://pixijs.io/pixi-react/)
+  - [@pixi/react-animated](https://pixijs.io/pixi-react/react-spring/)
+  - [@pixi/tilemap](https://github.com/pixijs/tilemap)
+- [@tanstack/react-query](https://tanstack.com/query/latest)
+- [@tanstack/react-router](https://tanstack.com/router/latest/)
+- [@permaweb/aoconnect](https://cookbook_ao.g8way.io/guides/aoconnect/aoconnect.html)
 
 # Original Readme Below
 
