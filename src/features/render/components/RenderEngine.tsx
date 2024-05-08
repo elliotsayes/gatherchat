@@ -10,7 +10,7 @@ import { Container, Sprite } from "@pixi/react-animated";
 import { Spring } from "@react-spring/web";
 import { AlphaFilter } from "pixi.js";
 import { useState } from "react";
-import InteractableToon from "../../avatar/components/InteractableToon";
+import { InteractableAvatar } from "../../avatar/components/InteractableAvatar";
 import NamedAvatar from "../../avatar/components/NamedAvatar";
 import {
   type FaceDirection,
@@ -201,7 +201,7 @@ export const RenderEngine = ({
                       {flags.showObjects && world.spritesBg}
                       {flags.showOtherPlayers &&
                         state.otherPlayers.map((otherPlayer) => (
-                          <InteractableToon
+                          <InteractableAvatar
                             key={otherPlayer.id}
                             name={otherPlayer.profile.name}
                             seed={otherPlayer.profile.avatar}

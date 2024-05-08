@@ -3,13 +3,13 @@ import type React from "react";
 import { useState } from "react";
 import NamedAvatar from "./NamedAvatar";
 
-interface InteractableToonProps
+interface InteractableAvatarProps
   extends Omit<React.ComponentProps<typeof NamedAvatar>, "scale"> {
   scale: number;
 }
 
-const InteractableToon: React.FC<InteractableToonProps> = (
-  props: InteractableToonProps,
+export const InteractableAvatar: React.FC<InteractableAvatarProps> = (
+  props: InteractableAvatarProps,
 ) => {
   const { scale, ...namedAvatarProps } = props;
 
@@ -29,5 +29,3 @@ const InteractableToon: React.FC<InteractableToonProps> = (
     </Spring>
   );
 };
-
-export default InteractableToon;

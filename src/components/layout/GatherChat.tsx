@@ -297,7 +297,6 @@ export const GatherChat = ({
                   setSelectedPlayer(undefined);
                   setProileKey(Date.now());
                 }}
-                onCall={() => {}}
                 onClose={() => setSelectedPlayer(undefined)}
               />
             ) : (

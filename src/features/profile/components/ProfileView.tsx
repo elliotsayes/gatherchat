@@ -6,15 +6,13 @@ import { AvatarStandalone } from "../../avatar/components/AvatarStandalone";
 
 interface ProfileViewProps {
   otherPlayer: RenderOtherPlayer;
-  onChangeFollow: (toonInfo: RenderOtherPlayer) => void;
-  onCall: (toonInfo: RenderOtherPlayer) => void;
+  onChangeFollow: (otherPlayer: RenderOtherPlayer) => void;
   onClose: () => void;
 }
 
 export const ProfileView = ({
   otherPlayer,
   onChangeFollow,
-  // onCall,
   onClose,
 }: ProfileViewProps) => {
   return (
@@ -50,9 +48,6 @@ export const ProfileView = ({
           >
             {otherPlayer.isFollowedByUser ? "Unfollow" : "Follow"}
           </Button>
-          {/* <Button type="button" onClick={() => onCall(toonInfo)}>
-						Call
-					</Button> */}
         </div>
       </div>
     </div>
