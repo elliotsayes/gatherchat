@@ -30,14 +30,23 @@ Scripts:
 
 ## Important source files
 - [Gather Chat aos process LUA code](process/gatherchat.lua) (process/gatherchat.lua)
+  - Edit this to extend the game contract to add custom rooms, more profile options, etc
 - [Gather Chat aos process JS interface](src/features/ao/lib/ao-gather.ts) (src/features/ao/lib/ao-gather.ts)
+  - For interfacing with the game contract from the JS frontend
 - [Contract loading logic](src/features/ao/components/GatherContractLoader.tsx) (src/features/ao/components/GatherContractLoader.tsx)
+  - For controlling the load logic of the contract data
 - [Wallet loading logic](src/features/ao/components/WalletLoader.tsx) (src/features/ao/components/WalletLoader.tsx)
+  - For controlling how to load the user's wallet (e.g. via ArConnect)
 - [Main game screen](src/components/layout/GatherChat.tsx) (src/components/layout/GatherChat.tsx)
+  - The main game screen, which includes the game logic, world view, chat, profile view, etc
 - [Game view rendering](src/features/render/components/RenderEngine.tsx) (src/features/render/components/RenderEngine.tsx)
+  - The main world view rendering logic
 - [/game route](src/routes/game.lazy.tsx) (src/routes/game.lazy.tsx)
+  - Route for loading and displaying the main game screen
 - ["DecoratedRoom" world generator](src/features/worlds/DecoratedRoom.tsx) (src/features/worlds/DecoratedRoom.tsx)
+  - Example of a custom paramaterizable world generator. Modify this to change the world generation logic, or use it as a template for creating new world generators
 - [/render route (demo of DecoratedRoom)](src/routes/render.lazy.tsx) (src/routes/render.lazy.tsx)
+  - Route for rendering a world using the DecoratedRoom generator. You can play with cusomize the parameters and see how it affects the world generation
 
 ## Acknowledgements
 - [Atticus](https://github.com/atticusofsparta) for the original project idea + base LUA contract/TS Interface
