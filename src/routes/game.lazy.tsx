@@ -27,6 +27,7 @@ function Game() {
               }
               return (
                 <GatherChat
+                  key={state.worldId}
                   playerAddress={arweaveAddress}
                   state={state}
                   events={events}
