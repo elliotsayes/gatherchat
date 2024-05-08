@@ -45,7 +45,7 @@ export const GatherChat = ({
   const [profileKey, setProileKey] = useState(0);
 
   const [sidePanelState, setSidePanelState] =
-    useState<SidePanelState>("profile");
+    useState<SidePanelState>("feed");
 
   const [selectedPlayer, setSelectedPlayer] = useState<
     RenderOtherPlayer | undefined

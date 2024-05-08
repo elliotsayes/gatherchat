@@ -39,6 +39,7 @@ export const ProfileView = ({
         animationName={"jump"}
         isPlaying={true}
       />
+      <p>In World: {otherPlayer.profile.currentWorldId}</p>
       <p>Last activity: {timeAgo.format(otherPlayer.profile.lastSeen)}</p>
       <div className="flex flex-col gap-2 items-center">
         <div className="flex flex-row gap-2 items-center">
