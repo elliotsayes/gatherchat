@@ -6,14 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "preview": "vite preview",
     "test": "vitest",
+    "deploy": "aos gcdev --load process/gatherchat.lua",
+    "gen": "npx tsx ./scripts/generateDrum.ts",
     "format": "npx @biomejs/biome format --write ./src ./scripts",
     "lint": "npx @biomejs/biome lint --apply ./src ./scripts",
     "lint-unsafe": "npx @biomejs/biome lint --apply-unsafe ./src ./scripts",
     "check": "npx @biomejs/biome check --apply ./src ./scripts",
-    "check-unsafe": "npx @biomejs/biome check --apply-unsafe ./src ./scripts",
-    "gen": "npx tsx ./scripts/generateDrum.ts",
-    "preview": "vite preview"
+    "check-unsafe": "npx @biomejs/biome check --apply-unsafe ./src ./scripts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",

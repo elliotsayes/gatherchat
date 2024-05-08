@@ -13,6 +13,7 @@ Scripts:
 - Lint: `npm run lint`
 - Build: `npm run build`
 - Test: `npm run test`
+- Deploy (aos): `npm run deploy`
 
 ## Key libraries used
 - [React](https://reactjs.org/)
