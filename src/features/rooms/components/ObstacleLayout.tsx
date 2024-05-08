@@ -78,9 +78,21 @@ interface Props {
 
 const setupInstance = (instance: CompositeTilemap, props: Props) => {
 	instance.clear();
-	instance.scale.set(4);
+	instance.scale.set(tileScale);
 
 	const { tileSet, roomSizeTiles, windowSpacing } = props;
+
+
+	// Background tiles
+	for (let x = -20; x < roomSizeTiles.w + 20; x++) {
+		for (let y = -20; y < roomSizeTiles.h + 20; y++) {
+			instance.tile(
+				`${tileSet}_3_2`,
+				x * tileSizeBase.w,
+				y * tileSizeBase.h,
+			);
+		}
+	}
 
 	for (let x = 0; x < roomSizeTiles.w; x++) {
 		for (let y = 0; y < roomSizeTiles.h; y++) {
