@@ -1,21 +1,41 @@
-# How To
-- Make sure you have ArConnect installed
-- Go to one of the links below
-- Have fun :)
+# WEAVERS HACKERS GUIDE
 
-## Permaweb Link
-[https://gatherchat.ar-io.dev/](https://gatherchat.ar-io.dev/)
+Read this guide to get started with the project.
 
-## Backup Link
-[https://gatherchat.vercel.app/](https://gatherchat.vercel.app/)
+## Basic Instructions
 
-# Developement
+Prerequisites:
+- Node.js 21.x
 
-- Install: `bun install`
-- Run: `bun run dev`
-- Lint: `bun run lint`
-- Build: `bun run build`
-- Test: `bun run test`
+Scripts:
+- Install: `npm install`
+- Run: `npm run dev`
+- Lint: `npm run lint`
+- Build: `npm run build`
+- Test: `npm run test`
+
+## Important files
+- [Gather Chat aos process LUA code](process/gatherchat.lua) (process/gatherchat.lua)
+- [Gather Chat aos process JS interface](src/features/ao/lib/ao-gather.ts) (src/features/ao/lib/ao-gather.ts)
+- [Contract loading logic](src/features/ao/components/GatherContractLoader.tsx) (src/features/ao/components/GatherContractLoader.tsx)
+- [Wallet loading logic](src/features/ao/components/WalletLoader.tsx) (src/features/ao/components/WalletLoader.tsx)
+- [Main game screen](src/components/layout/GatherChat.tsx) (src/components/layout/GatherChat.tsx)
+- [Game view rendering](src/features/render/components/RenderEngine.tsx) (src/features/render/components/RenderEngine.tsx)
+- [#/game route](src/routes/game.lazy.tsx) (src/routes/game.lazy.tsx)
+- [#/render route (demo of RoomLayout)](src/routes/render.lazy.tsx) (src/routes/render.lazy.tsx)
+
+## Key libraries
+- [React](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [shadcn/ui](https://ui.shadcn.com/)
+- Game rendering: [pixi.js](https://pixijs.com/)
+  - [@pixi/react](https://pixijs.io/pixi-react/)
+  - [@pixi/react-animated](https://pixijs.io/pixi-react/react-spring/)
+  - [@pixi/tilemap](https://github.com/pixijs/tilemap)
+- [@tanstack/react-query](https://tanstack.com/query/latest)
+- [@tanstack/react-router](https://tanstack.com/router/latest/)
+- [@permaweb/aoconnect](https://cookbook_ao.g8way.io/guides/aoconnect/aoconnect.html)
 
 # Original Readme Below
 
