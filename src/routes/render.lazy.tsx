@@ -1,5 +1,13 @@
 import { RenderEngine } from "@/features/render/components/RenderEngine";
-import { createWorld } from "@/features/rooms/components/ObstacleLayout";
+import {
+	type ObstacleType,
+	ObstacleTypes,
+	createDecoratedRoom,
+} from "@/features/worlds/DecoratedRoom";
+import {
+	type RoomTileSet,
+	RoomTileSets,
+} from "@/features/worlds/components/RoomLayout";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
 
@@ -15,6 +23,9 @@ export const tileSize = {
 function Render() {
 	const containerRef = useRef<HTMLDivElement>(null);
 
+	const [tileSet, setTileSet] = useState<RoomTileSet>("room");
+	const [obstacleType, setObstacleType] = useState<ObstacleType>("tree");
+
 	const [widthSlider, setWidthSlider] = useState(21);
 	const [heightSlider, setHeightSlider] = useState(12);
 	const [windowGapSlider, setWindowGapSlider] = useState(3);
@@ -23,24 +34,27 @@ function Render() {
 
 	const world = useMemo(
 		() =>
-			createWorld(
+			createDecoratedRoom(
+				tileSet,
 				{
 					w: widthSlider,
 					h: heightSlider,
 				},
+				windowGapSlider,
 				{
 					w: blockSpacingWidthSlider,
 					h: blockSpacingHeightSlider,
 				},
-				"room",
-				windowGapSlider,
+				obstacleType,
 			),
 		[
+			tileSet,
 			widthSlider,
 			heightSlider,
 			blockSpacingWidthSlider,
 			blockSpacingHeightSlider,
 			windowGapSlider,
+			obstacleType,
 		],
 	);
 
@@ -49,10 +63,36 @@ function Render() {
 			<h1>Render</h1>
 			<div>
 				<label>
+					Tile Set:
+					<select
+						value={tileSet}
+						onChange={(e) => setTileSet(e.target.value as RoomTileSet)}
+					>
+						{RoomTileSets.map((set) => (
+							<option key={set} value={set}>
+								{set}
+							</option>
+						))}
+					</select>
+				</label>
+				<label>
+					Obstacle Type:
+					<select
+						value={obstacleType}
+						onChange={(e) => setObstacleType(e.target.value as ObstacleType)}
+					>
+						{ObstacleTypes.map((type) => (
+							<option key={type} value={type}>
+								{type}
+							</option>
+						))}
+					</select>
+				</label>
+				<label>
 					Width:
 					<input
 						type="range"
-						min={1}
+						min={4}
 						max={30}
 						value={widthSlider}
 						onChange={(e) => setWidthSlider(Number.parseInt(e.target.value))}
@@ -63,7 +103,7 @@ function Render() {
 					Height:
 					<input
 						type="range"
-						min={1}
+						min={4}
 						max={30}
 						value={heightSlider}
 						onChange={(e) => setHeightSlider(Number.parseInt(e.target.value))}
@@ -74,7 +114,7 @@ function Render() {
 					Block Spacing Width:
 					<input
 						type="range"
-						min={1}
+						min={2}
 						max={10}
 						value={blockSpacingWidthSlider}
 						onChange={(e) =>
@@ -87,7 +127,7 @@ function Render() {
 					Block Spacing Height:
 					<input
 						type="range"
-						min={1}
+						min={2}
 						max={10}
 						value={blockSpacingHeightSlider}
 						onChange={(e) =>

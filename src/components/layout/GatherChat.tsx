@@ -11,7 +11,7 @@ import type {
 import type { ContractPost } from "@/features/ao/lib/ao-gather";
 import { RenderEngine } from "@/features/render/components/RenderEngine";
 import { TileLoader } from "@/features/render/components/TileLoader";
-import { ObstacleLayout } from "@/features/rooms/components/ObstacleLayout";
+import { RoomLayout } from "@/features/worlds/components/RoomLayout";
 import { timeAgo } from "@/utils";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
@@ -75,7 +75,7 @@ export const GatherChat = ({
 						world={{
 							tileSet: (
 								<TileLoader alias="drum" src="assets/tiles/drum.json">
-									<ObstacleLayout
+									<RoomLayout
 										tileSet={"room"}
 										roomSizeTiles={{
 											w: 21,
