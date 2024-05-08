@@ -52,7 +52,7 @@ Scripts:
 ## Acknowledgements
 - [Atticus](https://github.com/atticusofsparta) for the original project idea + base LUA contract/TS Interface
 - Avatar Generator: based on [pixeldudesmaker](https://masterpose.itch.io/pixelduuuuudesmaker) by [masterpose](https://masterpose.itch.io/), which is in turn based on [0x72's original version](https://0x72.itch.io/pixeldudesmaker)
-- `drummondbass` for the original pixel art of tilesets and non-player sprites
+- [Lamington](https://linktr.ee/lamington) for the original pixel art for tilesets and non-player sprites, created especially for Gather Chat!
 - [Weavers](https://www.weaversofficial.com/) for running the hackathon!
 
 ## Licenses
