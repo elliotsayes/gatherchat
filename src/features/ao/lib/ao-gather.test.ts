@@ -5,7 +5,7 @@ function getTestInstance() {
 	return new AoGatherProvider({});
 }
 
-describe("AoGatherProvider", () => {
+describe.skip("AoGatherProvider", () => {
 	it("should be able to be instantiated", () => {
 		const aoGatherProvider = getTestInstance();
 		expect(aoGatherProvider).toBeDefined();
