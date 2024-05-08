@@ -6,8 +6,8 @@ import {
   type ContractRoomIndex,
   type ContractUser,
 } from "@/features/ao/lib/ao-gather";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 export type GatherContractState = {
   worldIndex: ContractRoomIndex;
@@ -35,13 +35,13 @@ interface Props {
 }
 
 export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
-  const [worldId, setWorldId] = useState(initialWorldId);
+  const [worldId, setWorldId] = useState(initialWorldId ?? "WelcomeLobby");
 
   const {
     data: users,
     error: errorUsers,
     refetch: refetchUsers,
-  } = useQuery({
+  } = useSuspenseQuery({
     queryKey: ["users"],
     queryFn: async () => {
       console.log("fetching users");
@@ -52,7 +52,7 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
     // enabled: arweaveAddress !== undefined,
   });
 
-  const { data: worldIndex } = useQuery({
+  const { data: worldIndex } = useSuspenseQuery({
     queryKey: ["roomIndex"],
     queryFn: async () => {
       console.log("fetching room Index");
@@ -63,34 +63,27 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
     // enabled: arweaveAddress !== undefined,
   });
 
-  useEffect(() => {
-    if (worldIndex !== undefined && worldId === undefined) {
-      setWorldId(worldIndex[0]);
-    }
-  }, [worldId, worldIndex]);
-
   const {
     data: room,
     // error: errorRoom,
     // refetch: refetchRoom,
-  } = useQuery({
+  } = useSuspenseQuery({
     queryKey: ["room", worldId],
     queryFn: async () => {
       console.log("fetching room");
       aoGather.ensureStarted();
       return aoGather.getRoom({
-        roomId: worldId!,
+        roomId: worldId,
       });
     },
     refetchInterval: 500,
-    enabled: worldId !== undefined,
   });
 
   const {
     data: posts,
     error: errorPosts,
     refetch: refetchPosts,
-  } = useQuery({
+  } = useSuspenseQuery({
     queryKey: ["posts", worldId],
     queryFn: async () => {
       console.log("fetching posts");
@@ -105,20 +98,6 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
     return (
       <div className="h-screen w-screen text-center flex flex-col justify-center">
         <p className="text-xl">Error Loading</p>
-      </div>
-    );
-  }
-
-  if (
-    users === undefined ||
-    worldIndex === undefined ||
-    worldId === undefined ||
-    room === undefined ||
-    posts === undefined
-  ) {
-    return (
-      <div className="h-screen w-screen text-center flex flex-col justify-center">
-        <p className="text-xl">Loading...</p>
       </div>
     );
   }

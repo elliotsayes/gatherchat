@@ -174,6 +174,7 @@ export const GatherChat = ({
             }}
             flags={{
               enableMovement: true,
+              animateMovement: true,
               showWorld: true,
               showPlayer: true,
               showOtherPlayers: true,

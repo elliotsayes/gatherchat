@@ -80,6 +80,7 @@ export type RenderEngineEvents = {
 
 export type RenderEngineFlags = {
   enableMovement: boolean;
+  animateMovement: boolean,
 
   showWorld: boolean;
   showPlayer: boolean;
@@ -182,6 +183,7 @@ export const RenderEngine = ({
                       (optimisticState.position.y + 1) * tileSize.y +
                       tileSize.y / 2,
                   }}
+                  immediate={!flags.animateMovement}
                 >
                   {(props) => (
                     <Container anchor={{ x: 0.5, y: 0.5 }} {...props}>
@@ -293,6 +295,7 @@ export const RenderEngine = ({
                       (optimisticState.position.y + 1) * tileSize.y +
                       tileSize.y / 2,
                   }}
+                  immediate={!flags.animateMovement}
                 >
                   {(props) => (
                     <Container anchor={{ x: 0.5, y: 0.5 }} {...props}>

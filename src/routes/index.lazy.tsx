@@ -1,13 +1,32 @@
 import { GatherChatDemo } from "@/components/layout/GatherChatDemo";
 import { buttonVariants } from "@/components/ui/button";
-import { GatherContractLoader } from "@/features/ao/components/GatherContractLoader";
+import { GatherContractLoader, type GatherContractState } from "@/features/ao/components/GatherContractLoader";
 import { cn } from "@/utils";
 import { Link, createLazyFileRoute } from "@tanstack/react-router";
-import { useRef } from "react";
+import { Suspense, useRef } from "react";
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
 });
+
+const defaultState: GatherContractState = {
+  worldIndex: ["WelcomeLobby"],
+  worldId: "WelcomeLobby",
+  room: {
+    created: 0,
+    lastActivity: 0,
+    name: "",
+    description: "",
+    theme: "",
+    spawnPosition: {
+      x: 5,
+      y: 4,
+    },
+    playerPositions: {}
+  },
+  users: {},
+  posts: {}
+}
 
 function Index() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -62,11 +81,17 @@ function Index() {
         </p>
       </div>
       <div className="z-0 absolute w-[100%] h-[100%] overflow-hidden">
-        <GatherContractLoader>
-          {(state) => (
-            <GatherChatDemo containerRef={containerRef} state={state} />
+        <Suspense
+          fallback={(
+            <GatherChatDemo containerRef={containerRef} state={defaultState}/>
           )}
-        </GatherContractLoader>
+        >
+          <GatherContractLoader>
+            {(state) => (
+              <GatherChatDemo containerRef={containerRef} state={state} />
+            )}
+          </GatherContractLoader>
+        </Suspense>
       </div>
     </div>
   );

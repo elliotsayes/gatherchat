@@ -90,7 +90,8 @@ export const GatherChatDemo = ({
         onPlayerClick: () => {},
       }}
       flags={{
-        enableMovement: true,
+        enableMovement: false,
+        animateMovement: false,
         showWorld: true,
         showPlayer: true,
         showOtherPlayers: true,
