@@ -35,12 +35,14 @@ interface SetupFormProps {
 	onSubmit: (values: z.infer<typeof formWithSeed>) => void;
 	initialUsername?: string;
 	initialSeed?: string;
+	submitDisabled?: boolean;
 }
 
 export const SetupForm = ({
 	onSubmit: onSubmitProp,
 	initialUsername,
 	initialSeed,
+	submitDisabled = false,
 }: SetupFormProps) => {
 	// 1. Define your form.
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -84,7 +86,12 @@ export const SetupForm = ({
 					initialSeed={avatarSeed}
 					onSeedChange={setAvatarSeed}
 				/>
-				<Button type="submit">Submit</Button>
+				<Button
+					type="submit"
+					disabled={submitDisabled || !form.formState.isValid}
+				>
+					Submit
+				</Button>
 			</form>
 		</Form>
 	);
