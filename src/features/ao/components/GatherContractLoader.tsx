@@ -7,8 +7,7 @@ import {
 	type ContractUser,
 } from "@/features/ao/lib/ao-gather";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
-import { throttle } from "throttle-debounce";
+import { useEffect, useState } from "react";
 
 export type GatherContractState = {
 	worldIndex: ContractRoomIndex;
@@ -36,7 +35,7 @@ interface Props {
 }
 
 export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
-	const [worldId, setWorldId] = useState(initialWorldId ?? "WelcomeLobby");
+	const [worldId, setWorldId] = useState(initialWorldId);
 
 	const {
 		data: users,
@@ -64,6 +63,12 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
 		// enabled: arweaveAddress !== undefined,
 	});
 
+	useEffect(() => {
+		if (worldIndex !== undefined && worldId === undefined) {
+			setWorldId(worldIndex[0]);
+		}
+	}, [worldId, worldIndex]);
+
 	const {
 		data: room,
 		// error: errorRoom,
@@ -74,11 +79,11 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
 			console.log("fetching room");
 			aoGather.ensureStarted();
 			return aoGather.getRoom({
-				roomId: worldId,
+				roomId: worldId!,
 			});
 		},
 		refetchInterval: 500,
-		// enabled: arweaveAddress !== undefined,
+		enabled: worldId !== undefined,
 	});
 
 	const {
@@ -96,22 +101,6 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
 		// enabled: arweaveAddress !== undefined,
 	});
 
-	const throttledUpdatePositionAndRefetch = useMemo(
-		() =>
-			throttle(
-				250,
-				async (args) => {
-					await aoGather.updatePosition(args);
-					await refetchUsers();
-				},
-				{
-					noTrailing: false,
-					noLeading: false,
-				},
-			),
-		[refetchUsers],
-	);
-
 	if (errorUsers !== null || errorPosts !== null) {
 		return (
 			<div className="h-screen w-screen text-center flex flex-col justify-center">
@@ -123,6 +112,7 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
 	if (
 		users === undefined ||
 		worldIndex === undefined ||
+		worldId === undefined ||
 		room === undefined ||
 		posts === undefined
 	) {
@@ -143,8 +133,8 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
 
 	const events: GatherContactEvents = {
 		setWorldId: async (worldId) => {
-			return setWorldId(worldId);
-			// Will automatically refetch room and posts
+			setWorldId(worldId);
+			// Will automatically refetch room and posts, so no need to do this manually
 		},
 		register: async (args) => {
 			await aoGather.register(args);
@@ -155,8 +145,8 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
 			await refetchUsers();
 		},
 		updatePosition: async (args) => {
-			// This one might be called a lot, so throttle it
-			throttledUpdatePositionAndRefetch(args);
+			await aoGather.updatePosition(args);
+			await refetchUsers();
 		},
 		post: async (args) => {
 			await aoGather.post(args);

@@ -46,7 +46,7 @@ export type ContractRoom = {
 	playerPositions: Record<ArweaveID, ContractPosition>;
 };
 
-export type ContractRoomIndex = Array<ContractRoom>;
+export type ContractRoomIndex = Array<string>;
 
 export type ContractPost = {
 	created: number;

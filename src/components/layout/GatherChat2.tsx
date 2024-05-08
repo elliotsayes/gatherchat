@@ -21,6 +21,7 @@ import { ChatBox } from "../../features/post/components/ChatBox";
 import { ProfileView } from "../../features/profile/components/ProfileView";
 import { SetupForm } from "../../features/profile/components/SetupForm";
 import { SidePanel, type SidePanelState } from "./SidePanel";
+import { throttle } from "throttle-debounce";
 
 export type UploadInfo = Pick<ContractPost, "type" | "textOrTxId">;
 
@@ -46,6 +47,21 @@ export const GatherChat2 = ({
 	const [selectedPlayer, setSelectedPlayer] = useState<
 		RenderOtherPlayer | undefined
 	>(undefined);
+	
+	const throttledUpdatePosition = useMemo(
+		() =>
+			throttle(
+				250,
+				async (args) => {
+					contractEvents.updatePosition(args);
+				},
+				{
+					noTrailing: false,
+					noLeading: false,
+				},
+			),
+		[contractEvents.updatePosition],
+	);
 
 	// Convert raw GatherContractState to RenderEngineState
 	const renderEngineState: RenderEngineState = useMemo(() => {
@@ -117,7 +133,7 @@ export const GatherChat2 = ({
 						events={{
 							onPositionUpdate: ({ newPosition /* newDirection */ }): void => {
 								if (newPosition) {
-									contractEvents.updatePosition({
+									throttledUpdatePosition({
 										roomId: "WelcomeLobby",
 										position: newPosition,
 									});
