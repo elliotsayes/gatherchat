@@ -1,4 +1,6 @@
-import { GameLoader } from "@/features/ao/components/GameLoader";
+import { GatherChat } from "@/components/layout/GatherChat";
+import { GatherContractLoader } from "@/features/ao/components/GatherContractLoader";
+import WalletLoader from "@/features/ao/components/WalletLoader";
 import { createLazyFileRoute } from "@tanstack/react-router";
 
 export const Route = createLazyFileRoute("/game")({
@@ -6,5 +8,19 @@ export const Route = createLazyFileRoute("/game")({
 });
 
 function Game() {
-	return <GameLoader />;
+	return (
+		<WalletLoader>
+			{(arweaveAddress) => (
+				<GatherContractLoader>
+					{(state, events) => (
+						<GatherChat
+							playerAddress={arweaveAddress}
+							state={state}
+							events={events}
+						/>
+					)}
+				</GatherContractLoader>
+			)}
+		</WalletLoader>
+	);
 }

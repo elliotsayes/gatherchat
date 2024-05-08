@@ -4,58 +4,144 @@ import {
 	ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import type {
-	AoPostsState,
-	AoToonSaved,
-	AoUsersState,
-} from "@/features/_old/lib/model";
+	GatherContactEvents,
+	GatherContractState,
+} from "@/features/ao/components/GatherContractLoader";
 import type { ContractPost } from "@/features/ao/lib/ao-gather";
-import { RenderEngine } from "@/features/render/components/RenderEngine";
-import { TileLoader } from "@/features/render/components/TileLoader";
-import { RoomLayout } from "@/features/worlds/components/RoomLayout";
+import {
+	RenderEngine,
+	type RenderEngineState,
+	type RenderOtherPlayer,
+} from "@/features/render/components/RenderEngine";
+import { createDecoratedRoom } from "@/features/worlds/DecoratedRoom";
 import { timeAgo } from "@/utils";
-import { useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
+import { throttle } from "throttle-debounce";
 import { ChatBox } from "../../features/post/components/ChatBox";
-// import { ProfileView } from "../../features/profile/components/ProfileView";
+import { ProfileView } from "../../features/profile/components/ProfileView";
 import { SetupForm } from "../../features/profile/components/SetupForm";
 import { SidePanel, type SidePanelState } from "./SidePanel";
 
 export type UploadInfo = Pick<ContractPost, "type" | "textOrTxId">;
 
 interface GatherChatProps {
-	aoUsersState: AoUsersState;
-	aoPostsState: AoPostsState;
-	onUpdateProfile(profile: {
-		name: string;
-		avatarSeed: string;
-	}): Promise<boolean>;
-	onUpdatePosition(position: { x: number; y: number }): Promise<boolean>;
-	onFollow(data: { address: string }): Promise<boolean>;
-	onUnfollow(data: { address: string }): Promise<boolean>;
-	onUpload(upload: UploadInfo): Promise<boolean>;
+	playerAddress: string;
+	state: GatherContractState;
+	events: GatherContactEvents;
 }
 
 export const GatherChat = ({
-	aoUsersState,
-	aoPostsState,
-	onUpdateProfile,
-	onUpdatePosition,
-	// onFollow,
-	// onUnfollow,
-	onUpload,
+	playerAddress,
+	state: contractState,
+	events: contractEvents,
 }: GatherChatProps) => {
-	console.log({ aoState: aoUsersState });
-
 	const containerRef = useRef<HTMLDivElement>(null);
+	const [lastResized, setLastResized] = useState(0);
+
+	// To force rerender of profile view
+	const [profileKey, setProileKey] = useState(0);
 
 	const [sidePanelState, setSidePanelState] =
 		useState<SidePanelState>("profile");
 
-	const [_, setSelectedToon] = useState<AoToonSaved | undefined>(undefined);
+	const [selectedPlayer, setSelectedPlayer] = useState<
+		RenderOtherPlayer | undefined
+	>(undefined);
+	const [animatedPlayer, setAnimatedPlayer] = useState<
+		RenderOtherPlayer | undefined
+	>();
 
-	const [lastResized, setLastResized] = useState(0);
+	const selectAndAnimatePlayer = useCallback((player: RenderOtherPlayer) => {
+		setSelectedPlayer(player);
+		setAnimatedPlayer(player);
+		setTimeout(() => {
+			setAnimatedPlayer(undefined);
+		}, 1000);
+	}, []);
 
-	// const [profileKey, setProileKey] = useState(0);
+	const throttledUpdatePosition = useMemo(
+		() =>
+			throttle(
+				250,
+				async (args) => {
+					contractEvents.updatePosition(args);
+				},
+				{
+					noTrailing: false,
+					noLeading: false,
+				},
+			),
+		[contractEvents.updatePosition],
+	);
+
+	// Convert raw GatherContractState to RenderEngineState
+	const renderEngineState: RenderEngineState = useMemo(() => {
+		const player = contractState.users[playerAddress];
+
+		return {
+			room: {
+				id: contractState.worldId,
+				data: contractState.room,
+			},
+			player: {
+				id: playerAddress,
+				profile: player,
+				savedPosition: contractState.room.playerPositions[playerAddress],
+			},
+			otherPlayers: Object.entries(contractState.users)
+				.filter(
+					([address, player]) =>
+						address !== playerAddress &&
+						player.currentRoom === contractState.room.name,
+				)
+				.map(([address, otherPlayer]) => {
+					return {
+						id: address,
+						profile: otherPlayer,
+						savedPosition: contractState.room.playerPositions[address],
+
+						// Derived
+						isFollowingUser: Object.keys(otherPlayer.following).includes(
+							address,
+						),
+						isFollowedByUser: Object.keys(player.following).includes(
+							playerAddress,
+						),
+						isInRoom: true,
+						isActivated: false,
+						isTalking: false,
+					};
+				}),
+		};
+	}, [playerAddress, contractState]);
+
+	const renderEngineStateTransient = useMemo(() => {
+		const stateCopy = window.structuredClone(renderEngineState);
+		if (animatedPlayer !== undefined) {
+			stateCopy.otherPlayers.filter(
+				(p) => p.id === animatedPlayer.id,
+			)[0].isActivated = true;
+		}
+		return stateCopy;
+	}, [renderEngineState, animatedPlayer]);
+
+	const world = useMemo(
+		() =>
+			createDecoratedRoom(
+				"room",
+				{
+					w: 21,
+					h: 12,
+				},
+				3,
+				{
+					w: 4,
+					h: 4,
+				},
+			),
+		[],
+	);
 
 	return (
 		<ResizablePanelGroup direction="horizontal" className="h-screen">
@@ -70,66 +156,19 @@ export const GatherChat = ({
 					<RenderEngine
 						parentRef={containerRef}
 						lastResized={lastResized}
-						world={{
-							tileSet: (
-								<TileLoader alias="drum" src="assets/tiles/drum.json">
-									<RoomLayout
-										tileSet={"room"}
-										roomSizeTiles={{
-											w: 21,
-											h: 12,
-										}}
-										windowSpacing={3}
-									/>
-								</TileLoader>
-							),
-							spritesBg: <></>,
-							spritesFg: <></>,
-							collision: () => false,
-						}}
-						state={{
-							room: {
-								id: "WelcomeLobby",
-								data: {
-									created: 0,
-									lastActivity: 0,
-									name: "",
-									description: "",
-									theme: "",
-									spawnPosition: {
-										x: 0,
-										y: 0,
-									},
-									playerPositions: {},
-								},
-							},
-							player: {
-								id: "",
-								profile: {
-									processId: "",
-									created: 0,
-									lastSeen: 0,
-									name: aoUsersState.user.displayName,
-									avatar: aoUsersState.user.avatarSeed,
-									status: "",
-									currentRoom: "",
-									following: {},
-								},
-								savedPosition: aoUsersState.user.savedPosition,
-							},
-							otherPlayers: [],
-						}}
+						world={world}
+						state={renderEngineStateTransient}
 						events={{
-							onPositionUpdate: ({ newPosition, newDirection }): void => {
-								console.log({ newPosition, newDirection });
+							onPositionUpdate: ({ newPosition /* newDirection */ }): void => {
 								if (newPosition) {
-									onUpdatePosition(newPosition);
+									throttledUpdatePosition({
+										roomId: contractState.worldId,
+										position: newPosition,
+									});
 								}
 							},
 							onPlayerClick: (player): void => {
-								setSelectedToon(
-									aoUsersState.otherToons.find((t) => t.id === player.id),
-								);
+								player && selectAndAnimatePlayer(player);
 							},
 						}}
 						flags={{
@@ -150,19 +189,22 @@ export const GatherChat = ({
 					activityFeed={
 						<div className="min-h-min h-auto flex flex-col gap-4 py-4">
 							<ul className="w-[100%] min-h-0 max-h-full h-[calc(100vh-140px)] overflow-y-auto px-2">
-								{aoPostsState.map((post) => {
-									const toon = [
-										...aoUsersState.otherToons,
-										aoUsersState.user,
-									].find((t) => t.id === post.author);
-									const isUser = aoUsersState.user.id === post.author;
-									const isLink = !isUser && toon;
+								{Object.keys(contractState.posts).map((postId) => {
+									const post = contractState.posts[postId];
+									const selectedPlayer = [
+										renderEngineState.player,
+										...renderEngineState.otherPlayers,
+									].find((t) => t.id === post.author) as
+										| RenderOtherPlayer
+										| undefined;
+									const isUser = renderEngineState.player.id === post.author;
+									const isLink = !isUser && selectedPlayer;
 									return (
 										<li
-											key={post.id}
-											className={`${toon?.isFollowing ? "bg-blue-100" : ""} ${
-												isUser ? "bg-gray-200" : ""
-											} break-words max-w-sm`}
+											key={postId}
+											className={`${
+												selectedPlayer?.isFollowedByUser ? "bg-blue-100" : ""
+											} ${isUser ? "bg-gray-200" : ""} break-words max-w-sm`}
 										>
 											<button
 												className={"text-muted-foreground text-underline px-1"}
@@ -170,14 +212,14 @@ export const GatherChat = ({
 												onClick={
 													isLink
 														? () => {
-																setSelectedToon(toon);
+																selectAndAnimatePlayer(selectedPlayer);
 																setSidePanelState("profile");
 															}
 														: undefined
 												}
 											>
 												{" "}
-												{toon?.displayName ?? post.author}:{" "}
+												{selectedPlayer?.profile.name ?? post.author}:{" "}
 											</button>
 											{post.type === "text" ? (
 												<span>{post.textOrTxId}</span>
@@ -199,10 +241,14 @@ export const GatherChat = ({
 									);
 								})}
 							</ul>
-							<div className="">
+							<div>
 								<ChatBox
 									onSubmit={async (text) => {
-										await onUpload({ type: "text", textOrTxId: text });
+										await contractEvents.post({
+											type: "text",
+											room: contractState.worldId,
+											textOrTxId: text,
+										});
 										toast("Message sent!");
 									}}
 								/>
@@ -211,22 +257,40 @@ export const GatherChat = ({
 					}
 					upload={<p>TODO</p>}
 					profile={
-						<SetupForm
-							onSubmit={(s) => {
-								onUpdateProfile({
-									name: s.username,
-									avatarSeed: s.avatarSeed,
-								}).then((res) => {
-									if (res) {
-										toast("Profile updated!");
+						selectedPlayer ? (
+							<ProfileView
+								key={profileKey}
+								otherPlayer={selectedPlayer}
+								onChangeFollow={async (otherPlayer) => {
+									if (otherPlayer.isFollowedByUser) {
+										await contractEvents.unfollow({ address: otherPlayer.id });
+										toast("Unfollowed!");
 									} else {
-										toast("Update failed!");
+										await contractEvents.follow({ address: otherPlayer.id });
+										toast("Followed!");
 									}
-								});
-							}}
-							initialUsername={aoUsersState.user.displayName}
-							initialSeed={aoUsersState.user.avatarSeed}
-						/>
+									setSelectedPlayer(undefined);
+									setProileKey(Date.now());
+								}}
+								onCall={() => {}}
+								onClose={() => setSelectedPlayer(undefined)}
+							/>
+						) : (
+							<SetupForm
+								onSubmit={(s) => {
+									contractEvents
+										.updateUser({
+											name: s.username,
+											avatar: s.avatarSeed,
+										})
+										.then(() => {
+											toast("Profile updated!");
+										});
+								}}
+								initialUsername={renderEngineState.player.profile.name}
+								initialSeed={renderEngineState.player.profile.avatar}
+							/>
+						)
 					}
 				/>
 			</ResizablePanel>
