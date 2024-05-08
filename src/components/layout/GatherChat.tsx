@@ -168,7 +168,8 @@ export const GatherChat = ({
 								}
 							},
 							onPlayerClick: (player): void => {
-								player && selectAndAnimatePlayer(player);
+								selectAndAnimatePlayer(player);
+								setSidePanelState("profile");
 							},
 						}}
 						flags={{
