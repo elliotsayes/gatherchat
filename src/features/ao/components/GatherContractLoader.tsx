@@ -2,17 +2,17 @@ import {
   AoGatherProvider,
   type ArweaveAddress,
   type ContractPost,
-  type ContractRoom,
-  type ContractRoomIndex,
+  type ContractWorld,
+  type ContractWorldIndex,
   type ContractUser,
 } from "@/features/ao/lib/ao-gather";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 export type GatherContractState = {
-  worldIndex: ContractRoomIndex;
+  worldIndex: ContractWorldIndex;
   worldId: string;
-  room: ContractRoom;
+  world: ContractWorld;
   users: Record<ArweaveAddress, ContractUser>;
   posts: Record<string, ContractPost>;
 };
@@ -30,6 +30,7 @@ interface Props {
   children: (
     gatherContractState: GatherContractState,
     gatherContactEvents: GatherContactEvents,
+    onWorldChange: (worldId: string) => void,
   ) => React.ReactNode;
   initialWorldId?: string;
 }
@@ -53,27 +54,27 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
   });
 
   const { data: worldIndex } = useSuspenseQuery({
-    queryKey: ["roomIndex"],
+    queryKey: ["worldIndex"],
     queryFn: async () => {
-      console.log("fetching room Index");
+      console.log("fetching world Index");
       aoGather.ensureStarted();
-      return aoGather.getRoomIndex();
+      return aoGather.getWorldIndex();
     },
     refetchInterval: 10000,
     // enabled: arweaveAddress !== undefined,
   });
 
   const {
-    data: room,
+    data: world,
     // error: errorRoom,
     // refetch: refetchRoom,
   } = useSuspenseQuery({
-    queryKey: ["room", worldId],
+    queryKey: ["world", worldId],
     queryFn: async () => {
-      console.log("fetching room");
+      console.log("fetching world");
       aoGather.ensureStarted();
-      return aoGather.getRoom({
-        roomId: worldId,
+      return aoGather.getWorld({
+        worldId: worldId,
       });
     },
     refetchInterval: 500,
@@ -88,7 +89,7 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
     queryFn: async () => {
       console.log("fetching posts");
       aoGather.ensureStarted();
-      return aoGather.getPosts({ roomId: worldId });
+      return aoGather.getPosts({ worldId });
     },
     refetchInterval: 5000,
     // enabled: arweaveAddress !== undefined,
@@ -106,7 +107,7 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
     worldId,
     worldIndex,
     users,
-    room,
+    world: world,
     posts,
   };
 
@@ -141,5 +142,5 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
     },
   };
 
-  return children(state, events);
+  return children(state, events, setWorldId);
 };

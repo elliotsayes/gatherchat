@@ -34,20 +34,20 @@ describe.skip("AoGatherProvider", () => {
     expect(aoGatherProvider.getUsers()).resolves.toMatchSnapshot();
   });
 
-  it("should be able to get room index", () => {
+  it("should be able to get world index", () => {
     const aoGatherProvider = getTestInstance();
-    expect(aoGatherProvider.getRoomIndex()).resolves.toMatchSnapshot();
+    expect(aoGatherProvider.getWorldIndex()).resolves.toMatchSnapshot();
   });
 
-  it("should be able to get all rooms", () => {
+  it("should be able to get all worlds", () => {
     const aoGatherProvider = getTestInstance();
-    expect(aoGatherProvider.getRooms()).resolves.toMatchSnapshot();
+    expect(aoGatherProvider.getWorlds()).resolves.toMatchSnapshot();
   });
 
-  it("should be able to get a specific room", () => {
+  it("should be able to get a specific world", () => {
     const aoGatherProvider = getTestInstance();
     expect(
-      aoGatherProvider.getRoom({ roomId: "WelcomeLobby" }),
+      aoGatherProvider.getWorld({ worldId: "WelcomeLobby" }),
     ).resolves.toMatchSnapshot();
   });
 
@@ -56,10 +56,10 @@ describe.skip("AoGatherProvider", () => {
     expect(aoGatherProvider.getPosts()).resolves.toMatchSnapshot();
   });
 
-  it("should be able to get posts from a specific room", () => {
+  it("should be able to get posts from a specific world", () => {
     const aoGatherProvider = getTestInstance();
     expect(
-      aoGatherProvider.getPosts({ roomId: "WelcomeLobby" }),
+      aoGatherProvider.getPosts({ worldId: "WelcomeLobby" }),
     ).resolves.toMatchSnapshot();
   });
 });

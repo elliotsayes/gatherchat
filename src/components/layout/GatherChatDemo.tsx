@@ -2,7 +2,7 @@ import type { GatherContractState } from "@/features/ao/components/GatherContrac
 import { randomSeed } from "@/features/avatar/lib/edit";
 import {
   RenderEngine,
-  type RenderEngineState,
+  type RenderState,
   type RenderPlayer,
 } from "@/features/render/components/RenderEngine";
 import { createDecoratedRoom } from "@/features/worlds/DecoratedRoom";
@@ -19,7 +19,7 @@ export const GatherChatDemo = ({
 }: GatherChat2Props) => {
   const [randomAvatar] = useState(() => randomSeed());
   // Convert raw GatherContractState to RenderEngineState
-  const renderEngineState: RenderEngineState = useMemo(() => {
+  const renderEngineState: RenderState = useMemo(() => {
     const player: RenderPlayer = {
       id: "123",
       profile: {
@@ -29,32 +29,33 @@ export const GatherChatDemo = ({
         name: "You?",
         avatar: randomAvatar,
         status: "",
-        currentRoom: "",
+        currentWorldId: "",
         following: {},
       },
     };
 
     return {
-      room: {
+      world: {
         id: contractState.worldId,
-        data: contractState.room,
+        data: contractState.world,
       },
       player: {
         ...player,
         savedPosition: undefined,
       },
       otherPlayers: Object.entries(contractState.users)
-        .filter(([, player]) => player.currentRoom === contractState.room.name)
+        .filter(([, player]) => player.currentWorldId === contractState.world.name)
         .map(([address, otherPlayer]) => {
           return {
             id: address,
             profile: otherPlayer,
-            savedPosition: contractState.room.playerPositions[address],
+            savedPosition: contractState.world.playerPositions[address],
 
             // Derived
             isFollowingUser: false,
             isFollowedByUser: false,
-            isInRoom: true,
+
+            isInWorld: true,
             isActivated: false,
             isTalking: false,
           };

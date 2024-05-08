@@ -10,7 +10,7 @@ import type {
 import type { ContractPost } from "@/features/ao/lib/ao-gather";
 import {
   RenderEngine,
-  type RenderEngineState,
+  type RenderState,
   type RenderOtherPlayer,
 } from "@/features/render/components/RenderEngine";
 import { createDecoratedRoom } from "@/features/worlds/DecoratedRoom";
@@ -29,12 +29,14 @@ interface GatherChatProps {
   playerAddress: string;
   state: GatherContractState;
   events: GatherContactEvents;
+  onWorldChange: (worldId: string) => void;
 }
 
 export const GatherChat = ({
   playerAddress,
   state: contractState,
   events: contractEvents,
+  onWorldChange,
 }: GatherChatProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [lastResized, setLastResized] = useState(0);
@@ -64,7 +66,10 @@ export const GatherChat = ({
     () =>
       throttle(
         250,
-        async (args) => {
+        async (args: {
+          worldId: string;
+          position: { x: number; y: number };
+        }) => {
           contractEvents.updatePosition(args);
         },
         {
@@ -76,30 +81,30 @@ export const GatherChat = ({
   );
 
   // Convert raw GatherContractState to RenderEngineState
-  const renderEngineState: RenderEngineState = useMemo(() => {
+  const renderEngineState: RenderState = useMemo(() => {
     const player = contractState.users[playerAddress];
 
     return {
-      room: {
+      world: {
         id: contractState.worldId,
-        data: contractState.room,
+        data: contractState.world,
       },
       player: {
         id: playerAddress,
         profile: player,
-        savedPosition: contractState.room.playerPositions[playerAddress],
+        savedPosition: contractState.world.playerPositions[playerAddress],
       },
       otherPlayers: Object.entries(contractState.users)
         .filter(
           ([address, player]) =>
             address !== playerAddress &&
-            player.currentRoom === contractState.room.name,
+            player.currentWorldId === contractState.world.name,
         )
         .map(([address, otherPlayer]) => {
           return {
             id: address,
             profile: otherPlayer,
-            savedPosition: contractState.room.playerPositions[address],
+            savedPosition: contractState.world.playerPositions[address],
 
             // Derived
             isFollowingUser: Object.keys(otherPlayer.following).includes(
@@ -108,7 +113,7 @@ export const GatherChat = ({
             isFollowedByUser: Object.keys(player.following).includes(
               playerAddress,
             ),
-            isInRoom: true,
+            isInWorld: true,
             isActivated: false,
             isTalking: false,
           };
@@ -152,7 +157,21 @@ export const GatherChat = ({
           setLastResized(Date.now());
         }}
       >
-        <div ref={containerRef} className="h-screen">
+        <div ref={containerRef} className="h-screen relative">
+          <div className="absolute top-0 left-0 bg-red-100">
+            {/* World dropdown */}
+            <select
+              onChange={(e) => {
+                onWorldChange(e.target.value);
+              }}
+            >
+              {contractState.worldIndex.map((worldId) => (
+                <option key={worldId} value={worldId}>
+                  {worldId}
+                </option>
+              ))}
+            </select>
+          </div>
           <RenderEngine
             parentRef={containerRef}
             lastResized={lastResized}
@@ -162,7 +181,7 @@ export const GatherChat = ({
               onPositionUpdate: ({ newPosition /* newDirection */ }): void => {
                 if (newPosition) {
                   throttledUpdatePosition({
-                    roomId: contractState.worldId,
+                    worldId: contractState.worldId,
                     position: newPosition,
                   });
                 }
@@ -248,7 +267,7 @@ export const GatherChat = ({
                   onSubmit={async (text) => {
                     await contractEvents.post({
                       type: "text",
-                      room: contractState.worldId,
+                      worldId: contractState.worldId,
                       textOrTxId: text,
                     });
                     toast("Message sent!");

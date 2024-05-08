@@ -11,21 +11,21 @@ Users = Users or {
     name = "Test User :)",
     avatar = "a1204030b070a01", -- pixel art seed
     status = "Hello, World!",
-    currentRoom = "WelcomeLobby",
+    currentWorldId = "WelcomeLobby",
     following = {
       -- testUser2 = true,
     },
   },
 }
 
-DefaultRooms = {
+DefaultWorlds = {
   "WelcomeLobby",
   "ChillZone",
   "HolidayHangout",
 }
 
--- Key: Room ID
-Rooms = Rooms or {
+-- Key: World ID
+Worlds = Worlds or {
   WelcomeLobby = {
     created = 1713833416559,
     lastActivity = 1713833416559,
@@ -74,14 +74,14 @@ Posts = Posts or {
   testPost1 = {
     created = 1713833416559,
     author = "testUser1",
-    room = "WelcomeLobby",
+    worldId = "WelcomeLobby",
     type = "text", -- if "video" or "image" then "TextOrTxId" is a TxId
     textOrTxId = "Welcome to GatherChat!",
   },
   testPost2 = {
     created = 1713833416559,
     author = "testUser1",
-    room = "HolidayHangout",
+    worldId = "HolidayHangout",
     type = "text", -- if "video" or "image" then "TextOrTxId" is a TxId
     textOrTxId = "I love being on holiday!",
   },
@@ -96,30 +96,30 @@ Handlers.add(
 )
 
 Handlers.add(
-  "GetRoomIndex",
-  Handlers.utils.hasMatchingTag("Action", "GetRoomIndex"),
+  "GetWorldIndex",
+  Handlers.utils.hasMatchingTag("Action", "GetWorldIndex"),
   function(msg)
-    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(DefaultRooms) })
+    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(DefaultWorlds) })
   end
 )
 
 Handlers.add(
-  "GetRoom",
-  Handlers.utils.hasMatchingTag("Action", "GetRoom"),
+  "GetWorld",
+  Handlers.utils.hasMatchingTag("Action", "GetWorld"),
   function(msg)
     if string.len(msg.Data) > 0 then
       local data = json.decode(msg.Data)
       if type(data) == "table" then
-        local room = Rooms[data.roomId]
-        if room then
-          ao.send({ Target = msg.From, Status = "OK", Data = json.encode(room) })
+        local world = Worlds[data.worldId]
+        if world then
+          ao.send({ Target = msg.From, Status = "OK", Data = json.encode(world) })
         else
-          ao.send({ Target = msg.From, Status = "Error", Message = "Room not found." })
+          ao.send({ Target = msg.From, Status = "Error", Message = "World not found." })
         end
         return
       end
     end
-    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Rooms) })
+    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Worlds) })
   end
 )
 
@@ -130,13 +130,13 @@ Handlers.add(
     if string.len(msg.Data) > 0 then
       local data = json.decode(msg.Data)
       if type(data) == "table" then
-        local RoomPosts = {}
+        local WorldPosts = {}
         for postId, post in pairs(Posts) do
-          if post.room == data.roomId then
-            RoomPosts[postId] = post
+          if post.worldId == data.worldId then
+            WorldPosts[postId] = post
           end
         end
-        ao.send({ Target = msg.From, Status = "OK", Data = json.encode(RoomPosts) })
+        ao.send({ Target = msg.From, Status = "OK", Data = json.encode(WorldPosts) })
         return
       end
     end
@@ -159,7 +159,7 @@ Handlers.add(
     Users[address].name = data.name
     Users[address].avatar = data.avatar
     Users[address].status = data.status
-    Users[address].currentRoom = data.currentRoom
+    Users[address].currentWorldId = data.currentWorldId
 
     ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Users[address]) })
   end
@@ -177,7 +177,7 @@ Handlers.add(
       if data.name then Users[address].name = data.name end
       if data.avatar then Users[address].avatar = data.avatar end
       if data.status then Users[address].status = data.status end
-      if data.currentRoom then Users[address].currentRoom = data.currentRoom end
+      if data.currentWorldId then Users[address].currentWorldId = data.currentWorldId end
     end
 
     ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Users[address]) })
@@ -193,21 +193,21 @@ Handlers.add(
 
     if string.len(msg.Data) > 0 then
       local data = json.decode(msg.Data)
-      if type(data) == "table" and data.roomId then
-        if Rooms[data.roomId] then
-          Users[address].currentRoom = data.roomId
-          Rooms[data.roomId].playerPositions[address] = {
+      if type(data) == "table" and data.worldId then
+        if Worlds[data.worldId] then
+          Users[address].currentWorldId = data.worldId
+          Worlds[data.worldId].playerPositions[address] = {
             x = data.position.x,
             y = data.position.y,
           }
           ao.send({ Target = msg.From, Status = "OK" })
         else
-          ao.send({ Target = msg.From, Status = "Error", Message = "Room not found." })
+          ao.send({ Target = msg.From, Status = "Error", Message = "World not found." })
         end
         return
       end
     end
-    ao.send({ Target = msg.From, Status = "Error", Message = "Missing roomId." })
+    ao.send({ Target = msg.From, Status = "Error", Message = "Missing worldId." })
   end
 )
 
@@ -262,7 +262,7 @@ Handlers.add(
     Posts[postId].author = address
 
     local data = json.decode(msg.Data)
-    Posts[postId].room = data.room
+    Posts[postId].worldId = data.worldId
     Posts[postId].type = data.type
     Posts[postId].textOrTxId = data.textOrTxId
 

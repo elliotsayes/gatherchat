@@ -156,7 +156,7 @@ function Render() {
           lastResized={0}
           world={world}
           state={{
-            room: {
+            world: {
               id: "WelcomeLobby",
               data: {
                 created: 0,
@@ -180,7 +180,7 @@ function Render() {
                 name: "Elliot",
                 avatar: "a1204030b070a01",
                 status: "",
-                currentRoom: "",
+                currentWorldId: "",
                 following: {},
               },
               savedPosition: {

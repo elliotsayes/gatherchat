@@ -1,7 +1,7 @@
 import type {
   ArweaveID,
   ContractPosition,
-  ContractRoom,
+  ContractWorld,
   ContractUser,
 } from "@/features/ao/lib/ao-gather";
 import type { Position } from "@/features/render/lib/schema";
@@ -36,9 +36,9 @@ export type RenderEngineWorld = {
   collision: (pos: Position) => boolean;
 };
 
-export type RenderRoom = {
+export type RenderWorld = {
   id: string;
-  data: ContractRoom;
+  data: ContractWorld;
 };
 
 export type RenderPlayer = {
@@ -57,15 +57,15 @@ export type RenderOtherPlayer = {
   // Derived
   isFollowedByUser: boolean;
   isFollowingUser: boolean;
-  isInRoom: boolean;
+  isInWorld: boolean;
 
   // Transient
   isActivated: boolean;
   isTalking: boolean;
 };
 
-export type RenderEngineState = {
-  room: RenderRoom;
+export type RenderState = {
+  world: RenderWorld;
   player: RenderPlayer;
   otherPlayers: Array<RenderOtherPlayer>;
 };
@@ -92,7 +92,7 @@ type Props = {
   parentRef: React.RefObject<HTMLDivElement>;
   lastResized: number;
 
-  state: RenderEngineState;
+  state: RenderState;
 
   world: RenderEngineWorld;
   events: RenderEngineEvents;
@@ -119,7 +119,7 @@ export const RenderEngine = ({
 
   const { optimisticState, activeMovement, move } = useMovement({
     initialState: {
-      position: state.player.savedPosition ?? state.room.data.spawnPosition,
+      position: state.player.savedPosition ?? state.world.data.spawnPosition,
       direction: "right",
     },
     onPositionUpdate: events.onPositionUpdate,

@@ -4,7 +4,7 @@ import EventEmitter from "eventemitter3";
 import { AoProvider } from "./ao";
 import { defaultArweave } from "./arweave";
 
-export const aoGatherProcessId = "JdyXCG741z-8SiYCQ6d4cDZ7gg71XRixM3VcFik0dnU";
+export const aoGatherProcessId = "_dxDnCZ5sEtaxMJCyA6GZth5CBC_CPU3qvedOsKq5uM";
 
 export type ArweaveID = string;
 export type ArweavePublicKey = string;
@@ -23,7 +23,7 @@ export type ContractUser = {
   name: string;
   avatar: string;
   status: string;
-  currentRoom: string;
+  currentWorldId: string;
   following: {
     [address: string]: boolean;
   };
@@ -36,7 +36,7 @@ export type ContractUserWritable = Omit<
   "processId" | "created" | "lastSeen"
 >;
 
-export type ContractRoom = {
+export type ContractWorld = {
   created: number;
   lastActivity: number;
   name: string;
@@ -46,12 +46,12 @@ export type ContractRoom = {
   playerPositions: Record<ArweaveID, ContractPosition>;
 };
 
-export type ContractRoomIndex = Array<string>;
+export type ContractWorldIndex = Array<string>;
 
 export type ContractPost = {
   created: number;
   author: string;
-  room: string;
+  worldId: string;
   type: string;
   textOrTxId: string;
 };
@@ -62,16 +62,16 @@ export interface AoGather {
   signer: unknown;
   arweave: Arweave;
   getUsers(): Promise<Record<ArweaveID, ContractUser>>;
-  getRoomIndex(): Promise<ContractRoomIndex>;
-  getRooms(): Promise<Record<ArweaveID, ContractRoom>>;
-  getRoom(params?: { roomId: string }): Promise<ContractRoom>;
-  getPosts(params?: { roomId: string }): Promise<
+  getWorldIndex(): Promise<ContractWorldIndex>;
+  getWorlds(): Promise<Record<ArweaveID, ContractWorld>>;
+  getWorld(params?: { worldId: string }): Promise<ContractWorld>;
+  getPosts(params?: { worldId: string }): Promise<
     Record<ArweaveID, ContractPost>
   >; // queries contract for all connections associated with a user
   register(params: ContractUserWritable): Promise<void>;
   updateUser(params: Partial<ContractUserWritable>): Promise<void>;
   updatePosition(params: {
-    roomId: string;
+    worldId: string;
     position: ContractPosition;
   }): Promise<void>;
   post(params: ContractPostWritable): Promise<void>;
@@ -157,34 +157,34 @@ export class AoGatherProvider extends AoProvider implements AoGather {
     return JSON.parse(Messages[0].Data) as Record<ArweaveID, ContractUser>;
   }
 
-  async getRoomIndex(): Promise<ContractRoomIndex> {
+  async getWorldIndex(): Promise<ContractWorldIndex> {
     const { Messages } = await this.ao.dryrun({
       process: this.processId,
-      tags: [{ name: "Action", value: "GetRoomIndex" }],
+      tags: [{ name: "Action", value: "GetWorldIndex" }],
     });
-    return JSON.parse(Messages[0].Data) as ContractRoomIndex;
+    return JSON.parse(Messages[0].Data) as ContractWorldIndex;
   }
 
-  async getRooms(): Promise<Record<string, ContractRoom>> {
+  async getWorlds(): Promise<Record<string, ContractWorld>> {
     const { Messages } = await this.ao.dryrun({
       process: this.processId,
-      tags: [{ name: "Action", value: "GetRoom" }],
+      tags: [{ name: "Action", value: "GetWorld" }],
     });
-    return JSON.parse(Messages[0].Data) as Record<ArweaveID, ContractRoom>;
+    return JSON.parse(Messages[0].Data) as Record<ArweaveID, ContractWorld>;
   }
 
-  async getRoom(params: { roomId: string }): Promise<ContractRoom> {
+  async getWorld(params: { worldId: string }): Promise<ContractWorld> {
     const { Messages } = await this.ao.dryrun({
       process: this.processId,
-      tags: [{ name: "Action", value: "GetRoom" }],
+      tags: [{ name: "Action", value: "GetWorld" }],
       data: JSON.stringify(params),
     });
-    return JSON.parse(Messages[0].Data) as ContractRoom;
+    return JSON.parse(Messages[0].Data) as ContractWorld;
   }
 
   async getPosts({
-    roomId,
-  }: { roomId?: string } = {}): Promise<Record<ArweaveID, ContractPost>> {
+    worldId,
+  }: { worldId?: string } = {}): Promise<Record<ArweaveID, ContractPost>> {
     const { Messages } = await this.ao.dryrun({
       process: this.processId,
       tags: [{ name: "Action", value: "GetPosts" }],
@@ -194,10 +194,10 @@ export class AoGatherProvider extends AoProvider implements AoGather {
       ContractPost
     >;
     // return all posts if no userId or signer is provided
-    if (!roomId) return posts;
+    if (!worldId) return posts;
     // return all posts for a specific user if userId is provided
     return Object.fromEntries(
-      Object.entries(posts).filter(([_, value]) => value.room === roomId),
+      Object.entries(posts).filter(([_, value]) => value.worldId === worldId),
     );
   }
 
@@ -222,17 +222,17 @@ export class AoGatherProvider extends AoProvider implements AoGather {
   }
 
   async updatePosition({
-    roomId,
+    worldId,
     position,
-  }: { roomId: string; position: ContractPosition }): Promise<void> {
+  }: { worldId: string; position: ContractPosition }): Promise<void> {
     const registrationId = await this.ao.message({
       process: this.processId,
       tags: [{ name: "Action", value: "UpdatePosition" }],
-      data: JSON.stringify({ roomId, position }),
+      data: JSON.stringify({ worldId, position }),
       signer: createDataItemSigner(this.signer),
     });
     console.debug(
-      `User position in ${roomId} to ${JSON.stringify(
+      `User position in ${worldId} to ${JSON.stringify(
         position,
       )} with id ${registrationId}`,
     );

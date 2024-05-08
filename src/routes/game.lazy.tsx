@@ -21,7 +21,7 @@ function Game() {
       <WalletLoader>
         {(arweaveAddress) => (
           <GatherContractLoader>
-            {(state, events) => {
+            {(state, events, onWorldChange) => {
               if (state.users[arweaveAddress] === undefined) {
                 return <Register events={events} />;
               }
@@ -30,6 +30,7 @@ function Game() {
                   playerAddress={arweaveAddress}
                   state={state}
                   events={events}
+                  onWorldChange={onWorldChange}
                 />
               );
             }}
