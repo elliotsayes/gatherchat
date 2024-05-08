@@ -164,6 +164,7 @@ export const GatherChat = ({
               onChange={(e) => {
                 onWorldChange(e.target.value);
               }}
+              defaultValue={contractState.worldId}
             >
               {contractState.worldIndex.map((worldId) => (
                 <option key={worldId} value={worldId}>
