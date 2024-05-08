@@ -96,9 +96,9 @@ export const GatherChat = ({
       },
       otherPlayers: Object.entries(contractState.users)
         .filter(
-          ([address, player]) =>
-            address !== playerAddress &&
-            player.currentWorldId === contractState.world.name,
+          ([otherPlayerAddress, _]) =>
+            otherPlayerAddress !== playerAddress &&
+            contractState.world.playerPositions[otherPlayerAddress] !== undefined,
         )
         .map(([otherPlayerAddress, otherPlayer]) => {
           return {
@@ -113,7 +113,7 @@ export const GatherChat = ({
             isFollowingUser: Object.keys(otherPlayer.following).includes(
               playerAddress,
             ),
-            isInWorld: true,
+            isInWorld: otherPlayer.currentWorldId === contractState.worldId,
             isActivated: false,
             isTalking: false,
           };

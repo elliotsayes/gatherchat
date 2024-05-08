@@ -200,71 +200,34 @@ export const RenderEngine = ({
                       )}
                       {flags.showObjects && world.spritesBg}
                       {flags.showOtherPlayers &&
-                        state.otherPlayers.map((otherPlayer) => {
-                          // check if within two tiles
-                          const selfPos = optimisticState.position;
-                          const otherPos = otherPlayer.savedPosition;
-
-                          const distance =
-                            Math.abs(selfPos.x - otherPos.x) +
-                            Math.abs(selfPos.y - otherPos.y);
-
-                          const withinThreeTiles = distance <= 3;
-
-                          if (withinThreeTiles) {
-                            return (
-                              <InteractableToon
-                                key={otherPlayer.id}
-                                name={otherPlayer.profile.name}
-                                seed={otherPlayer.profile.avatar}
-                                scale={3}
-                                x={
-                                  otherPlayer.savedPosition.x * tileSize.x +
-                                  tileSize.x / 2
-                                }
-                                y={
-                                  otherPlayer.savedPosition.y * tileSize.y +
-                                  tileSize.y / 2
-                                }
-                                isPlaying={true}
-                                animationName={"idle"}
-                                animationSpeed={
-                                  otherPlayer.isActivated ? 0.3 : 0.1
-                                }
-                                onclick={() => {
-                                  events.onPlayerClick(otherPlayer);
-                                }}
-                              />
-                            );
-                            // biome-ignore lint/style/noUselessElse: Readability
-                          } else {
-                            const veryFar = distance < 6;
-                            return (
-                              <NamedAvatar
-                                key={otherPlayer.id}
-                                name={otherPlayer.profile.name}
-                                seed={otherPlayer.profile.avatar}
-                                scale={3}
-                                x={
-                                  otherPlayer.savedPosition.x * tileSize.x +
-                                  tileSize.x / 2
-                                }
-                                y={
-                                  otherPlayer.savedPosition.y * tileSize.y +
-                                  tileSize.y / 2
-                                }
-                                isPlaying={true}
-                                animationName={"idle"}
-                                animationSpeed={0.05}
-                                filters={
-                                  veryFar
-                                    ? [slightlyTransparent]
-                                    : [veryTransparent]
-                                }
-                              />
-                            );
-                          }
-                        })}
+                        state.otherPlayers.map((otherPlayer) => (
+                          <InteractableToon
+                            key={otherPlayer.id}
+                            name={otherPlayer.profile.name}
+                            seed={otherPlayer.profile.avatar}
+                            scale={3}
+                            x={
+                              otherPlayer.savedPosition.x * tileSize.x +
+                              tileSize.x / 2
+                            }
+                            y={
+                              otherPlayer.savedPosition.y * tileSize.y +
+                              tileSize.y / 2
+                            }
+                            isPlaying={true}
+                            animationName={"idle"}
+                            animationSpeed={
+                              otherPlayer.isActivated ? 0.3 : 0.1
+                            }
+                            onclick={() => {
+                              events.onPlayerClick(otherPlayer);
+                            }}
+                            filters={
+                              otherPlayer.isInWorld ? [] : [slightlyTransparent]
+                            }
+                          />
+                        )
+                      )}
                     </Container>
                   )}
                 </Spring>
