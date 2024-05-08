@@ -15,7 +15,7 @@ import {
 } from "@/features/render/components/RenderEngine";
 import { createDecoratedRoom } from "@/features/worlds/DecoratedRoom";
 import { timeAgo } from "@/utils";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { ChatBox } from "../../features/post/components/ChatBox";
 import { ProfileView } from "../../features/profile/components/ProfileView";
@@ -44,9 +44,19 @@ export const GatherChat2 = ({
 
 	const [sidePanelState, setSidePanelState] =
 		useState<SidePanelState>("profile");
+
 	const [selectedPlayer, setSelectedPlayer] = useState<
 		RenderOtherPlayer | undefined
 	>(undefined);
+	const [animatedPlayer, setAnimatedPlayer] = useState<RenderOtherPlayer | undefined>();
+
+	const selectAndAnimatePlayer = useCallback((player: RenderOtherPlayer) => {
+		setSelectedPlayer(player);
+		setAnimatedPlayer(player);
+		setTimeout(() => {
+			setAnimatedPlayer(undefined);
+		}, 1000);
+	}, [])
 	
 	const throttledUpdatePosition = useMemo(
 		() =>
@@ -104,6 +114,14 @@ export const GatherChat2 = ({
 		};
 	}, [arweaveAddress, contractState]);
 
+	const renderEngineStateTransient = useMemo(() => {
+		const stateCopy = window.structuredClone(renderEngineState);
+		if (animatedPlayer !== undefined) {
+			stateCopy.otherPlayers.filter((p) => p.id === animatedPlayer.id)[0].isActivated = true;
+		}
+		return stateCopy;
+	}, [renderEngineState, animatedPlayer]);
+
 	return (
 		<ResizablePanelGroup direction="horizontal" className="h-screen">
 			<ResizablePanel
@@ -129,7 +147,7 @@ export const GatherChat2 = ({
 								h: 4,
 							},
 						)}
-						state={renderEngineState}
+						state={renderEngineStateTransient}
 						events={{
 							onPositionUpdate: ({ newPosition /* newDirection */ }): void => {
 								if (newPosition) {
@@ -140,7 +158,7 @@ export const GatherChat2 = ({
 								}
 							},
 							onPlayerClick: (player): void => {
-								player && setSelectedPlayer(player);
+								player && selectAndAnimatePlayer(player);
 							},
 						}}
 						flags={{
@@ -184,7 +202,7 @@ export const GatherChat2 = ({
 												onClick={
 													isLink
 														? () => {
-																setSelectedPlayer(selectedPlayer);
+																selectAndAnimatePlayer(selectedPlayer);
 																setSidePanelState("profile");
 															}
 														: undefined
@@ -213,7 +231,7 @@ export const GatherChat2 = ({
 									);
 								})}
 							</ul>
-							<div className="">
+							<div>
 								<ChatBox
 									onSubmit={async (text) => {
 										await contractEvents.post({
@@ -241,13 +259,10 @@ export const GatherChat2 = ({
 										await contractEvents.follow({ address: otherPlayer.id });
 										toast("Followed!");
 									}
-									setProileKey(Date.now());
 									setSelectedPlayer(undefined);
+									setProileKey(Date.now());
 								}}
-								onCall={() => {
-									console.log("Call clicked!");
-									setSidePanelState("video");
-								}}
+								onCall={() => {}}
 								onClose={() => setSelectedPlayer(undefined)}
 							/>
 						) : (
