@@ -14,28 +14,47 @@ Scripts:
 - Build: `npm run build`
 - Test: `npm run test`
 
-## Important files
-- [Gather Chat aos process LUA code](process/gatherchat.lua) (process/gatherchat.lua)
-- [Gather Chat aos process JS interface](src/features/ao/lib/ao-gather.ts) (src/features/ao/lib/ao-gather.ts)
-- [Contract loading logic](src/features/ao/components/GatherContractLoader.tsx) (src/features/ao/components/GatherContractLoader.tsx)
-- [Wallet loading logic](src/features/ao/components/WalletLoader.tsx) (src/features/ao/components/WalletLoader.tsx)
-- [Main game screen](src/components/layout/GatherChat.tsx) (src/components/layout/GatherChat.tsx)
-- [Game view rendering](src/features/render/components/RenderEngine.tsx) (src/features/render/components/RenderEngine.tsx)
-- [#/game route](src/routes/game.lazy.tsx) (src/routes/game.lazy.tsx)
-- [#/render route (demo of RoomLayout)](src/routes/render.lazy.tsx) (src/routes/render.lazy.tsx)
-
-## Key libraries
+## Key libraries used
 - [React](https://reactjs.org/)
 - [Vite](https://vitejs.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [shadcn/ui](https://ui.shadcn.com/)
-- Game rendering: [pixi.js](https://pixijs.com/)
+- Game rendering: 
+  - [pixi.js](https://pixijs.com/)
   - [@pixi/react](https://pixijs.io/pixi-react/)
   - [@pixi/react-animated](https://pixijs.io/pixi-react/react-spring/)
   - [@pixi/tilemap](https://github.com/pixijs/tilemap)
 - [@tanstack/react-query](https://tanstack.com/query/latest)
 - [@tanstack/react-router](https://tanstack.com/router/latest/)
 - [@permaweb/aoconnect](https://cookbook_ao.g8way.io/guides/aoconnect/aoconnect.html)
+
+## Important source files
+- [Gather Chat aos process LUA code](process/gatherchat.lua) (process/gatherchat.lua)
+- [Gather Chat aos process JS interface](src/features/ao/lib/ao-gather.ts) (src/features/ao/lib/ao-gather.ts)
+- [Contract loading logic](src/features/ao/components/GatherContractLoader.tsx) (src/features/ao/components/GatherContractLoader.tsx)
+- [Wallet loading logic](src/features/ao/components/WalletLoader.tsx) (src/features/ao/components/WalletLoader.tsx)
+- [Main game screen](src/components/layout/GatherChat.tsx) (src/components/layout/GatherChat.tsx)
+- [Game view rendering](src/features/render/components/RenderEngine.tsx) (src/features/render/components/RenderEngine.tsx)
+- [/game route](src/routes/game.lazy.tsx) (src/routes/game.lazy.tsx)
+- ["DecoratedRoom" world generator](src/features/worlds/DecoratedRoom.tsx) (src/features/worlds/DecoratedRoom.tsx)
+- [/render route (demo of DecoratedRoom)](src/routes/render.lazy.tsx) (src/routes/render.lazy.tsx)
+
+## Acknowledgements
+- [Atticus](https://github.com/atticusofsparta) for the original project idea + base LUA contract/TS Interface
+- Avatar Generator: based on [pixeldudesmaker](https://masterpose.itch.io/pixelduuuuudesmaker) by [masterpose](https://masterpose.itch.io/), which is in turn based on [0x72's original version](https://0x72.itch.io/pixeldudesmaker)
+- `drummondbass` for the original pixel art of tilesets and non-player sprites
+- [Weavers](https://www.weaversofficial.com/) for running the hackathon!
+
+## Licenses
+- Original license for the generated pixel art used in this applicatoin's avatars:
+```
+PERMISSION IS GRANTED, FREE OF CHARGE, TO ANY PERSON, TO USE THE  ASSETS GENERATED WITH THE SOFTWARE IN ANY COMMERCIAL OR NON-COMMERCIAL  PROJECTS, GAME OR OTHERWISE, AS LONG AS THE ASSETS ARE NOT USED AS SO  CALLED NFTs (NON-FUNGIBLE TOKENS).
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT ANY KIND OF WARRANTY.
+```
+- The pixel art generator code itself is ["not released as licensed software"](https://itch.io/post/5408271)
+- All original code is licensed under the [GPLv3 License](LICENSE)
+
+---
 
 # Original Readme Below
 
