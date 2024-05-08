@@ -100,17 +100,17 @@ export const GatherChat = ({
             address !== playerAddress &&
             player.currentWorldId === contractState.world.name,
         )
-        .map(([address, otherPlayer]) => {
+        .map(([otherPlayerAddress, otherPlayer]) => {
           return {
-            id: address,
+            id: otherPlayerAddress,
             profile: otherPlayer,
-            savedPosition: contractState.world.playerPositions[address],
+            savedPosition: contractState.world.playerPositions[otherPlayerAddress],
 
             // Derived
-            isFollowingUser: Object.keys(otherPlayer.following).includes(
-              address,
-            ),
             isFollowedByUser: Object.keys(player.following).includes(
+              otherPlayerAddress,
+            ),
+            isFollowingUser: Object.keys(otherPlayer.following).includes(
               playerAddress,
             ),
             isInWorld: true,
