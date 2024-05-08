@@ -16,7 +16,7 @@ import { timeAgo } from "@/utils";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { ChatBox } from "../../features/post/components/ChatBox";
-import { ProfileView } from "../../features/profile/components/ProfileView";
+// import { ProfileView } from "../../features/profile/components/ProfileView";
 import { SetupForm } from "../../features/profile/components/SetupForm";
 import { SidePanel, type SidePanelState } from "./SidePanel";
 
@@ -40,8 +40,8 @@ export const GatherChat = ({
 	aoPostsState,
 	onUpdateProfile,
 	onUpdatePosition,
-	onFollow,
-	onUnfollow,
+	// onFollow,
+	// onUnfollow,
 	onUpload,
 }: GatherChatProps) => {
 	console.log({ aoState: aoUsersState });
@@ -51,13 +51,11 @@ export const GatherChat = ({
 	const [sidePanelState, setSidePanelState] =
 		useState<SidePanelState>("profile");
 
-	const [selectedToon, setSelectedToon] = useState<AoToonSaved | undefined>(
-		undefined,
-	);
+	const [_, setSelectedToon] = useState<AoToonSaved | undefined>(undefined);
 
 	const [lastResized, setLastResized] = useState(0);
 
-	const [profileKey, setProileKey] = useState(0);
+	// const [profileKey, setProileKey] = useState(0);
 
 	return (
 		<ResizablePanelGroup direction="horizontal" className="h-screen">
@@ -91,16 +89,19 @@ export const GatherChat = ({
 						}}
 						state={{
 							room: {
-								created: 0,
-								lastActivity: 0,
-								name: "",
-								description: "",
-								theme: "",
-								spawnPosition: {
-									x: 0,
-									y: 0,
+								id: "WelcomeLobby",
+								data: {
+									created: 0,
+									lastActivity: 0,
+									name: "",
+									description: "",
+									theme: "",
+									spawnPosition: {
+										x: 0,
+										y: 0,
+									},
+									playerPositions: {},
 								},
-								playerPositions: {},
 							},
 							player: {
 								id: "",
@@ -125,9 +126,9 @@ export const GatherChat = ({
 									onUpdatePosition(newPosition);
 								}
 							},
-							onPlayerClick: (playerId: string): void => {
+							onPlayerClick: (player): void => {
 								setSelectedToon(
-									aoUsersState.otherToons.find((t) => t.id === playerId),
+									aoUsersState.otherToons.find((t) => t.id === player.id),
 								);
 							},
 						}}
@@ -210,45 +211,22 @@ export const GatherChat = ({
 					}
 					upload={<p>TODO</p>}
 					profile={
-						selectedToon ? (
-							<ProfileView
-								key={profileKey}
-								toonInfo={selectedToon}
-								onChangeFollow={async (toonInfo) => {
-									if (toonInfo.isFollowing) {
-										await onUnfollow({ address: toonInfo.id });
-										toast("Unfollowed!");
+						<SetupForm
+							onSubmit={(s) => {
+								onUpdateProfile({
+									name: s.username,
+									avatarSeed: s.avatarSeed,
+								}).then((res) => {
+									if (res) {
+										toast("Profile updated!");
 									} else {
-										await onFollow({ address: toonInfo.id });
-										toast("Followed!");
+										toast("Update failed!");
 									}
-									setProileKey(Date.now());
-									setSelectedToon(undefined);
-								}}
-								onCall={() => {
-									console.log("Call clicked!");
-									setSidePanelState("video");
-								}}
-								onClose={() => setSelectedToon(undefined)}
-							/>
-						) : (
-							<SetupForm
-								onSubmit={(s) => {
-									onUpdateProfile({
-										name: s.username,
-										avatarSeed: s.avatarSeed,
-									}).then((res) => {
-										if (res) {
-											toast("Profile updated!");
-										} else {
-											toast("Update failed!");
-										}
-									});
-								}}
-								initialUsername={aoUsersState.user.displayName}
-								initialSeed={aoUsersState.user.avatarSeed}
-							/>
-						)
+								});
+							}}
+							initialUsername={aoUsersState.user.displayName}
+							initialSeed={aoUsersState.user.avatarSeed}
+						/>
 					}
 				/>
 			</ResizablePanel>

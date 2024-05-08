@@ -157,16 +157,19 @@ function Render() {
 					world={world}
 					state={{
 						room: {
-							created: 0,
-							lastActivity: 0,
-							name: "",
-							description: "",
-							theme: "",
-							spawnPosition: {
-								x: 0,
-								y: 0,
+							id: "WelcomeLobby",
+							data: {
+								created: 0,
+								lastActivity: 0,
+								name: "",
+								description: "",
+								theme: "",
+								spawnPosition: {
+									x: 0,
+									y: 0,
+								},
+								playerPositions: {},
 							},
-							playerPositions: {},
 						},
 						player: {
 							id: "",

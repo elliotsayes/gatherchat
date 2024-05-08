@@ -14,6 +14,7 @@ export const tileSize: Dimension = {
 	h: tileSizeBase.h * tileScale,
 };
 
+// TODO: Add more tileset variations!
 export const RoomTileSets = ["room"] as const;
 export type RoomTileSet = (typeof RoomTileSets)[number];
 
@@ -29,16 +30,21 @@ const setupInstance = (instance: CompositeTilemap, props: Props) => {
 
 	const { tileSet, roomSizeTiles, windowSpacing } = props;
 
-	// Background tiles
+	// Iterate over main + surrounding area
 	for (let x = -20; x < roomSizeTiles.w + 20; x++) {
 		for (let y = -20; y < roomSizeTiles.h + 20; y++) {
+			// Draw background tiles
+			// TODO: Replace with a better tile?
 			instance.tile(`${tileSet}_3_2`, x * tileSizeBase.w, y * tileSizeBase.h);
 		}
 	}
 
+	// Iterate over main area
 	for (let x = 0; x < roomSizeTiles.w; x++) {
 		for (let y = 0; y < roomSizeTiles.h; y++) {
+			// Logic by column
 			if (x === 0) {
+				// Left wall column
 				if (y === 0) {
 					instance.tile(
 						`${tileSet}_0_0`,
@@ -59,6 +65,7 @@ const setupInstance = (instance: CompositeTilemap, props: Props) => {
 					);
 				}
 			} else if (x === 1) {
+				// Left shadow column
 				if (y === 0) {
 					instance.tile(
 						`${tileSet}_1_0`,
@@ -85,6 +92,7 @@ const setupInstance = (instance: CompositeTilemap, props: Props) => {
 					);
 				}
 			} else if (x === roomSizeTiles.w - 1) {
+				// Right wall column
 				if (y === 0) {
 					instance.tile(
 						`${tileSet}_4_0`,
@@ -105,6 +113,7 @@ const setupInstance = (instance: CompositeTilemap, props: Props) => {
 					);
 				}
 			} else if (x % windowSpacing === 0) {
+				// Window columns
 				if (y === 0) {
 					instance.tile(
 						`${tileSet}_2_0`,
@@ -137,6 +146,7 @@ const setupInstance = (instance: CompositeTilemap, props: Props) => {
 					);
 				}
 			} else {
+				// Normal columns
 				if (y === 0) {
 					instance.tile(
 						`${tileSet}_3_0`,

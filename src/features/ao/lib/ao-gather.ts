@@ -46,7 +46,7 @@ export type ContractRoom = {
 	playerPositions: Record<ArweaveID, ContractPosition>;
 };
 
-export type RoomIndex = Array<ContractRoom>;
+export type ContractRoomIndex = Array<ContractRoom>;
 
 export type ContractPost = {
 	created: number;
@@ -62,21 +62,21 @@ export interface AoGather {
 	signer: unknown;
 	arweave: Arweave;
 	getUsers(): Promise<Record<ArweaveID, ContractUser>>;
-	getRoomIndex(): Promise<RoomIndex>;
+	getRoomIndex(): Promise<ContractRoomIndex>;
 	getRooms(): Promise<Record<ArweaveID, ContractRoom>>;
 	getRoom(params?: { roomId: string }): Promise<ContractRoom>;
 	getPosts(params?: { roomId: string }): Promise<
 		Record<ArweaveID, ContractPost>
 	>; // queries contract for all connections associated with a user
-	register(params: ContractUserWritable): Promise<this>;
-	updateUser(params: Partial<ContractUserWritable>): Promise<this>;
+	register(params: ContractUserWritable): Promise<void>;
+	updateUser(params: Partial<ContractUserWritable>): Promise<void>;
 	updatePosition(params: {
 		roomId: string;
 		position: ContractPosition;
-	}): Promise<this>;
-	post(params: ContractPostWritable): Promise<this>;
-	follow(params: { address: string }): Promise<this>;
-	unfollow(params: { address: string }): Promise<this>;
+	}): Promise<void>;
+	post(params: ContractPostWritable): Promise<void>;
+	follow(params: { address: string }): Promise<void>;
+	unfollow(params: { address: string }): Promise<void>;
 }
 
 export const gatherEventEmitter = new EventEmitter();
@@ -157,12 +157,12 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 		return JSON.parse(Messages[0].Data) as Record<ArweaveID, ContractUser>;
 	}
 
-	async getRoomIndex(): Promise<RoomIndex> {
+	async getRoomIndex(): Promise<ContractRoomIndex> {
 		const { Messages } = await this.ao.dryrun({
 			process: this.processId,
 			tags: [{ name: "Action", value: "GetRoomIndex" }],
 		});
-		return JSON.parse(Messages[0].Data) as RoomIndex;
+		return JSON.parse(Messages[0].Data) as ContractRoomIndex;
 	}
 
 	async getRooms(): Promise<Record<string, ContractRoom>> {
@@ -201,7 +201,7 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 		);
 	}
 
-	async register(userNew: ContractUserWritable): Promise<this> {
+	async register(userNew: ContractUserWritable): Promise<void> {
 		const registrationId = await this.ao.message({
 			process: this.processId,
 			data: JSON.stringify(userNew),
@@ -209,11 +209,9 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			signer: createDataItemSigner(this.signer),
 		});
 		console.debug(`User registered with id ${registrationId}`);
-
-		return this;
 	}
 
-	async updateUser(userUpdate: Partial<ContractUserWritable>): Promise<this> {
+	async updateUser(userUpdate: Partial<ContractUserWritable>): Promise<void> {
 		const registrationId = await this.ao.message({
 			process: this.processId,
 			data: JSON.stringify(userUpdate),
@@ -221,14 +219,12 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			signer: createDataItemSigner(this.signer),
 		});
 		console.debug(`User updated with id ${registrationId}`);
-
-		return this;
 	}
 
 	async updatePosition({
 		roomId,
 		position,
-	}: { roomId: string; position: ContractPosition }): Promise<this> {
+	}: { roomId: string; position: ContractPosition }): Promise<void> {
 		const registrationId = await this.ao.message({
 			process: this.processId,
 			tags: [{ name: "Action", value: "UpdatePosition" }],
@@ -240,10 +236,9 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 				position,
 			)} with id ${registrationId}`,
 		);
-		return this;
 	}
 
-	async post(post: ContractPostWritable): Promise<this> {
+	async post(post: ContractPostWritable): Promise<void> {
 		const registrationId = await this.ao.message({
 			process: this.processId,
 			data: JSON.stringify(post),
@@ -251,11 +246,9 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			signer: createDataItemSigner(this.signer),
 		});
 		console.debug(`Created post with id ${registrationId}`);
-
-		return this;
 	}
 
-	async follow(data: { address: string }): Promise<this> {
+	async follow(data: { address: string }): Promise<void> {
 		const registrationId = await this.ao.message({
 			process: this.processId,
 			data: JSON.stringify(data),
@@ -263,11 +256,9 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			signer: createDataItemSigner(this.signer),
 		});
 		console.debug(`Followed ${data.address} with id ${registrationId}`);
-
-		return this;
 	}
 
-	async unfollow(data: { address: string }): Promise<this> {
+	async unfollow(data: { address: string }): Promise<void> {
 		const registrationId = await this.ao.message({
 			process: this.processId,
 			data: JSON.stringify(data),
@@ -275,7 +266,5 @@ export class AoGatherProvider extends AoProvider implements AoGather {
 			signer: createDataItemSigner(this.signer),
 		});
 		console.debug(`Unfollowed ${data.address} with id ${registrationId}`);
-
-		return this;
 	}
 }

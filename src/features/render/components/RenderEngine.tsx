@@ -36,27 +36,38 @@ export type RenderEngineWorld = {
 	collision: (pos: Position) => boolean;
 };
 
+export type RenderRoom = {
+	id: string;
+	data: ContractRoom;
+};
+
+export type RenderPlayer = {
+	id: ArweaveID;
+	profile: ContractUser;
+	savedPosition?: ContractPosition;
+
+	// Player transient state is managed by RenderEngine
+};
+
+export type RenderOtherPlayer = {
+	id: ArweaveID;
+	profile: ContractUser;
+	savedPosition: ContractPosition;
+
+	// Derived
+	isFollowedByUser: boolean;
+	isFollowingUser: boolean;
+	isInRoom: boolean;
+
+	// Transient
+	isActivated: boolean;
+	isTalking: boolean;
+};
+
 export type RenderEngineState = {
-	room: ContractRoom;
-	player: {
-		id: ArweaveID;
-		profile: ContractUser;
-		savedPosition?: ContractPosition;
-	};
-	otherPlayers: Array<{
-		id: ArweaveID;
-		profile: ContractUser;
-		savedPosition: ContractPosition;
-
-		// Derived
-		isFollowedByUser: boolean;
-		isFollowingUser: boolean;
-		isInRoom: boolean;
-
-		// Transient
-		isActivated: boolean;
-		isTalking: boolean;
-	}>;
+	room: RenderRoom;
+	player: RenderPlayer;
+	otherPlayers: Array<RenderOtherPlayer>;
 };
 
 export type RenderEngineEvents = {
@@ -64,7 +75,7 @@ export type RenderEngineEvents = {
 		newPosition?: Position;
 		newDirection?: FaceDirection;
 	}) => void;
-	onPlayerClick: (playerId: ArweaveID) => void;
+	onPlayerClick: (player: RenderOtherPlayer) => void;
 };
 
 export type RenderEngineFlags = {
@@ -80,9 +91,9 @@ type Props = {
 	parentRef: React.RefObject<HTMLDivElement>;
 	lastResized: number;
 
-	world: RenderEngineWorld;
-
 	state: RenderEngineState;
+
+	world: RenderEngineWorld;
 	events: RenderEngineEvents;
 	flags: RenderEngineFlags;
 };
@@ -91,15 +102,15 @@ export const RenderEngine = ({
 	parentRef,
 	lastResized,
 
-	world,
-
 	state,
+
+	world,
 	events,
 	flags,
 }: Props) => {
 	const stageSize = useResizableStage(parentRef, lastResized);
 
-	// User for the camera offset on mouse move
+	// Used for the camera offset on mouse move
 	const [targetOffset, setTargetOffset] = useState({
 		x: 0,
 		y: 0,
@@ -107,7 +118,7 @@ export const RenderEngine = ({
 
 	const { optimisticState, activeMovement, move } = useMovement({
 		initialState: {
-			position: state.player.savedPosition ?? state.room.spawnPosition,
+			position: state.player.savedPosition ?? state.room.data.spawnPosition,
 			direction: "right",
 		},
 		onPositionUpdate: events.onPositionUpdate,
@@ -219,7 +230,7 @@ export const RenderEngine = ({
 																	otherPlayer.isActivated ? 0.3 : 0.1
 																}
 																onclick={() => {
-																	events.onPlayerClick(otherPlayer.id);
+																	events.onPlayerClick(otherPlayer);
 																}}
 															/>
 														);

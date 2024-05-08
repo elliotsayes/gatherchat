@@ -15,18 +15,11 @@ const getObstacleLocations = (
 	const locations: Position[] = [];
 	if (!blockSpacing) return locations;
 
-	for (let x = 0; x < roomSizeTiles.w; x++) {
-		for (let y = 0; y < roomSizeTiles.h; y++) {
-			if (
-				x > 0 &&
-				x < roomSizeTiles.w - 1 &&
-				y > 0 &&
-				y < roomSizeTiles.h - 2 &&
-				x % blockSpacing.w === 0
-			) {
-				if ((y + 1) % blockSpacing.h === 0) {
-					locations.push({ x, y });
-				}
+	// Iterate over internal area area
+	for (let x = 1; x < roomSizeTiles.w - 1; x++) {
+		for (let y = 1; y < roomSizeTiles.h - 2; y++) {
+			if (x % blockSpacing.w === 0 && (y + 1) % blockSpacing.h === 0) {
+				locations.push({ x, y });
 			}
 		}
 	}
