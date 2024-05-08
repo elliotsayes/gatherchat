@@ -14,7 +14,7 @@ function Game2() {
 				<GatherContractLoader>
 					{(state, events) => (
 						<GatherChat2
-							arweaveAddress={arweaveAddress}
+							playerAddress={arweaveAddress}
 							state={state}
 							events={events}
 						/>

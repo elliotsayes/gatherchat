@@ -26,13 +26,13 @@ import { throttle } from "throttle-debounce";
 export type UploadInfo = Pick<ContractPost, "type" | "textOrTxId">;
 
 interface GatherChat2Props {
-	arweaveAddress: string;
+	playerAddress: string;
 	state: GatherContractState;
 	events: GatherContactEvents;
 }
 
 export const GatherChat2 = ({
-	arweaveAddress,
+	playerAddress,
 	state: contractState,
 	events: contractEvents,
 }: GatherChat2Props) => {
@@ -75,7 +75,7 @@ export const GatherChat2 = ({
 
 	// Convert raw GatherContractState to RenderEngineState
 	const renderEngineState: RenderEngineState = useMemo(() => {
-		const player = contractState.users[arweaveAddress];
+		const player = contractState.users[playerAddress];
 
 		return {
 			room: {
@@ -83,14 +83,14 @@ export const GatherChat2 = ({
 				data: contractState.room,
 			},
 			player: {
-				id: arweaveAddress,
+				id: playerAddress,
 				profile: player,
-				savedPosition: contractState.room.playerPositions[arweaveAddress],
+				savedPosition: contractState.room.playerPositions[playerAddress],
 			},
 			otherPlayers: Object.entries(contractState.users)
 				.filter(
 					([address, player]) =>
-						address !== arweaveAddress &&
+						address !== playerAddress &&
 						player.currentRoom === contractState.room.name,
 				)
 				.map(([address, otherPlayer]) => {
@@ -104,7 +104,7 @@ export const GatherChat2 = ({
 							address,
 						),
 						isFollowedByUser: Object.keys(player.following).includes(
-							arweaveAddress,
+							playerAddress,
 						),
 						isInRoom: true,
 						isActivated: false,
@@ -112,7 +112,7 @@ export const GatherChat2 = ({
 					};
 				}),
 		};
-	}, [arweaveAddress, contractState]);
+	}, [playerAddress, contractState]);
 
 	const renderEngineStateTransient = useMemo(() => {
 		const stateCopy = window.structuredClone(renderEngineState);
@@ -121,6 +121,19 @@ export const GatherChat2 = ({
 		}
 		return stateCopy;
 	}, [renderEngineState, animatedPlayer]);
+
+	const world = useMemo(() => createDecoratedRoom(
+		"room",
+		{
+			w: 21,
+			h: 12,
+		},
+		3,
+		{
+			w: 4,
+			h: 4,
+		},
+	), []);
 
 	return (
 		<ResizablePanelGroup direction="horizontal" className="h-screen">
@@ -135,24 +148,13 @@ export const GatherChat2 = ({
 					<RenderEngine
 						parentRef={containerRef}
 						lastResized={lastResized}
-						world={createDecoratedRoom(
-							"room",
-							{
-								w: 21,
-								h: 12,
-							},
-							3,
-							{
-								w: 4,
-								h: 4,
-							},
-						)}
+						world={world}
 						state={renderEngineStateTransient}
 						events={{
 							onPositionUpdate: ({ newPosition /* newDirection */ }): void => {
 								if (newPosition) {
 									throttledUpdatePosition({
-										roomId: "WelcomeLobby",
+										roomId: contractState.worldId,
 										position: newPosition,
 									});
 								}
