@@ -60,8 +60,8 @@ function Render() {
 
 	return (
 		<div>
-			<h1>Render</h1>
-			<div>
+			<h1 className="text-xl">Render Demo</h1>
+			<div className="flex flex-row gap-2 flex-wrap">
 				<label>
 					Tile Set:
 					<select
