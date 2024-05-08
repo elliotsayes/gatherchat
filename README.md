@@ -1,10 +1,25 @@
-# Instructions
+# WEAVERS HACKERS GUIDE
+
+Read this guide to get started with the project.
+
+## Basic Instructions
 
 - Install: `npm install`
 - Run: `npm run dev`
 - Lint: `npm run lint`
 - Build: `npm run build`
 - Test: `npm run test`
+
+## Important files
+- [Gather Chat aos process LUA code](process/gatherchat.lua) (process/gatherchat.lua)
+- [Gather Chat aos process JS interface](src/features/ao/lib/ao-gather.ts) (src/features/ao/lib/ao-gather.ts)
+- [Contract loading logic](src/features/ao/components/GatherContractLoader.tsx) (src/features/ao/components/GatherContractLoader.tsx)
+- [Wallet loading logic](src/features/ao/components/WalletLoader.tsx) (src/features/ao/components/WalletLoader.tsx)
+- [Main game screen](src/components/layout/GatherChat.tsx) (src/components/layout/GatherChat.tsx)
+- [Game view rendering](src/features/render/components/RenderEngine.tsx) (src/features/render/components/RenderEngine.tsx)
+- [#/game route](src/routes/game.lazy.tsx) (src/routes/game.lazy.tsx)
+- [#/render route (demo of RoomLayout)](src/routes/render.lazy.tsx) (src/routes/render.lazy.tsx)
+
 
 # Original Readme Below
 
