@@ -71,11 +71,11 @@ export const GatherChat2 = ({
 					return {
 						id: address,
 						profile: otherPlayer,
-						savedPosition: contractState.room.playerPositions[arweaveAddress],
+						savedPosition: contractState.room.playerPositions[address],
 
 						// Derived
 						isFollowingUser: Object.keys(otherPlayer.following).includes(
-							arweaveAddress,
+							address,
 						),
 						isFollowedByUser: Object.keys(player.following).includes(
 							arweaveAddress,

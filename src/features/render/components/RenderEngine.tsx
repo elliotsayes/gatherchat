@@ -214,7 +214,7 @@ export const RenderEngine = ({
 															<InteractableToon
 																key={otherPlayer.id}
 																name={otherPlayer.profile.name}
-																seed={otherPlayer.profile.name}
+																seed={otherPlayer.profile.avatar}
 																scale={3}
 																x={
 																	otherPlayer.savedPosition.x * tileSize.x +
