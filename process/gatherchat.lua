@@ -195,6 +195,7 @@ Handlers.add(
       local data = json.decode(msg.Data)
       if type(data) == "table" and data.roomId then
         if Rooms[data.roomId] then
+          Users[address].currentRoom = data.roomId
           Rooms[data.roomId].playerPositions[address] = {
             x = data.position.x,
             y = data.position.y,
