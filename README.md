@@ -38,9 +38,9 @@ Scripts:
 - [Wallet loading logic](src/features/ao/components/WalletLoader.tsx) (src/features/ao/components/WalletLoader.tsx)
   - For controlling how to load the user's wallet (e.g. via ArConnect)
 - [Main game screen](src/components/layout/GatherChat.tsx) (src/components/layout/GatherChat.tsx)
-  - The main game screen, which includes the game logic, world view, chat, profile view, etc
+  - The main game screen, which includes the game logic, world view, chat, profile view, etc. Modify this to change the main game screen view, or change the core functionality of the game (e.g. warping between worlds)
 - [Game view rendering](src/features/render/components/RenderEngine.tsx) (src/features/render/components/RenderEngine.tsx)
-  - The main world view rendering logic
+  - The main world view rendering logic. Also handles player movement.
 - [/game route](src/routes/game.lazy.tsx) (src/routes/game.lazy.tsx)
   - Route for loading and displaying the main game screen
 - ["DecoratedRoom" world generator](src/features/worlds/DecoratedRoom.tsx) (src/features/worlds/DecoratedRoom.tsx)
