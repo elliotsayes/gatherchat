@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { GatherContactEvents } from "@/features/ao/components/GatherContractLoader";
-import { SetupForm } from "./SetupForm";
 import { useState } from "react";
+import { SetupForm } from "./SetupForm";
 
 interface RegisterProps {
 	// state: GatherContractState;
@@ -12,7 +12,7 @@ export const Register = ({
 	// state: contractState,
 	events: contractEvents,
 }: RegisterProps) => {
-  const [registerClicked, setRegisterClicked] = useState(false);
+	const [registerClicked, setRegisterClicked] = useState(false);
 
 	return (
 		<div className="flex flex-col items-center justify-center h-screen">
@@ -24,16 +24,16 @@ export const Register = ({
 				<CardContent>
 					<SetupForm
 						onSubmit={(s) => {
-              setRegisterClicked(true);
-              contractEvents.register({
-                name: s.username,
-                avatar: s.avatarSeed,
-                status: "Hello Gather Chat!",
-                currentRoom: "WelcomeLobby",
-                following: {},
-              });
+							setRegisterClicked(true);
+							contractEvents.register({
+								name: s.username,
+								avatar: s.avatarSeed,
+								status: "Hello Gather Chat!",
+								currentRoom: "WelcomeLobby",
+								following: {},
+							});
 						}}
-            submitDisabled={registerClicked}
+						submitDisabled={registerClicked}
 					/>
 				</CardContent>
 			</Card>
