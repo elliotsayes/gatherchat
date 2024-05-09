@@ -1,6 +1,6 @@
 import * as fs from "node:fs";
 
-type FrameSet = {
+export type FrameSet = {
   name: string;
   tiles: { x: number; y: number; w: number; h: number };
 };
@@ -14,37 +14,7 @@ type Frame = {
   pivot: { x: number; y: number };
 };
 
-const meta = {
-  app: "gatherchat",
-  version: "1.0",
-  image: "room3.png",
-  format: "RGBA8888",
-  size: { w: 176, h: 160 },
-  scale: "1",
-  // "smartupdate": "$TexturePacker:SmartUpdate:cd0d17d3f8965456a92be15158a0ed9e:d14942d54a3d3385fdb15258e1ae1a8f:cbce6b53f0f49e0bf15173c25c41f876$"
-};
-
-const allFrameSets: FrameSet[] = [
-  {
-    name: "room_default",
-    tiles: { x: 0, y: 0, w: 5, h: 4 },
-  },
-  {
-    name: "room_dark",
-    tiles: { x: 5, y: 0, w: 5, h: 4 },
-  },
-  {
-    name: "room_red",
-    tiles: { x: 10, y: 0, w: 5, h: 4 },
-  },
-];
-
-const tileSize = {
-  w: 16,
-  h: 16,
-};
-
-function frameSetToFrames(frameSet: FrameSet): Record<string, Frame> {
+function frameSetToFrames(tileSize: { w: number, h: number }, frameSet: FrameSet): Record<string, Frame> {
   const frameIndicies = {
     x: Array(frameSet.tiles.w)
       .fill(0)
@@ -93,12 +63,17 @@ function frameSetToFrames(frameSet: FrameSet): Record<string, Frame> {
   return Object.assign({}, ...frames);
 }
 
-fs.writeFileSync(
-  "./public/assets/tiles/room3.json",
+export const generate = (
+  fname: string,
+  meta,
+  tileSize: { w: number, h: number },
+  frameSets: FrameSet[],
+) => fs.writeFileSync(
+  fname,
   JSON.stringify(
     {
       meta,
-      frames: Object.assign({}, ...allFrameSets.map(frameSetToFrames)),
+      frames: Object.assign({}, ...frameSets.map((f) => frameSetToFrames(tileSize, f))),
     },
     null,
     2,

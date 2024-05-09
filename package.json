@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "deploy": "aos gcdev --load process/gatherchat.lua",
-    "gen": "npx tsx ./scripts/generateDrum.ts",
+    "gen": "npx tsx ./scripts/generateAll.ts",
     "format": "npx @biomejs/biome format --write ./src ./scripts",
     "lint": "npx @biomejs/biome lint --apply ./src ./scripts",
     "lint-unsafe": "npx @biomejs/biome lint --apply-unsafe ./src ./scripts",
