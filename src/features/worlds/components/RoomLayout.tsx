@@ -57,25 +57,21 @@ const setupInstance = (instance: CompositeTilemap, props: Props) => {
   // Iterate over main area
   for (let x = 0; x < roomSizeTiles.w; x++) {
     for (let y = 0; y < roomSizeTiles.h; y++) {
-      // Draw window tiles
-      if (
-        x > 1 &&
-        x < roomSizeTiles.w - 1 &&
-        y < 3 &&
-        x % windowSpacing === 0
-      ) {
-        instance.tile(
-          `${tileSet}_2_${tilesetOffsetY(y)}`,
-          x * tileSizeBase.w,
-          y * tileSizeBase.h,
-        );
-        continue;
-      }
-
       // Draw regular tile
       instance.tile(
         `${tileSet}_${tilesetOffsetX(x)}_${tilesetOffsetY(y)}`,
         x * tileSizeBase.w,
+        y * tileSizeBase.h,
+      );
+    }
+  }
+  
+  // Draw window tiles
+  for (let x = 2; x < roomSizeTiles.w - 2; x += windowSpacing) {
+    for (let y = 0; y < 3; y++) {
+      instance.tile(
+        `${tileSet}_2_${y}`,
+        x * tileSizeBase.w + tileSizeBase.w,
         y * tileSizeBase.h,
       );
     }
