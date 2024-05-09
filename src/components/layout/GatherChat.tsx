@@ -95,25 +95,25 @@ export const GatherChat = ({
         savedPosition: contractState.world.playerPositions[playerAddress],
       },
       otherPlayers: Object.entries(contractState.users)
-        .filter(
-          ([otherPlayerAddress, _]) =>
-            otherPlayerAddress !== playerAddress &&
-            contractState.world.playerPositions[otherPlayerAddress] !== undefined,
-        )
+        .filter(([otherPlayerAddress, _]) => otherPlayerAddress !== playerAddress)
         .map(([otherPlayerAddress, otherPlayer]) => {
+          const savedPosition = contractState.world.playerPositions[otherPlayerAddress]
           return {
             id: otherPlayerAddress,
             profile: otherPlayer,
-            savedPosition: contractState.world.playerPositions[otherPlayerAddress],
+            savedPosition,
 
             // Derived
+            isInWorld: otherPlayer.currentWorldId === contractState.worldId,
+            hasPositionInWorld: savedPosition !== undefined,
             isFollowedByUser: Object.keys(player.following).includes(
               otherPlayerAddress,
             ),
             isFollowingUser: Object.keys(otherPlayer.following).includes(
               playerAddress,
             ),
-            isInWorld: otherPlayer.currentWorldId === contractState.worldId,
+            
+            // Transient
             isActivated: false,
             isTalking: false,
           };

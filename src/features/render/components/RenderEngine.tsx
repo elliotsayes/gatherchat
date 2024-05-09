@@ -55,9 +55,10 @@ export type RenderOtherPlayer = {
   savedPosition: ContractPosition;
 
   // Derived
+  isInWorld: boolean;
+  hasPositionInWorld: boolean;
   isFollowedByUser: boolean;
   isFollowingUser: boolean;
-  isInWorld: boolean;
 
   // Transient
   isActivated: boolean;
@@ -200,33 +201,42 @@ export const RenderEngine = ({
                       )}
                       {flags.showObjects && world.spritesBg}
                       {flags.showOtherPlayers &&
-                        state.otherPlayers.map((otherPlayer) => (
-                          <InteractableAvatar
+                        state.otherPlayers
+                          .filter((otherPlayer) => otherPlayer.hasPositionInWorld)
+                          .map((otherPlayer) => (
+                            <Spring 
                             key={otherPlayer.id}
-                            name={otherPlayer.profile.name}
-                            seed={otherPlayer.profile.avatar}
-                            scale={3}
-                            x={
-                              otherPlayer.savedPosition.x * tileSize.x +
-                              tileSize.x / 2
-                            }
-                            y={
-                              otherPlayer.savedPosition.y * tileSize.y +
-                              tileSize.y / 2
-                            }
-                            isPlaying={true}
-                            animationName={"idle"}
-                            animationSpeed={
-                              otherPlayer.isActivated ? 0.3 : 0.1
-                            }
-                            onclick={() => {
-                              events.onPlayerClick(otherPlayer);
-                            }}
-                            filters={
-                              otherPlayer.isInWorld ? [] : [slightlyTransparent]
-                            }
-                          />
-                        )
+                            to={{
+                              x: 
+                                otherPlayer.savedPosition.x * tileSize.x +
+                                tileSize.x / 2
+                              ,
+                              y: 
+                                otherPlayer.savedPosition.y * tileSize.y +
+                                tileSize.y / 2
+                              ,
+                            }}>
+                              {(props) => (
+                                <InteractableAvatar
+                                  name={otherPlayer.profile.name}
+                                  seed={otherPlayer.profile.avatar}
+                                  scale={3}
+                                  isPlaying={true}
+                                  animationName={"idle"}
+                                  animationSpeed={
+                                    otherPlayer.isActivated ? 0.3 : 0.1
+                                  }
+                                  onclick={() => {
+                                    events.onPlayerClick(otherPlayer);
+                                  }}
+                                  filters={
+                                    otherPlayer.isInWorld ? [] : [slightlyTransparent]
+                                  }
+                                  {...props}
+                                />
+                              )}
+                            </Spring>
+                          )
                       )}
                     </Container>
                   )}
