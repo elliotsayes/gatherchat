@@ -44,18 +44,19 @@ export const GatherChatDemo = ({
         savedPosition: undefined,
       },
       otherPlayers: Object.entries(contractState.users)
-        .filter(([, player]) => player.currentWorldId === contractState.world.name)
         .map(([address, otherPlayer]) => {
+          const savedPosition = contractState.world.playerPositions[address]
           return {
             id: address,
             profile: otherPlayer,
-            savedPosition: contractState.world.playerPositions[address],
+            savedPosition,
 
             // Derived
+            isInWorld: true,
+            hasPositionInWorld: savedPosition !== undefined,
             isFollowingUser: false,
             isFollowedByUser: false,
 
-            isInWorld: true,
             isActivated: false,
             isTalking: false,
           };
