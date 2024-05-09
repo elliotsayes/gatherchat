@@ -15,7 +15,7 @@ export const tileSize: Dimension = {
 };
 
 // TODO: Add more tileset variations!
-export const RoomTileSets = ["room"] as const;
+export const RoomTileSets = ["room_default", "room_dark", "room_red"] as const;
 export type RoomTileSet = (typeof RoomTileSets)[number];
 
 interface Props {

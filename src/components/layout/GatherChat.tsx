@@ -134,7 +134,7 @@ export const GatherChat = ({
   const world = useMemo(
     () =>
       createDecoratedRoom(
-        "room",
+        "room_default",
         {
           w: 21,
           h: 12,

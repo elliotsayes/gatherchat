@@ -76,7 +76,7 @@ export const createDecoratedRoom = (
   return {
     collision: getCollisionFunction(roomDimensions, obstacleLocations),
     tileSet: (
-      <TileLoader alias="drum" src="assets/tiles/drum.json">
+      <TileLoader alias="room3" src="assets/tiles/room3.json">
         <RoomLayout
           tileSet={tileSet}
           roomSizeTiles={roomDimensions}

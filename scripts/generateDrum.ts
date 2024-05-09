@@ -17,7 +17,7 @@ type Frame = {
 const meta = {
   app: "gatherchat",
   version: "1.0",
-  image: "drum.png",
+  image: "room3.png",
   format: "RGBA8888",
   size: { w: 176, h: 160 },
   scale: "1",
@@ -26,20 +26,16 @@ const meta = {
 
 const allFrameSets: FrameSet[] = [
   {
-    name: "room",
-    tiles: { x: 1, y: 3, w: 5, h: 4 },
+    name: "room_default",
+    tiles: { x: 0, y: 0, w: 5, h: 4 },
   },
   {
-    name: "couch",
-    tiles: { x: 1, y: 0, w: 2, h: 2 },
+    name: "room_dark",
+    tiles: { x: 5, y: 0, w: 5, h: 4 },
   },
   {
-    name: "tv",
-    tiles: { x: 3, y: 0, w: 2, h: 2 },
-  },
-  {
-    name: "tree",
-    tiles: { x: 2, y: 7, w: 1, h: 2 },
+    name: "room_red",
+    tiles: { x: 10, y: 0, w: 5, h: 4 },
   },
 ];
 
@@ -98,7 +94,7 @@ function frameSetToFrames(frameSet: FrameSet): Record<string, Frame> {
 }
 
 fs.writeFileSync(
-  "./public/assets/tiles/drum.json",
+  "./public/assets/tiles/room3.json",
   JSON.stringify(
     {
       meta,

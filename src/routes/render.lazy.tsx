@@ -23,7 +23,7 @@ export const tileSize = {
 function Render() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const [tileSet, setTileSet] = useState<RoomTileSet>("room");
+  const [tileSet, setTileSet] = useState<RoomTileSet>("room_default");
   const [obstacleType, setObstacleType] = useState<ObstacleType>("tree");
 
   const [widthSlider, setWidthSlider] = useState(21);
