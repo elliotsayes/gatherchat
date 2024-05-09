@@ -39,140 +39,43 @@ const setupInstance = (instance: CompositeTilemap, props: Props) => {
     }
   }
 
+  const tilesetOffsetX = (x: number) => ({
+      0: 0,
+      1: 1,
+      2: 3,
+      [roomSizeTiles.w - 1]: 4,
+    }[x] ?? 3)
+
+  const tilesetOffsetY = (y: number) => ({
+      0: 0,
+      1: 1,
+      [roomSizeTiles.h - 1]: 3,
+    }[y] ?? 2)
+
   // Iterate over main area
   for (let x = 0; x < roomSizeTiles.w; x++) {
     for (let y = 0; y < roomSizeTiles.h; y++) {
-      // Logic by column
-      if (x === 0) {
-        // Left wall column
-        if (y === 0) {
-          instance.tile(
-            `${tileSet}_0_0`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        } else if (y === roomSizeTiles.h - 1) {
-          instance.tile(
-            `${tileSet}_0_3`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        } else {
-          instance.tile(
-            `${tileSet}_0_2`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        }
-      } else if (x === 1) {
-        // Left shadow column
-        if (y === 0) {
-          instance.tile(
-            `${tileSet}_1_0`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        } else if (y === 1) {
-          instance.tile(
-            `${tileSet}_1_1`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        } else if (y === roomSizeTiles.h - 1) {
-          instance.tile(
-            `${tileSet}_1_3`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        } else {
-          instance.tile(
-            `${tileSet}_1_2`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        }
-      } else if (x === roomSizeTiles.w - 1) {
-        // Right wall column
-        if (y === 0) {
-          instance.tile(
-            `${tileSet}_4_0`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        } else if (y === roomSizeTiles.h - 1) {
-          instance.tile(
-            `${tileSet}_4_3`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        } else {
-          instance.tile(
-            `${tileSet}_4_2`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        }
-      } else if (x % windowSpacing === 0) {
-        // Window columns
-        if (y === 0) {
-          instance.tile(
-            `${tileSet}_2_0`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        } else if (y === 1) {
-          instance.tile(
-            `${tileSet}_2_1`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        } else if (y === 2) {
-          instance.tile(
-            `${tileSet}_2_2`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        } else if (y === roomSizeTiles.h - 1) {
-          instance.tile(
-            `${tileSet}_2_3`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        } else {
-          instance.tile(
-            `${tileSet}_3_2`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        }
-      } else {
-        // Normal columns
-        if (y === 0) {
-          instance.tile(
-            `${tileSet}_3_0`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        } else if (y === 1) {
-          instance.tile(
-            `${tileSet}_3_1`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        } else if (y === roomSizeTiles.h - 1) {
-          instance.tile(
-            `${tileSet}_3_3`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        } else {
-          instance.tile(
-            `${tileSet}_3_2`,
-            x * tileSizeBase.w,
-            y * tileSizeBase.h,
-          );
-        }
+      // Draw window tiles
+      if (
+        x > 1 &&
+        x < roomSizeTiles.w - 1 &&
+        y < 3 &&
+        x % windowSpacing === 0
+      ) {
+        instance.tile(
+          `${tileSet}_2_${tilesetOffsetY(y)}`,
+          x * tileSizeBase.w,
+          y * tileSizeBase.h,
+        );
+        continue;
       }
+
+      // Draw regular tile
+      instance.tile(
+        `${tileSet}_${tilesetOffsetX(x)}_${tilesetOffsetY(y)}`,
+        x * tileSizeBase.w,
+        y * tileSizeBase.h,
+      );
     }
   }
 };
