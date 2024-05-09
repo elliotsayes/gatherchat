@@ -146,7 +146,7 @@ export class AoGatherProvider extends AoProvider implements AoGather {
   }
 
   async updateData(): Promise<void> {
-    console.log("TODO: Periodic update");
+    // TODO: remove?
   }
 
   async getUsers(): Promise<Record<ArweaveID, ContractUser>> {
