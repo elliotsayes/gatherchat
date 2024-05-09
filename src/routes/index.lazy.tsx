@@ -1,9 +1,10 @@
 import { GatherChatDemo } from "@/components/layout/GatherChatDemo";
 import { buttonVariants } from "@/components/ui/button";
 import { GatherContractLoader, type GatherContractState } from "@/features/ao/components/GatherContractLoader";
+import { randomSeed } from "@/features/avatar/lib/edit";
 import { cn } from "@/utils";
 import { Link, createLazyFileRoute } from "@tanstack/react-router";
-import { Suspense, useRef } from "react";
+import { Suspense, useRef, useState } from "react";
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
@@ -30,6 +31,8 @@ const defaultState: GatherContractState = {
 
 function Index() {
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const [randomAvatar] = useState(() => randomSeed());
 
   return (
     <div ref={containerRef} className="w-[100%] h-[100%] relative">
@@ -83,12 +86,20 @@ function Index() {
       <div className="z-0 absolute w-[100%] h-[100%] overflow-hidden">
         <Suspense
           fallback={(
-            <GatherChatDemo containerRef={containerRef} state={defaultState}/>
+            <GatherChatDemo
+              containerRef={containerRef}
+              state={defaultState}
+              avatarSeed={randomAvatar}
+            />
           )}
         >
           <GatherContractLoader>
             {(state) => (
-              <GatherChatDemo containerRef={containerRef} state={state} />
+              <GatherChatDemo
+                containerRef={containerRef}
+                state={state}
+                avatarSeed={randomAvatar}
+              />
             )}
           </GatherContractLoader>
         </Suspense>

@@ -11,13 +11,14 @@ import { useMemo, useState } from "react";
 interface GatherChat2Props {
   containerRef: React.RefObject<HTMLDivElement>;
   state: GatherContractState;
+  avatarSeed: string;
 }
 
 export const GatherChatDemo = ({
   containerRef,
   state: contractState,
+  avatarSeed,
 }: GatherChat2Props) => {
-  const [randomAvatar] = useState(() => randomSeed());
   // Convert raw GatherContractState to RenderEngineState
   const renderEngineState: RenderState = useMemo(() => {
     const player: RenderPlayer = {
@@ -27,7 +28,7 @@ export const GatherChatDemo = ({
         created: 0,
         lastSeen: 0,
         name: "You?",
-        avatar: randomAvatar,
+        avatar: avatarSeed,
         status: "",
         currentWorldId: "",
         following: {},
@@ -62,7 +63,7 @@ export const GatherChatDemo = ({
           };
         }),
     };
-  }, [contractState, randomAvatar]);
+  }, [contractState, avatarSeed]);
 
   const world = useMemo(
     () =>
