@@ -2,9 +2,9 @@ import {
   AoGatherProvider,
   type ArweaveAddress,
   type ContractPost,
+  type ContractUser,
   type ContractWorld,
   type ContractWorldIndex,
-  type ContractUser,
 } from "@/features/ao/lib/ao-gather";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";

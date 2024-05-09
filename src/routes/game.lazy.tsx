@@ -12,11 +12,11 @@ export const Route = createLazyFileRoute("/game")({
 function Game() {
   return (
     <Suspense
-      fallback={(
+      fallback={
         <div className="h-screen w-screen text-center flex flex-col justify-center">
           <p className="text-xl">Loading...</p>
         </div>
-      )}
+      }
     >
       <WalletLoader>
         {(arweaveAddress) => (

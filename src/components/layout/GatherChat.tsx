@@ -10,8 +10,8 @@ import type {
 import type { ContractPost } from "@/features/ao/lib/ao-gather";
 import {
   RenderEngine,
-  type RenderState,
   type RenderOtherPlayer,
+  type RenderState,
 } from "@/features/render/components/RenderEngine";
 import { createDecoratedRoom } from "@/features/worlds/DecoratedRoom";
 import { timeAgo } from "@/utils";
@@ -44,8 +44,7 @@ export const GatherChat = ({
   // To force rerender of profile view
   const [profileKey, setProileKey] = useState(0);
 
-  const [sidePanelState, setSidePanelState] =
-    useState<SidePanelState>("feed");
+  const [sidePanelState, setSidePanelState] = useState<SidePanelState>("feed");
 
   const [selectedPlayer, setSelectedPlayer] = useState<
     RenderOtherPlayer | undefined
@@ -95,9 +94,12 @@ export const GatherChat = ({
         savedPosition: contractState.world.playerPositions[playerAddress],
       },
       otherPlayers: Object.entries(contractState.users)
-        .filter(([otherPlayerAddress, _]) => otherPlayerAddress !== playerAddress)
+        .filter(
+          ([otherPlayerAddress, _]) => otherPlayerAddress !== playerAddress,
+        )
         .map(([otherPlayerAddress, otherPlayer]) => {
-          const savedPosition = contractState.world.playerPositions[otherPlayerAddress]
+          const savedPosition =
+            contractState.world.playerPositions[otherPlayerAddress];
           return {
             id: otherPlayerAddress,
             profile: otherPlayer,
@@ -112,7 +114,7 @@ export const GatherChat = ({
             isFollowingUser: Object.keys(otherPlayer.following).includes(
               playerAddress,
             ),
-            
+
             // Transient
             isActivated: false,
             isTalking: false,

@@ -1,8 +1,8 @@
 import type {
   ArweaveID,
   ContractPosition,
-  ContractWorld,
   ContractUser,
+  ContractWorld,
 } from "@/features/ao/lib/ao-gather";
 import type { Position } from "@/features/render/lib/schema";
 import { Stage } from "@pixi/react";
@@ -81,7 +81,7 @@ export type RenderEngineEvents = {
 
 export type RenderEngineFlags = {
   enableMovement: boolean;
-  animateMovement: boolean,
+  animateMovement: boolean;
 
   showWorld: boolean;
   showPlayer: boolean;
@@ -202,20 +202,21 @@ export const RenderEngine = ({
                       {flags.showObjects && world.spritesBg}
                       {flags.showOtherPlayers &&
                         state.otherPlayers
-                          .filter((otherPlayer) => otherPlayer.hasPositionInWorld)
+                          .filter(
+                            (otherPlayer) => otherPlayer.hasPositionInWorld,
+                          )
                           .map((otherPlayer) => (
-                            <Spring 
-                            key={otherPlayer.id}
-                            to={{
-                              x: 
-                                otherPlayer.savedPosition.x * tileSize.x +
-                                tileSize.x / 2
-                              ,
-                              y: 
-                                otherPlayer.savedPosition.y * tileSize.y +
-                                tileSize.y / 2
-                              ,
-                            }}>
+                            <Spring
+                              key={otherPlayer.id}
+                              to={{
+                                x:
+                                  otherPlayer.savedPosition.x * tileSize.x +
+                                  tileSize.x / 2,
+                                y:
+                                  otherPlayer.savedPosition.y * tileSize.y +
+                                  tileSize.y / 2,
+                              }}
+                            >
                               {(props) => (
                                 <InteractableAvatar
                                   name={otherPlayer.profile.name}
@@ -230,14 +231,15 @@ export const RenderEngine = ({
                                     events.onPlayerClick(otherPlayer);
                                   }}
                                   filters={
-                                    otherPlayer.isInWorld ? [] : [slightlyTransparent]
+                                    otherPlayer.isInWorld
+                                      ? []
+                                      : [slightlyTransparent]
                                   }
                                   {...props}
                                 />
                               )}
                             </Spring>
-                          )
-                      )}
+                          ))}
                     </Container>
                   )}
                 </Spring>

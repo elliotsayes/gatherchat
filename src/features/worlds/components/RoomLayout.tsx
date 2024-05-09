@@ -39,18 +39,20 @@ const setupInstance = (instance: CompositeTilemap, props: Props) => {
     }
   }
 
-  const tilesetOffsetX = (x: number) => ({
+  const tilesetOffsetX = (x: number) =>
+    ({
       0: 0,
       1: 1,
       2: 3,
       [roomSizeTiles.w - 1]: 4,
-    }[x] ?? 3)
+    })[x] ?? 3;
 
-  const tilesetOffsetY = (y: number) => ({
+  const tilesetOffsetY = (y: number) =>
+    ({
       0: 0,
       1: 1,
       [roomSizeTiles.h - 1]: 3,
-    }[y] ?? 2)
+    })[y] ?? 2;
 
   // Iterate over main area
   for (let x = 0; x < roomSizeTiles.w; x++) {

@@ -2,8 +2,8 @@ import type { GatherContractState } from "@/features/ao/components/GatherContrac
 import { randomSeed } from "@/features/avatar/lib/edit";
 import {
   RenderEngine,
-  type RenderState,
   type RenderPlayer,
+  type RenderState,
 } from "@/features/render/components/RenderEngine";
 import { createDecoratedRoom } from "@/features/worlds/DecoratedRoom";
 import { useMemo, useState } from "react";
@@ -44,9 +44,9 @@ export const GatherChatDemo = ({
         ...player,
         savedPosition: undefined,
       },
-      otherPlayers: Object.entries(contractState.users)
-        .map(([address, otherPlayer]) => {
-          const savedPosition = contractState.world.playerPositions[address]
+      otherPlayers: Object.entries(contractState.users).map(
+        ([address, otherPlayer]) => {
+          const savedPosition = contractState.world.playerPositions[address];
           return {
             id: address,
             profile: otherPlayer,
@@ -61,7 +61,8 @@ export const GatherChatDemo = ({
             isActivated: false,
             isTalking: false,
           };
-        }),
+        },
+      ),
     };
   }, [contractState, avatarSeed]);
 

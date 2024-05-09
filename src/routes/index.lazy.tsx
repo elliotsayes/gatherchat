@@ -1,6 +1,9 @@
 import { GatherChatDemo } from "@/components/layout/GatherChatDemo";
 import { buttonVariants } from "@/components/ui/button";
-import { GatherContractLoader, type GatherContractState } from "@/features/ao/components/GatherContractLoader";
+import {
+  GatherContractLoader,
+  type GatherContractState,
+} from "@/features/ao/components/GatherContractLoader";
 import { randomSeed } from "@/features/avatar/lib/edit";
 import { cn } from "@/utils";
 import { Link, createLazyFileRoute } from "@tanstack/react-router";
@@ -23,11 +26,11 @@ const defaultState: GatherContractState = {
       x: 5,
       y: 4,
     },
-    playerPositions: {}
+    playerPositions: {},
   },
   users: {},
-  posts: {}
-}
+  posts: {},
+};
 
 function Index() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -85,13 +88,13 @@ function Index() {
       </div>
       <div className="z-0 absolute w-[100%] h-[100%] overflow-hidden">
         <Suspense
-          fallback={(
+          fallback={
             <GatherChatDemo
               containerRef={containerRef}
               state={defaultState}
               avatarSeed={randomAvatar}
             />
-          )}
+          }
         >
           <GatherContractLoader>
             {(state) => (
