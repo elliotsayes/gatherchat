@@ -22,6 +22,9 @@ import { ChatBox } from "../../features/post/components/ChatBox";
 import { ProfileView } from "../../features/profile/components/ProfileView";
 import { SetupForm } from "../../features/profile/components/SetupForm";
 import { SidePanel, type SidePanelState } from "./SidePanel";
+import { createClubBeach } from "@/features/worlds/ClubBeach";
+import type { RoomTileSet } from "@/features/worlds/components/RoomLayout";
+import type { GenericTileSet } from "@/features/worlds/components/GenericLayout";
 
 export type UploadInfo = Pick<ContractPost, "type" | "textOrTxId">;
 
@@ -135,19 +138,23 @@ export const GatherChat = ({
 
   const world = useMemo(
     () =>
-      createDecoratedRoom(
-        "room_default",
-        {
-          w: 21,
-          h: 12,
-        },
-        3,
-        {
-          w: 4,
-          h: 4,
-        },
+      contractState.world.worldType === "clubbeach" ? (
+        createClubBeach(
+          contractState.world.worldTheme as GenericTileSet,
+          contractState.world.worldSize,
+        )
+      ) : (
+        createDecoratedRoom(
+          contractState.world.worldTheme as RoomTileSet,
+          contractState.world.worldSize,
+          3,
+          {
+            w: 4,
+            h: 4,
+          },
+        )
       ),
-    [],
+    [contractState.world],
   );
 
   return (

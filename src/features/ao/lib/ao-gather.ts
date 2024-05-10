@@ -41,7 +41,12 @@ export type ContractWorld = {
   lastActivity: number;
   name: string;
   description: string;
-  theme: string;
+  worldSize: {
+    w: number;
+    h: number;
+  }
+  worldType: string;
+  worldTheme: string;
   spawnPosition: ContractPosition;
   playerPositions: Record<ArweaveID, ContractPosition>;
 };

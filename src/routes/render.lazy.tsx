@@ -225,7 +225,12 @@ function Render() {
                 lastActivity: 0,
                 name: "",
                 description: "",
-                theme: "",
+                worldSize: {
+                  w: widthSlider,
+                  h: heightSlider,
+                },
+                worldType,
+                worldTheme: worldType === "room" ? roomTileSet : clubbeachTileSet,
                 spawnPosition: {
                   x: 0,
                   y: 0,

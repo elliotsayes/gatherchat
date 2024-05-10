@@ -21,7 +21,12 @@ const defaultState: GatherContractState = {
     lastActivity: 0,
     name: "",
     description: "",
-    theme: "",
+    worldSize: {
+      w: 21,
+      h: 12,
+    },
+    worldType: "room",
+    worldTheme: "room_default",
     spawnPosition: {
       x: 5,
       y: 4,
