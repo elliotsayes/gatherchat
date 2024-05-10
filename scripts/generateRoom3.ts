@@ -1,4 +1,4 @@
-import { generate, type FrameSet } from "./generate";
+import { generate, type TileBox } from "./generate";
 
 const meta = {
   app: "gatherchat",
@@ -15,19 +15,19 @@ const tileSize = {
   h: 16,
 };
 
-const allFrameSets: FrameSet[] = [
+const segmentedTileBoxes: TileBox[] = [
   {
     name: "room_default",
-    tiles: { x: 0, y: 0, w: 5, h: 4 },
+    rect: { x: 0, y: 0, w: 5, h: 4 },
   },
   {
     name: "room_dark",
-    tiles: { x: 5, y: 0, w: 5, h: 4 },
+    rect: { x: 5, y: 0, w: 5, h: 4 },
   },
   {
     name: "room_red",
-    tiles: { x: 10, y: 0, w: 5, h: 4 },
+    rect: { x: 10, y: 0, w: 5, h: 4 },
   },
 ];
 
-export const generateRoom3 = () => generate("./public/assets/tiles/room3.json", meta, tileSize, allFrameSets);
+export const generateRoom3 = () => generate("./public/assets/tiles/room3.json", meta, tileSize, segmentedTileBoxes);

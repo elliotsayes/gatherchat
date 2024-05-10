@@ -102,15 +102,11 @@ const setupInstance = (instance: CompositeTilemap, props: Props) => {
       y: couchAbsoluteOffset.y + couchRelativeOffset.y * n,
     };
     if (totalOffset.x >= roomSizeTiles.w - 2) break;
-    for (let x = 0; x < 2; x++) {
-      for (let y = 0; y < 2; y++) {
-        instance.tile(
-          `${tileSet}_couch_${n}_${x}_${y}`,
-          (totalOffset.x + x) * tileSizeBase.w,
-          (totalOffset.y + y) * tileSizeBase.h,
-        );
-      }
-    }
+      instance.tile(
+        `${tileSet}_couch_${n}`,
+        totalOffset.x * tileSizeBase.w,
+        totalOffset.y * tileSizeBase.h,
+      );
   }
 
   // Draw rugs
@@ -122,15 +118,11 @@ const setupInstance = (instance: CompositeTilemap, props: Props) => {
       y: rugAbsoluteOffset.y + rugRelativeOffset.y * n,
     };
     if (totalOffset.x >= roomSizeTiles.w - 3 || totalOffset.y >= roomSizeTiles.h - 3) break;
-    for (let x = 0; x < 4; x++) {
-      for (let y = 0; y < 4; y++) {
-        instance.tile(
-          `${tileSet}_rug_${n}_${x}_${y}`,
-          (totalOffset.x + x) * tileSizeBase.w,
-          (totalOffset.y + y) * tileSizeBase.h,
-        );
-      }
-    }
+    instance.tile(
+      `${tileSet}_rug_${n}`,
+      totalOffset.x * tileSizeBase.w,
+      totalOffset.y * tileSizeBase.h,
+    );
   }
 };
 
