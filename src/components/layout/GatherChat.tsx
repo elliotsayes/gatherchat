@@ -33,14 +33,12 @@ interface GatherChatProps {
   playerAddress: string;
   state: GatherContractState;
   events: GatherContactEvents;
-  onWorldChange: (worldId: string) => void;
 }
 
 export const GatherChat = ({
   playerAddress,
   state: contractState,
   events: contractEvents,
-  onWorldChange,
 }: GatherChatProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [lastResized, setLastResized] = useState(0);
@@ -175,7 +173,7 @@ export const GatherChat = ({
             <select
               className=" text-xl px-2 py-1"
               onChange={(e) => {
-                onWorldChange(e.target.value);
+                contractEvents.setWorldId(e.target.value);
               }}
               defaultValue={contractState.worldId}
             >

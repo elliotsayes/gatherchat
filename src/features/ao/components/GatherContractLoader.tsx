@@ -30,7 +30,6 @@ interface Props {
   children: (
     gatherContractState: GatherContractState,
     gatherContactEvents: GatherContactEvents,
-    onWorldChange: (worldId: string) => void,
   ) => React.ReactNode;
   initialWorldId?: string;
 }
@@ -111,7 +110,9 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
   const events: GatherContactEvents = {
     setWorldId: async (worldId) => {
       setWorldId(worldId);
-      // Will automatically refetch world and posts, so no need to do this manually
+      await aoGather.updateUser({ currentWorldId: worldId })
+      await refetchUsers();
+      // Will automatically refetch new world and posts, so no need to do this manually
     },
     register: async (args) => {
       await aoGather.register(args);
@@ -139,5 +140,5 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
     },
   };
 
-  return children(state, events, setWorldId);
+  return children(state, events);
 };
