@@ -1,9 +1,12 @@
 import { RenderEngine } from "@/features/render/components/RenderEngine";
+import { type WorldType, WorldTypes } from "@/features/worlds";
+import { createClubBeach } from "@/features/worlds/ClubBeach";
 import {
   type ObstacleType,
   ObstacleTypes,
   createDecoratedRoom,
 } from "@/features/worlds/DecoratedRoom";
+import { type GenericTileSet, GenericTileSets } from "@/features/worlds/components/GenericLayout";
 import {
   type RoomTileSet,
   RoomTileSets,
@@ -23,19 +26,23 @@ export const tileSize = {
 function Render() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const [tileSet, setTileSet] = useState<RoomTileSet>("room_default");
-  const [obstacleType, setObstacleType] = useState<ObstacleType>("tree");
-
   const [widthSlider, setWidthSlider] = useState(21);
   const [heightSlider, setHeightSlider] = useState(12);
+
+  const [worldType, setWorldType] = useState<WorldType>("clubbeach");
+
+  const [clubbeachTileSet, setClubbeachTileSet] = useState<GenericTileSet>("beach1");
+
+  const [roomTileSet, setRoomTileSet] = useState<RoomTileSet>("room_default");
+  const [obstacleType, setObstacleType] = useState<ObstacleType>("tree");
   const [windowGapSlider, setWindowGapSlider] = useState(3);
   const [blockSpacingWidthSlider, setBlockSpacingWidthSlider] = useState(4);
   const [blockSpacingHeightSlider, setBlockSpacingHeightSlider] = useState(4);
 
-  const world = useMemo(
+  const roomWorld = useMemo(
     () =>
       createDecoratedRoom(
-        tileSet,
+        roomTileSet,
         {
           w: widthSlider,
           h: heightSlider,
@@ -48,7 +55,7 @@ function Render() {
         obstacleType,
       ),
     [
-      tileSet,
+      roomTileSet,
       widthSlider,
       heightSlider,
       blockSpacingWidthSlider,
@@ -58,36 +65,26 @@ function Render() {
     ],
   );
 
+  const clubbeachWorld = useMemo(
+    () =>
+      createClubBeach(
+        clubbeachTileSet,
+        {
+          w: widthSlider,
+          h: heightSlider,
+        },
+      ),
+    [
+      clubbeachTileSet,
+      widthSlider,
+      heightSlider,
+    ],
+  );
+
   return (
     <div>
       <h1 className="text-xl">Render Demo</h1>
-      <div className="flex flex-row gap-2 flex-wrap">
-        <label>
-          Tile Set:
-          <select
-            value={tileSet}
-            onChange={(e) => setTileSet(e.target.value as RoomTileSet)}
-          >
-            {RoomTileSets.map((set) => (
-              <option key={set} value={set}>
-                {set}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Obstacle Type:
-          <select
-            value={obstacleType}
-            onChange={(e) => setObstacleType(e.target.value as ObstacleType)}
-          >
-            {ObstacleTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </label>
+      <div className="">
         <label>
           Width:
           <input
@@ -110,51 +107,116 @@ function Render() {
           />
           {heightSlider}
         </label>
+        <br />
         <label>
-          Block Spacing Width:
-          <input
-            type="range"
-            min={2}
-            max={10}
-            value={blockSpacingWidthSlider}
-            onChange={(e) =>
-              setBlockSpacingWidthSlider(Number.parseInt(e.target.value))
-            }
-          />
-          {blockSpacingWidthSlider}
+          World Type:
+          <select
+            value={worldType}
+            onChange={(e) => setWorldType(e.target.value as WorldType)}
+          >
+            {WorldTypes.map((set) => (
+              <option key={set} value={set}>
+                {set}
+              </option>
+            ))}
+          </select>
         </label>
-        <label>
-          Block Spacing Height:
-          <input
-            type="range"
-            min={2}
-            max={10}
-            value={blockSpacingHeightSlider}
-            onChange={(e) =>
-              setBlockSpacingHeightSlider(Number.parseInt(e.target.value))
-            }
-          />
-          {blockSpacingHeightSlider}
-        </label>
-        <label>
-          Window Gap:
-          <input
-            type="range"
-            min={1}
-            max={5}
-            value={windowGapSlider}
-            onChange={(e) =>
-              setWindowGapSlider(Number.parseInt(e.target.value))
-            }
-          />
-          {windowGapSlider}
-        </label>
+        <br />
+        {
+          worldType === "room" ? (
+            <>
+              <label>
+                Tile Set:
+                <select
+                  value={roomTileSet}
+                  onChange={(e) => setRoomTileSet(e.target.value as RoomTileSet)}
+                >
+                  {RoomTileSets.map((set) => (
+                    <option key={set} value={set}>
+                      {set}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <br />
+              <label>
+                Obstacle Type:
+                <select
+                  value={obstacleType}
+                  onChange={(e) => setObstacleType(e.target.value as ObstacleType)}
+                >
+                  {ObstacleTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Block Spacing Width:
+                <input
+                  type="range"
+                  min={2}
+                  max={10}
+                  value={blockSpacingWidthSlider}
+                  onChange={(e) =>
+                    setBlockSpacingWidthSlider(Number.parseInt(e.target.value))
+                  }
+                />
+                {blockSpacingWidthSlider}
+              </label>
+              <label>
+                Block Spacing Height:
+                <input
+                  type="range"
+                  min={2}
+                  max={10}
+                  value={blockSpacingHeightSlider}
+                  onChange={(e) =>
+                    setBlockSpacingHeightSlider(Number.parseInt(e.target.value))
+                  }
+                />
+                {blockSpacingHeightSlider}
+              </label>
+              <label>
+                Window Gap:
+                <input
+                  type="range"
+                  min={1}
+                  max={5}
+                  value={windowGapSlider}
+                  onChange={(e) =>
+                    setWindowGapSlider(Number.parseInt(e.target.value))
+                  }
+                />
+                {windowGapSlider}
+              </label>
+            </>
+          ) : (
+            <>
+              <label>
+                Tile Set:
+                <select
+                  value={clubbeachTileSet}
+                  onChange={(e) => setClubbeachTileSet(e.target.value as GenericTileSet)}
+                >
+                  {GenericTileSets.map((set) => (
+                    <option key={set} value={set}>
+                      {set}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </>
+          )
+        }
       </div>
       <div className="w-dvw h-dvh" ref={containerRef}>
         <RenderEngine
+          key={worldType}
           parentRef={containerRef}
           lastResized={0}
-          world={world}
+          world={worldType === "room" ? roomWorld : clubbeachWorld}
           state={{
             world: {
               id: "WelcomeLobby",

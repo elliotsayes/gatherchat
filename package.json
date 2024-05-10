@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run gen && vite build",
     "preview": "vite preview",
     "test": "vitest",
     "deploy": "aos gcdev --load process/gatherchat.lua",

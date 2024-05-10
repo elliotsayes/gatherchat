@@ -10,6 +10,11 @@ const meta = {
   // "smartupdate": "$TexturePacker:SmartUpdate:cd0d17d3f8965456a92be15158a0ed9e:d14942d54a3d3385fdb15258e1ae1a8f:cbce6b53f0f49e0bf15173c25c41f876$"
 };
 
+const tileSize = {
+  w: 16,
+  h: 16,
+};
+
 const allFrameSets: FrameSet[] = [
   {
     name: "room_default",
@@ -24,10 +29,5 @@ const allFrameSets: FrameSet[] = [
     tiles: { x: 10, y: 0, w: 5, h: 4 },
   },
 ];
-
-const tileSize = {
-  w: 16,
-  h: 16,
-};
 
 export const generateRoom3 = () => generate("./public/assets/tiles/room3.json", meta, tileSize, allFrameSets);
