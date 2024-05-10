@@ -87,7 +87,7 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
     queryFn: async () => {
       console.log("fetching posts");
       aoGather.ensureStarted();
-      return aoGather.getPosts({ worldId });
+      return aoGather.getPosts();
     },
     refetchInterval: 5000,
   });
