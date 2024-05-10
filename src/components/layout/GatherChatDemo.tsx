@@ -74,6 +74,7 @@ export const GatherChatDemo = ({
           w: 21,
           h: 12,
         },
+        () => {},
         3,
         {
           w: 4,

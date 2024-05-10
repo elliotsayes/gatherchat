@@ -64,6 +64,7 @@ export type ObstacleType = (typeof ObstacleTypes)[number];
 export const createDecoratedRoom = (
   tileSet: RoomTileSet,
   roomDimensions: Dimension,
+  onViewFeed: () => void,
   windowSpacing = 4,
   obstacleSpacing?: Dimension,
   obstacleType: ObstacleType = "tree",
@@ -92,7 +93,7 @@ export const createDecoratedRoom = (
               image="assets/sprite/board.png"
               scale={4}
               anchor={{ x: 0.5, y: 0.45 }}
-              // onclick={() => events.onViewFeed()}
+              onclick={() => onViewFeed()}
               x={tileSize.w * 5}
               y={tileSize.h * 1.25}
             />

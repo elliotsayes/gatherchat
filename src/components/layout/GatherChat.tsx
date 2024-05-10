@@ -142,11 +142,13 @@ export const GatherChat = ({
         createClubBeach(
           contractState.world.worldTheme as GenericTileSet,
           contractState.world.worldSize,
+          () => setSidePanelState("feed"),
         )
       ) : (
         createDecoratedRoom(
           contractState.world.worldTheme as RoomTileSet,
           contractState.world.worldSize,
+          () => setSidePanelState("feed"),
           3,
           {
             w: 4,

@@ -47,6 +47,7 @@ function Render() {
           w: widthSlider,
           h: heightSlider,
         },
+        () => {},
         windowGapSlider,
         {
           w: blockSpacingWidthSlider,
@@ -73,6 +74,7 @@ function Render() {
           w: widthSlider,
           h: heightSlider,
         },
+        () => {},
       ),
     [
       clubbeachTileSet,

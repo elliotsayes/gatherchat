@@ -63,6 +63,7 @@ export const createClubBeach = (
   // windowSpacing = 4,
   // obstacleSpacing?: Dimension,
   // obstacleType: ObstacleType = "tree",
+  onViewFeed: () => void,
 ): RenderEngineWorld => {
   // const obstacleLocations = getObstacleLocations(
   //   roomDimensions,
@@ -86,7 +87,7 @@ export const createClubBeach = (
           image="assets/sprite/board.png"
           scale={4}
           anchor={{ x: 0.5, y: 0.45 }}
-          // onclick={() => events.onViewFeed()}
+          onclick={() => onViewFeed()}
           x={tileSize.w * 5.5}
           y={tileSize.h * 1.25}
         />
