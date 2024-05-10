@@ -1,4 +1,4 @@
-## Categories
+## Features
 
 ### 1-User customisable worlds
 
