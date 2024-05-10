@@ -82,11 +82,13 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
     error: errorPosts,
     refetch: refetchPosts,
   } = useSuspenseQuery({
-    queryKey: ["posts", worldId],
+    queryKey: ["posts", /* worldId */],
     queryFn: async () => {
       console.log("fetching posts");
       aoGather.ensureStarted();
       return aoGather.getPosts();
+      // If you want to fetch posts for a specific world, just pass the worldId
+      // return aoGather.getPosts({ worldId });
     },
     refetchInterval: 5000,
   });
