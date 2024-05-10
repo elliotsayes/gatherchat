@@ -25,6 +25,7 @@ import { SidePanel, type SidePanelState } from "./SidePanel";
 import { createClubBeach } from "@/features/worlds/ClubBeach";
 import type { RoomTileSet } from "@/features/worlds/components/RoomLayout";
 import type { GenericTileSet } from "@/features/worlds/components/GenericLayout";
+import type { WorldType } from "@/features/worlds";
 
 export type UploadInfo = Pick<ContractPost, "type" | "textOrTxId">;
 
@@ -138,7 +139,7 @@ export const GatherChat = ({
 
   const world = useMemo(
     () =>
-      contractState.world.worldType === "clubbeach" ? (
+      (contractState.world.worldType as WorldType) === "clubbeach" ? (
         createClubBeach(
           contractState.world.worldTheme as GenericTileSet,
           contractState.world.worldSize,

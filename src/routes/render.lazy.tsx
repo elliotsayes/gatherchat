@@ -31,7 +31,7 @@ function Render() {
 
   const [worldType, setWorldType] = useState<WorldType>("clubbeach");
 
-  const [clubbeachTileSet, setClubbeachTileSet] = useState<GenericTileSet>("beach1");
+  const [genericTileSet, setGenericTileSet] = useState<GenericTileSet>("beach1");
 
   const [roomTileSet, setRoomTileSet] = useState<RoomTileSet>("room_default");
   const [obstacleType, setObstacleType] = useState<ObstacleType>("tree");
@@ -69,7 +69,7 @@ function Render() {
   const clubbeachWorld = useMemo(
     () =>
       createClubBeach(
-        clubbeachTileSet,
+        genericTileSet,
         {
           w: widthSlider,
           h: heightSlider,
@@ -77,7 +77,7 @@ function Render() {
         () => {},
       ),
     [
-      clubbeachTileSet,
+      genericTileSet,
       widthSlider,
       heightSlider,
     ],
@@ -125,7 +125,7 @@ function Render() {
         </label>
         <br />
         {
-          worldType === "room" ? (
+          worldType === "decoratedRoom" ? (
             <>
               <label>
                 Tile Set:
@@ -199,8 +199,8 @@ function Render() {
               <label>
                 Tile Set:
                 <select
-                  value={clubbeachTileSet}
-                  onChange={(e) => setClubbeachTileSet(e.target.value as GenericTileSet)}
+                  value={genericTileSet}
+                  onChange={(e) => setGenericTileSet(e.target.value as GenericTileSet)}
                 >
                   {GenericTileSets.map((set) => (
                     <option key={set} value={set}>
@@ -218,7 +218,7 @@ function Render() {
           key={worldType}
           parentRef={containerRef}
           lastResized={0}
-          world={worldType === "room" ? roomWorld : clubbeachWorld}
+          world={worldType === "decoratedRoom" ? roomWorld : clubbeachWorld}
           state={{
             world: {
               id: "WelcomeLobby",
@@ -232,7 +232,7 @@ function Render() {
                   h: heightSlider,
                 },
                 worldType,
-                worldTheme: worldType === "room" ? roomTileSet : clubbeachTileSet,
+                worldTheme: worldType === "decoratedRoom" ? roomTileSet : genericTileSet,
                 spawnPosition: {
                   x: 0,
                   y: 0,

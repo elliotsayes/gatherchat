@@ -44,10 +44,10 @@ Scripts:
   - The main world view rendering logic. Also handles player movement.
 - [/game route](src/routes/game.lazy.tsx) (src/routes/game.lazy.tsx)
   - Route for loading and displaying the main game screen
-- ["DecoratedRoom" world generator](src/features/worlds/DecoratedRoom.tsx) (src/features/worlds/DecoratedRoom.tsx)
-  - Example of a custom paramaterizable world generator. Modify this to change the world generation logic, or use it as a template for creating new world generators
-- [/render route (demo of DecoratedRoom)](src/routes/render.lazy.tsx) (src/routes/render.lazy.tsx)
-  - Route for rendering a world using the DecoratedRoom generator. You can play with cusomize the parameters and see how it affects the world generation
+- ["DecoratedRoom" world generator](src/features/worlds/DecoratedRoom.tsx) (src/features/worlds/DecoratedRoom.tsx) + [ClubBeach world generator](src/features/worlds/ClubBeach.tsx) (src/features/worlds/ClubBeach.tsx)
+  - Examples of custom paramaterizable world generators. Modify these to change the world generation logic, or use them as a template for creating new world generators
+- [/render route (demo of DecoratedRoom/ClubBeach)](src/routes/render.lazy.tsx) (src/routes/render.lazy.tsx)
+  - Route for rendering a world using the world generators. You can play with customize the parameters and see how it affects the world generation
 
 ## Acknowledgements
 - [Atticus](https://github.com/atticusofsparta) for the original project idea + base LUA contract/TS Interface
