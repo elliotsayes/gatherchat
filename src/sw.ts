@@ -42,13 +42,15 @@ async function responseToBitmap(response: Response) {
   return bitmap;
 }
 
+const assetPaths = ["assets/sprite/avatar/base.png", "assets/sprite/avatar/parts.png"]
+
 self.addEventListener("activate", (e) => {
   const event = e as ExtendableEvent;
   console.log("[Service Worker] Activate", e);
 
   event.waitUntil(
     (async () => {
-      await cacheAssets(["assets/sprite/base.png", "assets/sprite/parts.png"]);
+      await cacheAssets(assetPaths);
       console.log("[Service Worker] Cached assets");
     })(),
   );
@@ -67,10 +69,7 @@ self.addEventListener("fetch", (e) => {
 
         const seed = url.searchParams.get("seed")!;
 
-        const assets = await retrieveAssets([
-          "assets/sprite/base.png",
-          "assets/sprite/parts.png",
-        ]);
+        const assets = await retrieveAssets(assetPaths);
         const baseTex = await responseToBitmap(assets[0]!);
         const partTex = await responseToBitmap(assets[1]!);
         const spriteBlob = await buildGenerator(baseTex, partTex)(seed);

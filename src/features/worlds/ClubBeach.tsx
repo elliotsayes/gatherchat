@@ -84,7 +84,7 @@ export const createClubBeach = (
     spritesBg: (
       <>
         <InteractableSprite
-          image="assets/sprite/board.png"
+          image="assets/sprite/object/board.png"
           scale={4}
           anchor={{ x: 0.5, y: 0.45 }}
           onclick={() => onViewFeed()}

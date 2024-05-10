@@ -90,7 +90,7 @@ export const createDecoratedRoom = (
         {roomDimensions.w >= 7 && (
           <>
             <InteractableSprite
-              image="assets/sprite/board.png"
+              image="assets/sprite/object/board.png"
               scale={4}
               anchor={{ x: 0.5, y: 0.45 }}
               onclick={() => onViewFeed()}
@@ -99,7 +99,7 @@ export const createDecoratedRoom = (
             />
             <InteractableSprite
               active={false}
-              image="assets/sprite/cal.png"
+              image="assets/sprite/object/cal.png"
               scale={4}
               anchor={{ x: 0.5, y: 0.5 }}
               // onclick={() => onViewFeed()}
@@ -112,7 +112,7 @@ export const createDecoratedRoom = (
           <>
             <InteractableSprite
               active={false}
-              image="assets/sprite/mona.png"
+              image="assets/sprite/object/mona.png"
               scale={4}
               anchor={{ x: 0.5, y: 0.5 }}
               // onclick={() => onViewFeed()}
@@ -121,7 +121,7 @@ export const createDecoratedRoom = (
             />
             <InteractableSprite
               active={false}
-              image="assets/sprite/stary.png"
+              image="assets/sprite/object/stary.png"
               scale={4}
               anchor={{ x: 0.5, y: 0.5 }}
               // onclick={() => onViewFeed()}
@@ -130,7 +130,7 @@ export const createDecoratedRoom = (
             />
             <InteractableSprite
               active={false}
-              image="assets/sprite/tv.png"
+              image="assets/sprite/object/tv.png"
               scale={4}
               anchor={{ x: 0.5, y: 0.5 }}
               // onclick={() => onViewFeed()}
@@ -143,7 +143,7 @@ export const createDecoratedRoom = (
           <>
             <InteractableSprite
               active={false}
-              image="assets/sprite/scream.png"
+              image="assets/sprite/object/scream.png"
               scale={4}
               anchor={{ x: 0.5, y: 0.5 }}
               // onclick={() => onViewFeed()}
@@ -152,7 +152,7 @@ export const createDecoratedRoom = (
             />
             <InteractableSprite
               active={false}
-              image="assets/sprite/couch.png"
+              image="assets/sprite/object/couch.png"
               scale={4}
               anchor={{ x: 0.5, y: 0.5 }}
               // onclick={() => onViewFeed()}
@@ -169,7 +169,7 @@ export const createDecoratedRoom = (
           <InteractableSprite
             active={false}
             key={i.toString()}
-            image={`assets/sprite/${obstacleType}.png`}
+            image={`assets/sprite/object/${obstacleType}.png`}
             scale={4}
             anchor={{ x: 0.5, y: 0.5 }}
             // onclick={() => onViewFeed()}
