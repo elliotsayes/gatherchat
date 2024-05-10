@@ -6,7 +6,7 @@ Since the last hackathon, Gather Chat has built in support for multiple worlds. 
 
 ### 2-User 1-1 Chat
 
-It would be nice if the player is near another player they could have the ability to filter the chat stream to just that user. So when looking at the activity tab, we could have an option to filter stream by the players you are next to. For bonus points, you could enable encrypted chat between the participants, or even livestream audio/video.
+It would be nice if when players are nearby they could have the ability to filter the chat stream to just those players. So when looking at the activity tab, we could have an option to filter stream by the players you are next to. You can also allow direct messaging between individual participants, and for bonus points encrypting the messages, or even add livestream audio/video!
 
 ### 3-Social-like Feed
 
@@ -14,7 +14,7 @@ This feature request is to make the chat panel look like a social feed than a ch
 
 ### 4-Mobile/Accessibility
 
-Gather Chat currently requires ArConnect on dekstop in order to play. However, it would be great to allow users to play without a wallet, or even when on mobile. One way of doing this is with Othent -- an Arweave wallet that uses Google OAuth to allow users to connect to AO/Arweave. You could also allow a temporary wallet as a backup. Also, Gather Chat needs to have its interface overhauled to work on mobile, including an suitable layout and touch controls for movement.
+Gather Chat currently requires ArConnect on desktop in order to play. However, it would be great to allow users to play without a wallet, or even when on mobile. One way of doing this is with Othent -- an Arweave wallet that uses Google OAuth to allow users to connect to AO/Arweave. You could also allow a temporary wallet as a backup. Also, Gather Chat needs to have its interface overhauled to work on mobile, including an suitable layout and touch controls for movement.
 
 ### 5-Autonomous Characters
 
