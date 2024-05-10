@@ -13,6 +13,7 @@ Scripts:
 - Lint: `npm run lint`
 - Build: `npm run build`
 - Test: `npm run test`
+- Generate tile definitions: `npm run gen`
 - Deploy (aos): `npm run deploy`
 
 ## Key libraries used
@@ -46,6 +47,8 @@ Scripts:
   - Route for loading and displaying the main game screen
 - ["DecoratedRoom" world generator](src/features/worlds/DecoratedRoom.tsx) (src/features/worlds/DecoratedRoom.tsx) + [ClubBeach world generator](src/features/worlds/ClubBeach.tsx) (src/features/worlds/ClubBeach.tsx)
   - Examples of custom paramaterizable world generators. Modify these to change the world generation logic, or use them as a template for creating new world generators
+- [scripts/generateClubBeach.ts](scripts/generateClubBeach.ts)
+  - Script for generating the ClubBeach tile definition JSON (i.e. [public/assets/tiles/clubbeach.json](public/assets/tiles/clubbeach.json)). These are used so the layout builders (e.g. [src/features/worlds/components/GenericLayout.tsx](src/features/worlds/components/GenericLayout.tsx)) can access the tiles by name
 - [/render route (demo of DecoratedRoom/ClubBeach)](src/routes/render.lazy.tsx) (src/routes/render.lazy.tsx)
   - Route for rendering a world using the world generators. You can play with customize the parameters and see how it affects the world generation
 

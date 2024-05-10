@@ -33,7 +33,11 @@ const setupInstance = (instance: CompositeTilemap, props: Props) => {
   for (let x = -20; x < roomSizeTiles.w + 20; x++) {
     for (let y = -20; y < roomSizeTiles.h + 20; y++) {
       // Draw background tiles
-      instance.tile(`${tileSet}_floor_walkable_1_1`, x * tileSizeBase.w, y * tileSizeBase.h);
+      if (tileSet.startsWith("beach")) {
+        instance.tile(`${tileSet}_floor_walkable_1_1`, x * tileSizeBase.w, y * tileSizeBase.h);
+      } else {
+        instance.tile(`${tileSet}_floor_walkable_1_1`, x * tileSizeBase.w, y * tileSizeBase.h);
+      }
     }
   }
 

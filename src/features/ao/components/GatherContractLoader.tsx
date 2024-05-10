@@ -64,8 +64,8 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
 
   const {
     data: world,
-    error: errorRoom,
-    refetch: refetchRoom,
+    error: errorWorld,
+    refetch: refetchWorld,
   } = useSuspenseQuery({
     queryKey: ["world", worldId],
     queryFn: async () => {
@@ -92,7 +92,7 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
     refetchInterval: 5000,
   });
 
-  if (errorUsers !== null || errorPosts !== null || errorRoom !== null) {
+  if (errorUsers !== null || errorPosts !== null || errorWorld !== null) {
     return (
       <div className="h-screen w-screen text-center flex flex-col justify-center">
         <p className="text-xl">Error Loading</p>
@@ -111,7 +111,7 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
   const events: GatherContactEvents = {
     setWorldId: async (worldId) => {
       setWorldId(worldId);
-      // Will automatically refetch room and posts, so no need to do this manually
+      // Will automatically refetch world and posts, so no need to do this manually
     },
     register: async (args) => {
       await aoGather.register(args);
@@ -123,7 +123,7 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
     },
     updatePosition: async (args) => {
       await aoGather.updatePosition(args);
-      await refetchRoom();
+      await refetchWorld();
     },
     post: async (args) => {
       await aoGather.post(args);
