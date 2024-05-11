@@ -39,9 +39,13 @@ function Index() {
 
   return (
     <div ref={containerRef} className="w-[100%] h-[100%] relative">
-      <div className="z-10 absolute w-[100%] h-[100%] text-white bg-gray-800/80 flex flex-col justify-center items-center pb-10">
-        <img src="./assets/logo.png" width={400} alt="Gather Chat logo" />
-        <div>
+      <div className="z-10 absolute w-[100%] h-[100%]  bg-gather/60 flex flex-col justify-center items-end">
+
+        <div className="text-black bg-gather border-solid border-2 border-gatherstrong p-10 rounded-3xl">
+          <img className="inline-block h-20 w-20 rounded-full ring-2 ring-white ml-12 mb-4"
+               src="./assets/logo-gather.webp"
+               alt="Gather Chat logo" />
+
           <ol>
             <li className="h-10 pl-2">
               <span className="font-mono">1. </span>
@@ -51,7 +55,7 @@ function Index() {
                   href="https://www.arconnect.io/download"
                   target="_blank"
                   rel="noreferrer"
-                  className="unterline text-blue-200"
+                  className="unterline text-gray-800"
                 >
                   ArConnect
                 </a>
@@ -71,21 +75,23 @@ function Index() {
               </Link>
             </li>
           </ol>
+
+          <div className="w-[100%] bottom-0 text-black flex flex-col justify-end items-center py-4">
+            <p>
+              Created by Elliot Sayes. Source on{" "}
+              <a
+                  href="https://github.com/elliotsayes/gatherchat"
+                  target="_black"
+                  className="underline text-gray-800"
+              >
+                Github
+              </a>
+              .
+            </p>
+          </div>
         </div>
       </div>
-      <div className="z-20 absolute w-[100%] bottom-0 text-white flex flex-col justify-end items-center py-4">
-        <p>
-          Created by Elliot Sayes. Source on{" "}
-          <a
-            href="https://github.com/elliotsayes/gatherchat"
-            target="_black"
-            className="underline text-blue-200"
-          >
-            Github
-          </a>
-          .
-        </p>
-      </div>
+
       <div className="z-0 absolute w-[100%] h-[100%] overflow-hidden">
         <Suspense
           fallback={
