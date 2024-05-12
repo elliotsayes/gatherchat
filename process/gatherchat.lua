@@ -4,102 +4,56 @@ local utils = require(".utils")
 
 -- Key: Address
 Users = Users or {
-  testUser1 = {
+  LlamaSecretary = {
     processId = "id",
     created = 1713833416559,
     lastSeen = 1713833416559,
-    name = "Test User :)",
+    name = "Llama Secretary",
     avatar = "a1204030b070a01", -- pixel art seed
-    status = "Hello, World!",
-    currentWorldId = "WelcomeLobby",
-    following = {
-      -- testUser2 = true,
-    },
+    status = "Bureaucratizing cyberspace!",
+    currentWorldId = "LlamaFED",
+    following = {},
   },
 }
 
-DefaultWorlds = {
-  "WelcomeLobby",
-  "ChillZone",
-  "HolidayHangout",
-}
-
 -- Key: World ID
-Worlds = Worlds or {
-  WelcomeLobby = {
+World = World or {
+  LlamaFED = {
     created = 1713833416559,
     lastActivity = 1713833416559,
-    name = "WelcomeLobby",
-    description = "Welcome to the Lobby!",
+    name = "LlamaFED",
+    description = "Home of the LLamaCoin Bureaucracy",
     worldSize = {
       w = 21,
       h = 12,
     },
     worldType = "decoratedRoom",
-    worldTheme = "room_default",
+    worldTheme = "llamaFED",
     spawnPosition = {
-      x = 5,
-      y = 4,
+      x = 6,
+      y = 6,
     },
     playerPositions = {
-      testUser1 = {
-        x = 4,
-        y = 5,
+      LlamaSecretary = {
+        x = 3,
+        y = 1,
       },
-    },
-  },
-  ChillZone = {
-    created = 1713833416559,
-    lastActivity = 1713833416559,
-    name = "ChillZone",
-    description = "Take it easy ;)",
-    worldSize = {
-      w = 12,
-      h = 14,
-    },
-    worldType = "clubbeach",
-    worldTheme = "clubhouse1",
-    spawnPosition = {
-      x = 5,
-      y = 4,
-    },
-    playerPositions = {}
-  },
-  HolidayHangout = {
-    created = 1713833416559,
-    lastActivity = 1713833416559,
-    name = "HolidayHangout",
-    description = "Sun, sand, and sea~",
-    worldSize = {
-      w = 18,
-      h = 10,
-    },
-    worldType = "clubbeach",
-    worldTheme = "beach1",
-    spawnPosition = {
-      x = 5,
-      y = 4,
-    },
-    playerPositions = {}
-  },
+    }
+  }
 }
 
 -- Key: Message ID
 Posts = Posts or {
-  testPost1 = {
+  WelcomePost = {
     created = 1713833416559,
-    author = "testUser1",
-    worldId = "WelcomeLobby",
-    type = "text", -- if "video" or "image" then "TextOrTxId" is a TxId
-    textOrTxId = "Welcome to GatherChat!",
-  },
-  testPost2 = {
-    created = 1713833416559,
-    author = "testUser1",
-    worldId = "HolidayHangout",
-    type = "text", -- if "video" or "image" then "TextOrTxId" is a TxId
-    textOrTxId = "I love being on holiday!",
-  },
+    author = "Secretary of the Llama Board",
+    worldId = "LlamaFED",
+    type = "text",
+    textOrTxId = "Welcome to LlamaFED! This room hosts the expert LlamaCoin Bureaucracy. " .. 
+    "We are a group of Llamas working to make cyberspace a better place through sound, prudent, " ..
+    "and very serious LlamaCoin monetary policy. You may petition the Llama council in this room to " .. 
+    "print some new LlamaCoins for you, if you represent a worthy cause. Llama printer goes scREEEEEEEEE---",
+  }
 }
 
 Handlers.add(
@@ -122,19 +76,7 @@ Handlers.add(
   "GetWorld",
   Handlers.utils.hasMatchingTag("Action", "GetWorld"),
   function(msg)
-    if string.len(msg.Data) > 0 then
-      local data = json.decode(msg.Data)
-      if type(data) == "table" then
-        local world = Worlds[data.worldId]
-        if world then
-          ao.send({ Target = msg.From, Status = "OK", Data = json.encode(world) })
-        else
-          ao.send({ Target = msg.From, Status = "Error", Message = "World not found." })
-        end
-        return
-      end
-    end
-    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Worlds) })
+    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(World) })
   end
 )
 
@@ -142,20 +84,20 @@ Handlers.add(
   "GetPosts",
   Handlers.utils.hasMatchingTag("Action", "GetPosts"),
   function(msg)
-    if string.len(msg.Data) > 0 then
-      local data = json.decode(msg.Data)
-      if type(data) == "table" then
-        local WorldPosts = {}
-        for postId, post in pairs(Posts) do
-          if post.worldId == data.worldId then
-            WorldPosts[postId] = post
-          end
+    local msgs = {}
+    local dm = msg.DM or false
+
+    for postId, post in pairs(Posts) do
+      if dm then
+        if dm == post.dm then
+          msgs[postId] = post
         end
-        ao.send({ Target = msg.From, Status = "OK", Data = json.encode(WorldPosts) })
-        return
+      else
+        msgs[postId] = post
       end
     end
-    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Posts) })
+
+    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(msgs) })
   end
 )
 
@@ -275,27 +217,11 @@ Handlers.add(
     Posts[postId] = {}
     Posts[postId].created = msg.Timestamp
     Posts[postId].author = address
+    Posts[postId].dm = msg.DM or false
 
     local data = json.decode(msg.Data)
-    Posts[postId].worldId = data.worldId
     Posts[postId].type = data.type
     Posts[postId].textOrTxId = data.textOrTxId
-
-    -- local Notification = {
-    --   Source = address,
-    --   Type = "Post",
-    --   Post = Posts[postId],
-    -- }
-
-    -- -- Notify all users following this user
-    -- for follower, isFollowing in pairs(Users[address].following) do
-    --   if isFollowing then
-    --     local followerProcess = Users[follower].processId
-    --     if followerProcess then
-    --       ao.send({ Target = followerProcess, Status = "OK", Action = "Notification", Data = json.encode(Notification) })
-    --     end
-    --   end
-    -- end
 
     ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Posts[postId]) })
   end

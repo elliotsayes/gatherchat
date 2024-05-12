@@ -4,7 +4,9 @@ import EventEmitter from "eventemitter3";
 import { AoProvider } from "./ao";
 import { defaultArweave } from "./arweave";
 
-export const aoGatherProcessId = "jDS4zJhkJynXllgWFRArilTdTnmCmCTzqNqohDY8v1Q";
+// Current - jDS4zJhkJynXllgWFRArilTdTnmCmCTzqNqohDY8v1Q
+// New - AkVr1v3NUovqfaMgyQt5WKJeXsw4vEF7ElMhv_m_fB4
+export const aoGatherProcessId = "AkVr1v3NUovqfaMgyQt5WKJeXsw4vEF7ElMhv_m_fB4";
 
 export type ArweaveID = string;
 export type ArweavePublicKey = string;
@@ -69,8 +71,8 @@ export interface AoGather {
   getUsers(): Promise<Record<ArweaveID, ContractUser>>;
   getWorldIndex(): Promise<ContractWorldIndex>;
   getWorlds(): Promise<Record<ArweaveID, ContractWorld>>;
-  getWorld(params?: { worldId: string }): Promise<ContractWorld>;
-  getPosts(params?: { worldId: string }): Promise<
+  getWorld(): Promise<ContractWorld>;
+  getPosts(params?: { dm?: string }): Promise<
     Record<ArweaveID, ContractPost>
   >; // queries contract for all connections associated with a user
   register(params: ContractUserWritable): Promise<void>;
@@ -178,32 +180,30 @@ export class AoGatherProvider extends AoProvider implements AoGather {
     return JSON.parse(Messages[0].Data) as Record<ArweaveID, ContractWorld>;
   }
 
-  async getWorld(params: { worldId: string }): Promise<ContractWorld> {
+  async getWorld(): Promise<ContractWorld> {
     const { Messages } = await this.ao.dryrun({
       process: this.processId,
-      tags: [{ name: "Action", value: "GetWorld" }],
-      data: JSON.stringify(params),
+      tags: [{ name: "Action", value: "GetWorld" }]
     });
     return JSON.parse(Messages[0].Data) as ContractWorld;
   }
 
   async getPosts({
-    worldId,
-  }: { worldId?: string } = {}): Promise<Record<ArweaveID, ContractPost>> {
+    dm,
+  }: { dm?: string } = {}): Promise<Record<ArweaveID, ContractPost>> {
+    var params = [{ name: "Action", value: "GetPosts" }]
+    if (dm) {
+      params.push({ name: "DM", value: dm })
+    }
     const { Messages } = await this.ao.dryrun({
       process: this.processId,
-      tags: [{ name: "Action", value: "GetPosts" }],
+      tags: params,
     });
     const posts = JSON.parse(Messages[0].Data) as Record<
       ArweavePublicKey,
       ContractPost
     >;
-    // return all posts if no userId or signer is provided
-    if (!worldId) return posts;
-    // return all posts for a specific user if userId is provided
-    return Object.fromEntries(
-      Object.entries(posts).filter(([_, value]) => value.worldId === worldId),
-    );
+    return posts;
   }
 
   async register(userNew: ContractUserWritable): Promise<void> {

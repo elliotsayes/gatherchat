@@ -1,6 +1,7 @@
 /// <reference lib="webworker" />
 
 import { buildGenerator } from "./features/avatar/lib/generate";
+import { buildLlamaGenerator } from "./features/avatar/lib/generateLlama";
 
 self.addEventListener(
   "message",
@@ -43,6 +44,8 @@ async function responseToBitmap(response: Response) {
 }
 
 const assetPaths = ["assets/sprite/avatar/base.png", "assets/sprite/avatar/parts.png"]
+const llamaPaths = ["assets/sprite/avatar/onlyIdle_v4.png", "assets/sprite/avatar/parts.png"]
+
 
 self.addEventListener("activate", (e) => {
   const event = e as ExtendableEvent;
@@ -64,7 +67,22 @@ self.addEventListener("fetch", (e) => {
     (async () => {
       const url = new URL(event.request.url);
 
-      if (url.pathname.match(/^\/api\/sprite\/generate/)) {
+      if (url.pathname.match(/^\/api\/sprite\/generate\/llama/)) {
+        console.log("[Service Worker] Generating a llama sprite!");
+
+        const seed = url.searchParams.get("seed")!;
+
+        const assets = await retrieveAssets(llamaPaths);
+        const baseTex = await responseToBitmap(assets[0]!);
+        const partTex = await responseToBitmap(assets[1]!);
+        const spriteBlob = await buildLlamaGenerator(baseTex, partTex)(seed);
+
+        return new Response(spriteBlob, {
+          headers: {
+            "Content-Type": "image/png",
+          },
+        });
+      } else if (url.pathname.match(/^\/api\/sprite\/generate/)) {
         console.log("[Service Worker] Generating sprite");
 
         const seed = url.searchParams.get("seed")!;

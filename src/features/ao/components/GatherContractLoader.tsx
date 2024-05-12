@@ -35,7 +35,7 @@ interface Props {
 }
 
 export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
-  const [worldId, setWorldId] = useState(initialWorldId ?? "WelcomeLobby");
+  const [worldId, setWorldId] = useState(initialWorldId ?? "LlamaFED");
 
   const {
     data: users,
@@ -70,9 +70,7 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
     queryFn: async () => {
       console.log("fetching world");
       aoGather.ensureStarted();
-      return aoGather.getWorld({
-        worldId: worldId,
-      });
+      return aoGather.getWorld();
     },
     refetchInterval: 500,
   });
@@ -87,8 +85,6 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
       console.log("fetching posts");
       aoGather.ensureStarted();
       return aoGather.getPosts();
-      // If you want to fetch posts for a specific world, just pass the worldId
-      // return aoGather.getPosts({ worldId });
     },
     refetchInterval: 5000,
   });

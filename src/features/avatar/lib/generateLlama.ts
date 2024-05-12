@@ -7,15 +7,16 @@
 
 import { type ColorSelections, colorThemes, pad2 } from "./shared";
 
-export function buildGenerator(
+export function buildLlamaGenerator(
   baseTex: CanvasImageSource,
   partTex: CanvasImageSource,
 ) {
   async function generate(seed: string) {
+    console.log("generate fn");
     const selections = deserialize(seed);
-
-    const faceSelection = selections[0];
-    const headSelection = selections[1];
+    
+    // const faceSelection = selections[0];
+    // const headSelection = selections[1];
     const colorSelections: ColorSelections = new Map([
       ["eyes", selections[2]],
       ["skin", selections[3]],
@@ -28,11 +29,10 @@ export function buildGenerator(
     const srcCtx = srcCanvas.getContext("2d")!;
 
     srcCtx.drawImage(baseTex, 0, 0);
-    
-    recalcVal(srcCtx, faceSelection, EYES_ORIGINS.length, 3, EYES_ORIGINS);
-    recalcVal(srcCtx, headSelection, HEAD_ORIGINS.length, 0, HEAD_ORIGINS);
-    recalcVal(srcCtx, headSelection, EYES_ORIGINS.length, 1, HEAD_ORIGINS);
-    recalcVal(srcCtx, faceSelection, EYES_ORIGINS.length, 2, EYES_ORIGINS);
+    // recalcVal(srcCtx, faceSelection,  3);
+    // recalcVal(srcCtx, headSelection,  0);
+    // recalcVal(srcCtx, headSelection,  1);
+    // recalcVal(srcCtx, faceSelection, 2);
     recolorAll(srcCtx, colorSelections);
 
     return await srcCanvas.convertToBlob({ type: "image/png" });
@@ -74,27 +74,27 @@ export function buildGenerator(
           c = true;
         }
       } else if (a === 3) {
-        draw16(ctx, e * 16, a * 24 + EYES_ORIGINS[3][e], partTex, 4, 4);
+        draw16(ctx, e * 16, a * 24 + ORIGINS[3][e], partTex, 4, 4);
         c = true;
       }
     } else if (t === 6 && r === 0) {
       if (a === 1 && (e === 1 || e === 3)) {
-        draw16(ctx, e * 16, a * 24 + HEAD_ORIGINS[1][e], partTex, 6, 4);
+        draw16(ctx, e * 16, a * 24 + ORIGINS[1][e], partTex, 6, 4);
         c = true;
       } else if (a === 1 && e === 2) {
-        draw16(ctx, e * 16, a * 24 + HEAD_ORIGINS[1][e], partTex, 7, 4);
+        draw16(ctx, e * 16, a * 24 + ORIGINS[1][e], partTex, 7, 4);
         c = true;
       } else if (a === 2 && e === 3) {
-        draw16(ctx, e * 16, a * 24 + HEAD_ORIGINS[1][e], partTex, 6, 4);
+        draw16(ctx, e * 16, a * 24 + ORIGINS[1][e], partTex, 6, 4);
         c = true;
       } else if (a === 3 && e === 2) {
         draw16(ctx, e * 16, a * 24 + 2, partTex, 8, 4);
         c = true;
       } else if (a === 3 && (e === 5 || e === 3)) {
-        draw16(ctx, e * 16, a * 24 + HEAD_ORIGINS[3][e], partTex, 6, 4);
+        draw16(ctx, e * 16, a * 24 + ORIGINS[3][e], partTex, 6, 4);
         c = true;
       } else if (a === 3 && e === 4) {
-        draw16(ctx, e * 16, a * 24 + HEAD_ORIGINS[3][e], partTex, 7, 4);
+        draw16(ctx, e * 16, a * 24 + ORIGINS[3][e], partTex, 7, 4);
         c = true;
       } else if (a === 3 && e === 1) {
         draw16(ctx, e * 16, a * 24 + 2, partTex, 9, 4);
@@ -102,11 +102,11 @@ export function buildGenerator(
       }
     } else if (t === 8 && r === 3) {
       if ((e === 1 || e === 3) && a === 3) {
-        draw16(ctx, e * 16, a * 24 + EYES_ORIGINS[3][e], partTex, 10, 4);
+        draw16(ctx, e * 16, a * 24 + ORIGINS[3][e], partTex, 10, 4);
         c = true;
       }
       if (e === 2 && a === 3) {
-        draw16(ctx, e * 16, a * 24 + EYES_ORIGINS[3][e], partTex, 11, 4);
+        draw16(ctx, e * 16, a * 24 + ORIGINS[3][e], partTex, 11, 4);
         c = true;
       }
     } else if (t === 13 && (r === 0 || r === 1)) {
@@ -138,12 +138,12 @@ export function buildGenerator(
   function recalcVal(
     ctx: OffscreenCanvasRenderingContext2D,
     selectionIndex: number,
-    _: number,
-    t: number,
-    r: number[][],
+    t: number
   ) {
-    for (let y = 0; y < r.length; y++) {
-      const n = r[y];
+    console.log("recalcVal")
+    console.log(ctx, selectionIndex, t)
+    for (let y = 0; y < ORIGINS.length; y++) {
+      const n = ORIGINS[y];
       for (let x = 0; x < n.length; x++) {
         drawShape(ctx, x, y, selectionIndex, t, n);
       }
@@ -187,6 +187,7 @@ export function buildGenerator(
     }
   }
 
+  console.log("buildGenerator");
   return generate;
 }
 
@@ -196,13 +197,15 @@ export function deserialize(e: string): number[] {
   return match.map((e) => Number.parseInt(e, 16));
 }
 
-const HEAD_ORIGINS = [
+const ORIGINS = [
   [0],
   [0, 1, 2, 1],
   [-1, -2, 0, 1],
   [-1, -1, -1, 1, 2, 1, 0],
 ];
-const EYES_ORIGINS = HEAD_ORIGINS;
 
-const srcCanvasWidth = 16 * 7;
-const srcCanvasHeight = 24 * 4;
+// const srcCanvasWidth = 16 * 7;
+// const srcCanvasHeight = 24 * 4;
+
+const srcCanvasWidth = 168;
+const srcCanvasHeight = 182;

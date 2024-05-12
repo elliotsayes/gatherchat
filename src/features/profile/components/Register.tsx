@@ -29,7 +29,7 @@ export const Register = ({
                 name: s.username,
                 avatar: s.avatarSeed,
                 status: "Hello Gather Chat!",
-                currentWorldId: "WelcomeLobby",
+                currentWorldId: "LlamaFED",
                 following: {},
               });
             }}
