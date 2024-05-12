@@ -39,34 +39,31 @@ function Index() {
 
   return (
     <div ref={containerRef} className="w-[100%] h-[100%] relative">
-      <div className="z-10 absolute w-[100%] h-[100%]  bg-gather/60 flex flex-col justify-center items-end">
+      <div className="z-10 absolute w-[100%] h-[100%] bg-gather/60 flex flex-col justify-center items-center">
 
-        <div className="text-black bg-gather border-solid border-2 border-gatherstrong p-10 rounded-3xl">
-          <img className="inline-block h-20 w-20 rounded-full ring-2 ring-white ml-12 mb-4"
-               src="./assets/logo-gather.webp"
+        <div className="text-black bg-gather/90 border-solid border-2 border-gatherstrong p-10 pb-2 rounded-3xl flex flex-col items-center">
+          <img className="inline-block h-20 w-auto mb-4"
+               src="./assets/newheart.png"
                alt="Gather Chat logo" />
 
-          <ol>
-            <li className="h-10 pl-2">
-              <span className="font-mono">1. </span>
-              <span className="pl-3">
-                Install{" "}
+          <ol className="silkscreen-regular">
+            <li className="h-10">
+              <span>
+                1. Install{" "}
                 <a
                   href="https://www.arconnect.io/download"
                   target="_blank"
                   rel="noreferrer"
-                  className="unterline text-gray-800"
+                  className="unterline text-violet-800 "
                 >
                   ArConnect
                 </a>
               </span>
             </li>
-            <li className="h-10 pl-2">
-              <span className="font-mono">2. </span>
-              <span className="pl-3">Set up a wallet</span>
+            <li className="h-10">
+              <span className="pl-3">2. Set up a wallet</span>
             </li>
-            <li className="h-10 pl-2">
-              <span className="font-mono">3. </span>
+            <li className="h-10 pl-2 mb-10">
               <Link
                 to="/game"
                 className={cn(buttonVariants({ variant: "default" }))}
@@ -76,8 +73,8 @@ function Index() {
             </li>
           </ol>
 
-          <div className="w-[100%] bottom-0 text-black flex flex-col justify-end items-center py-4">
-            <p>
+          <div className="w-[100%] bottom-0 text-gray-500 flex flex-col justify-end items-center pb-2">
+            <p className="text-xs">
               Created by Elliot Sayes. Source on{" "}
               <a
                   href="https://github.com/elliotsayes/gatherchat"
