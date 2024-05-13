@@ -32,8 +32,13 @@ async function cacheAssets(assets: string[]) {
 }
 
 async function retrieveAssets(assets: string[]) {
+  console.log(assets);
   const cache = await caches.open(assetsCacheName);
+  console.log("llama_ao: ", await caches.has(assets[0]))
+  console.log("parts: ", await caches.has(assets[1]));
+  console.log(cache);
   const requests = assets.map((asset) => cache.match(asset)!);
+  console.log(requests);
   return await Promise.all(requests);
 }
 
@@ -54,6 +59,7 @@ self.addEventListener("activate", (e) => {
   event.waitUntil(
     (async () => {
       await cacheAssets(assetPaths);
+      await cacheAssets(llamaPaths);
       console.log("[Service Worker] Cached assets");
     })(),
   );
@@ -72,8 +78,6 @@ self.addEventListener("fetch", (e) => {
         
 
         const seed = url.searchParams.get("seed")!;
-        console.log("Seed: " + seed);
-        console.log("Fetching from: " + llamaPaths[0]);
         const assets = await retrieveAssets(llamaPaths);
         const baseTex = await responseToBitmap(assets[0]!);
         const partTex = await responseToBitmap(assets[1]!);
