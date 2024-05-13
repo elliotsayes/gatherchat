@@ -44,7 +44,7 @@ async function responseToBitmap(response: Response) {
 }
 
 const assetPaths = ["assets/sprite/avatar/base.png", "assets/sprite/avatar/parts.png"]
-const llamaPaths = ["assets/sprite/avatar/onlyIdle_v4.png", "assets/sprite/avatar/parts.png"]
+const llamaPaths = ["assets/sprite/avatar/llama_ao.png", "assets/sprite/avatar/parts.png"]
 
 
 self.addEventListener("activate", (e) => {
@@ -69,9 +69,11 @@ self.addEventListener("fetch", (e) => {
 
       if (url.pathname.match(/^\/api\/sprite\/generate\/llama/)) {
         console.log("[Service Worker] Generating a llama sprite!");
+        
 
         const seed = url.searchParams.get("seed")!;
-
+        console.log("Seed: " + seed);
+        console.log("Fetching from: " + llamaPaths[0]);
         const assets = await retrieveAssets(llamaPaths);
         const baseTex = await responseToBitmap(assets[0]!);
         const partTex = await responseToBitmap(assets[1]!);
