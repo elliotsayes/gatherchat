@@ -228,13 +228,13 @@ export const GatherChat = ({
                     <li
                       key={postId}
                       className={`${
-                        selectedPlayer?.isFollowedByUser ? "bg-gather" : ""
+                        selectedPlayer?.isFollowedByUser ? "bg-green-200" : ""
                       } ${isUser ? "bg-gray-200" : ""} break-words max-w-lg flex flex-row`}
                     >
                         <div
                             className="relative bg-yellow-100 inline-flex items-center justify-center w-12 h-10 mr-2 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
                             <button
-                                className={"bg-yellow-100 h-10 w-10 two_chars text-yellow-800 font-medium text-gray-600 dark:text-gray-300"}
+                                className={"bg-yellow-100 h-10 w-10 two_chars text-yellow-800 font-medium overflow- text-gray-600 dark:text-gray-300"}
                                 type="button"
                                 onClick={
                                     isLink
@@ -248,6 +248,9 @@ export const GatherChat = ({
                                 {" "}
                                 {selectedPlayer?.profile.name ?? post.author}:{" "}
                             </button>
+                            <div
+                                className="bottom-0 left-7 absolute z-20  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></div>
+
                         </div>
 
                         <div className="flex flex-col mt-8 w-full max-w-[420px] leading-1.5 p-2 border-gray-200 bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700">
