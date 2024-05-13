@@ -212,8 +212,8 @@ export const GatherChat = ({
           state={sidePanelState}
           onSelectState={setSidePanelState}
           activityFeed={
-            <div className="min-h-min h-auto flex flex-col gap-4 py-4">
-              <ul className="w-[100%] min-h-0 max-h-full h-[calc(100vh-140px)] overflow-y-auto px-2 flex flex-col items-start gap-2.5">
+            <div className="min-h-min h-auto flex flex-col gap-4 py-1">
+              <ul className="w-[100%] min-h-0 max-h-full h-[calc(100vh-121px)] overflow-y-auto px-2 flex flex-col items-start gap-2.5">
                 {Object.keys(contractState.posts).map((postId) => {
                   const post = contractState.posts[postId];
                   const selectedPlayer = [
@@ -248,35 +248,40 @@ export const GatherChat = ({
                                 {" "}
                                 {selectedPlayer?.profile.name ?? post.author}:{" "}
                             </button>
-                            <div
-                                className="bottom-0 left-7 absolute z-20  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></div>
 
                         </div>
 
-                        <div className="flex flex-col mt-8 w-full max-w-[420px] leading-1.5 p-2 border-gray-200 bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700">
+                        <div className="flex flex-col mt-8 w-full max-w-[420px] leading-1.5 p-1 border-gray-200 bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700">
                             <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                                <button
-                                    className={"bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300"}
-                                    type="button"
-                                    onClick={
-                                        isLink
-                                            ? () => {
-                                                selectAndAnimatePlayer(selectedPlayer);
-                                                setSidePanelState("profile");
-                                            }
-                                            : undefined
-                                    }
-                                >
-                                    {" "}
-                                    {selectedPlayer?.profile.name ?? post.author}:{" "}
-                                </button>
+                                <div className="relative">
+                                    <button
+                                        className={"bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300"}
+                                        type="button"
+                                        onClick={
+                                            isLink
+                                                ? () => {
+                                                    selectAndAnimatePlayer(selectedPlayer);
+                                                    setSidePanelState("profile");
+                                                }
+                                                : undefined
+                                        }
+                                    >
+                                        {" "}
+                                        {selectedPlayer?.profile.name ?? post.author}:{" "}
+                                    </button>
+                                    <span
+                                        className={`${
+                                            selectedPlayer?.isFollowedByUser ? "-top-1 -left-1 absolute z-20  w-3.5 h-3.5 bg-yellow-400 border-2 border-white dark:border-gray-800 rounded-full" : ""
+                                        } ${isUser ? "-top-1 -left-1 absolute z-20  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" : ""} break-words max-w-lg flex flex-row`}
+                                        ></span>
+                                </div>
                                 <span className="text-xs font-normal text-gray-500 dark:text-gray-400">
                                     {" "}
                                     {timeAgo.format(post.created)}
                                 </span>
                             </div>
 
-                            <div className="flex flex-col leading-1.5 p-2 border-gray-200 bg-gather bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700">
+                            <div className="flex flex-col leading-1.5 p-1 border-gray-200 bg-gather bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700">
                                 <p className="text-sm font-normal text-gray-900 dark:text-white">
                                     {post.type === "text" ? (
                                         <span>{post.textOrTxId}</span>
