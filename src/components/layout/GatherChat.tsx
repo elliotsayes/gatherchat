@@ -207,13 +207,13 @@ export const GatherChat = ({
         </div>
       </ResizablePanel>
       <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={35} minSize={25} maxSize={50}>
+      <div>
         <SidePanel
           state={sidePanelState}
           onSelectState={setSidePanelState}
           activityFeed={
             <div className="min-h-min h-auto flex flex-col gap-4 py-4">
-              <ul className="w-[100%] min-h-0 max-h-full h-[calc(100vh-140px)] overflow-y-auto px-2">
+              <ul className="w-[100%] min-h-0 max-h-full h-[calc(100vh-140px)] overflow-y-auto px-2 flex flex-col items-start gap-2.5">
                 {Object.keys(contractState.posts).map((postId) => {
                   const post = contractState.posts[postId];
                   const selectedPlayer = [
@@ -228,40 +228,68 @@ export const GatherChat = ({
                     <li
                       key={postId}
                       className={`${
-                        selectedPlayer?.isFollowedByUser ? "bg-blue-100" : ""
-                      } ${isUser ? "bg-gray-200" : ""} break-words max-w-sm`}
+                        selectedPlayer?.isFollowedByUser ? "bg-gather" : ""
+                      } ${isUser ? "bg-gray-200" : ""} break-words max-w-lg flex flex-row`}
                     >
-                      <button
-                        className={"text-muted-foreground text-underline px-1 bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300"}
-                        type="button"
-                        onClick={
-                          isLink
-                            ? () => {
-                                selectAndAnimatePlayer(selectedPlayer);
-                                setSidePanelState("profile");
-                              }
-                            : undefined
-                        }
-                      >
-                        {" "}
-                        {selectedPlayer?.profile.name ?? post.author}:{" "}
-                      </button>
-                      {post.type === "text" ? (
-                        <span>{post.textOrTxId}</span>
-                      ) : (
-                        <a
-                          href={`https://arweave.net/${post.textOrTxId}`}
-                          target="_blank"
-                          className=" text-blue-400"
-                          rel="noreferrer"
-                        >
-                          ({post.type})
-                        </a>
-                      )}
-                      <span className="text-muted-foreground text-xs">
-                        {" "}
-                        {timeAgo.format(post.created)}
-                      </span>
+                        <div
+                            className="relative bg-yellow-100 inline-flex items-center justify-center w-12 h-10 mr-2 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                            <button
+                                className={"bg-yellow-100 h-10 w-10 two_chars text-yellow-800 font-medium text-gray-600 dark:text-gray-300"}
+                                type="button"
+                                onClick={
+                                    isLink
+                                        ? () => {
+                                            selectAndAnimatePlayer(selectedPlayer);
+                                            setSidePanelState("profile");
+                                        }
+                                        : undefined
+                                }
+                            >
+                                {" "}
+                                {selectedPlayer?.profile.name ?? post.author}:{" "}
+                            </button>
+                        </div>
+
+                        <div className="flex flex-col mt-8 w-full max-w-[420px] leading-1.5 p-2 border-gray-200 bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700">
+                            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                <button
+                                    className={"bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300"}
+                                    type="button"
+                                    onClick={
+                                        isLink
+                                            ? () => {
+                                                selectAndAnimatePlayer(selectedPlayer);
+                                                setSidePanelState("profile");
+                                            }
+                                            : undefined
+                                    }
+                                >
+                                    {" "}
+                                    {selectedPlayer?.profile.name ?? post.author}:{" "}
+                                </button>
+                                <span className="text-xs font-normal text-gray-500 dark:text-gray-400">
+                                    {" "}
+                                    {timeAgo.format(post.created)}
+                                </span>
+                            </div>
+
+                            <div className="flex flex-col leading-1.5 p-2 border-gray-200 bg-gather bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700">
+                                <p className="text-sm font-normal text-gray-900 dark:text-white">
+                                    {post.type === "text" ? (
+                                        <span>{post.textOrTxId}</span>
+                                    ) : (
+                                        <a
+                                            href={`https://arweave.net/${post.textOrTxId}`}
+                                            target="_blank"
+                                            className="text-sm font-normal text-gray-900 dark:text-white"
+                                            rel="noreferrer"
+                                        >
+                                            ({post.type})
+                                        </a>
+                                    )}
+                                </p>
+                            </div>
+                        </div>
                     </li>
                   );
                 })}
@@ -321,7 +349,7 @@ export const GatherChat = ({
             )
           }
         />
-      </ResizablePanel>
+      </div>
     </ResizablePanelGroup>
   );
 };

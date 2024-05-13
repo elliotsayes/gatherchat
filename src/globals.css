@@ -86,3 +86,10 @@
   font-weight: 700;
   font-style: normal;
 }
+
+.two_chars {
+  font-family: "Silkscreen", sans-serif;
+  width: 2ch;
+  white-space: nowrap;
+  font-size: 1.5em;
+}
