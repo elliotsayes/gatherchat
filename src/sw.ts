@@ -49,7 +49,10 @@ async function responseToBitmap(response: Response) {
 }
 
 const assetPaths = ["assets/sprite/avatar/base.png", "assets/sprite/avatar/parts.png"]
-const llamaPaths = ["assets/sprite/avatar/llama_ao.png", "assets/sprite/avatar/parts.png"]
+const llamaPaths = ["assets/sprite/avatar/llama_ao.png", 
+    "assets/sprite/avatar/llama_burgerKing.png",
+    "assets/sprite/avatar/llama_dumdum_v1.png",
+    "assets/sprite/avatar/llama_base_v1.png"]
 
 
 self.addEventListener("activate", (e) => {
@@ -78,9 +81,11 @@ self.addEventListener("fetch", (e) => {
         
 
         const seed = url.searchParams.get("seed")!;
+        const index = parseInt(seed) % 4;
+        
         const assets = await retrieveAssets(llamaPaths);
-        const baseTex = await responseToBitmap(assets[0]!);
-        const partTex = await responseToBitmap(assets[1]!);
+        const baseTex = await responseToBitmap(assets[index]!);
+        const partTex = await responseToBitmap(assets[0]!); // unused
         const spriteBlob = await buildLlamaGenerator(baseTex, partTex)(seed);
 
         return new Response(spriteBlob, {
