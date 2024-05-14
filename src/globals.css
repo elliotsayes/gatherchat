@@ -93,3 +93,11 @@
   white-space: nowrap;
   font-size: 1.5em;
 }
+
+.my-friend::before {
+  content: '🤝';
+  top: -5px;
+  left: 0;
+  font-size:16px;
+  position: absolute;
+}

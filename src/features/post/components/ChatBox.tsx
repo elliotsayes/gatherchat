@@ -37,6 +37,7 @@ export const ChatBox = ({ onSubmit: onSubmitProp }: ChatBoxProps) => {
                           type="text"
                           onChange={(e) => setText(e.target.value)}
                           value={text}
+                          autoFocus
                 ></input>
                 <button type="submit"
                         className="inline-flex justify-center p-2 text-yellow-800 rounded-full cursor-pointer hover:bg-white dark:text-blue-500 dark:hover:bg-gray-600"

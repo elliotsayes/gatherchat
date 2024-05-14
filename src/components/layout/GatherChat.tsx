@@ -207,13 +207,13 @@ export const GatherChat = ({
         </div>
       </ResizablePanel>
       <ResizableHandle withHandle />
-      <div>
+     <ResizablePanel defaultSize={30} minSize={30} maxSize={50}>
         <SidePanel
           state={sidePanelState}
           onSelectState={setSidePanelState}
           activityFeed={
             <div className="min-h-min h-auto flex flex-col gap-4 py-1">
-              <ul className="w-[100%] min-h-0 max-h-full h-[calc(100vh-121px)] overflow-y-auto px-2 flex flex-col items-start gap-2.5">
+              <ul className="w-full min-h-0 max-h-full h-[calc(100vh-121px)] overflow-y-auto px-2 flex flex-col items-start gap-2.5">
                 {Object.keys(contractState.posts).map((postId) => {
                   const post = contractState.posts[postId];
                   const selectedPlayer = [
@@ -228,30 +228,10 @@ export const GatherChat = ({
                     <li
                       key={postId}
                       className={`${
-                        selectedPlayer?.isFollowedByUser ? "bg-green-200" : ""
-                      } ${isUser ? "bg-gray-200" : ""} break-words max-w-lg flex flex-row`}
+                        selectedPlayer?.isFollowedByUser ? " " : ""
+                      } ${isUser ? "ml-auto pl-12 max-w-md" : "pr-12"} break-words flex flex-row`}
                     >
-                        <div
-                            className="relative bg-yellow-100 inline-flex items-center justify-center w-12 h-10 mr-2 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-                            <button
-                                className={"bg-yellow-100 h-10 w-10 two_chars text-yellow-800 font-medium overflow- text-gray-600 dark:text-gray-300"}
-                                type="button"
-                                onClick={
-                                    isLink
-                                        ? () => {
-                                            selectAndAnimatePlayer(selectedPlayer);
-                                            setSidePanelState("profile");
-                                        }
-                                        : undefined
-                                }
-                            >
-                                {" "}
-                                {selectedPlayer?.profile.name ?? post.author}:{" "}
-                            </button>
-
-                        </div>
-
-                        <div className="flex flex-col mt-8 w-full max-w-[420px] leading-1.5 p-1 border-gray-200 bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700">
+                        <div className={`${isUser ? "flex flex-col justify-items-end w-full max-w-[420px] leading-1.5 p-1 border-gray-200 bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700" : "flex flex-col w-full max-w-[420px] leading-1.5 p-1 border-gray-200 bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700"} `}>
                             <div className="flex items-center space-x-2 rtl:space-x-reverse">
                                 <div className="relative">
                                     <button
@@ -262,17 +242,17 @@ export const GatherChat = ({
                                                 ? () => {
                                                     selectAndAnimatePlayer(selectedPlayer);
                                                     setSidePanelState("profile");
-                                                }
-                                                : undefined
-                                        }
-                                    >
-                                        {" "}
-                                        {selectedPlayer?.profile.name ?? post.author}:{" "}
+                                                    }
+                                                    : undefined
+                                                    }
+                                                    >
+                                                    {" "}
+                                                {selectedPlayer?.profile.name ?? post.author}:{" "}
                                     </button>
                                     <span
                                         className={`${
-                                            selectedPlayer?.isFollowedByUser ? "-top-1 -left-1 absolute z-20  w-3.5 h-3.5 bg-yellow-400 border-2 border-white dark:border-gray-800 rounded-full" : ""
-                                        } ${isUser ? "-top-1 -left-1 absolute z-20  w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" : ""} break-words max-w-lg flex flex-row`}
+                                            selectedPlayer?.isFollowedByUser ? "my-friend -top-2 -left-2 absolute z-20  w-4 h-4 bg-purple-700  dark:border-gray-800 rounded-full" : ""
+                                        } ${isUser ? " " : ""} break-words max-w-lg flex flex-row`}
                                         ></span>
                                 </div>
                                 <span className="text-xs font-normal text-gray-500 dark:text-gray-400">
@@ -357,7 +337,7 @@ export const GatherChat = ({
             )
           }
         />
-      </div>
+     </ResizablePanel>
     </ResizablePanelGroup>
   );
 };
