@@ -1,10 +1,3 @@
-// const baseTex: HTMLImageElement = new Image();
-// baseTex.src = "base.png";
-// const partTex: HTMLImageElement = new Image();
-// partTex.src = "parts.png";
-// const generate = buildGenerator(baseTex, partTex);
-// const sprite = generate("seed");
-
 import { type ColorSelections, colorThemes, pad2 } from "./shared";
 
 export function buildLlamaGenerator(
@@ -29,10 +22,6 @@ export function buildLlamaGenerator(
     const srcCtx = srcCanvas.getContext("2d")!;
 
     srcCtx.drawImage(baseTex, 0, 0);
-    // recalcVal(srcCtx, faceSelection,  3);
-    // recalcVal(srcCtx, headSelection,  0);
-    // recalcVal(srcCtx, headSelection,  1);
-    // recalcVal(srcCtx, faceSelection, 2);
     recolorAll(srcCtx, colorSelections);
 
     return await srcCanvas.convertToBlob({ type: "image/png" });
