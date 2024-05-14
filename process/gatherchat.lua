@@ -2,6 +2,7 @@ local ao = require("ao")
 local json = require("json")
 local utils = require(".utils")
 
+
 -- Key: Address
 Users = Users or {
   LlamaSecretary = {
@@ -66,7 +67,7 @@ Handlers.add(
   "GetWorldIndex",
   Handlers.utils.hasMatchingTag("Action", "GetWorldIndex"),
   function(msg)
-    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(DefaultWorlds) })
+    ao.send({ Target = msg.From, Status = "OK", Data = json.encode({"LlamaFED"}) })
   end
 )
 
@@ -208,8 +209,11 @@ Handlers.add(
   "CreatePost",
   Handlers.utils.hasMatchingTag("Action", "CreatePost"),
   function(msg)
-    local address = msg.Owner;
-    Users[address].lastSeen = msg.Timestamp
+    WAT = msg
+    local address = msg.From;
+    if Users[address] then
+      Users[address].lastSeen = msg.Timestamp
+    end
 
     local postId = msg.Id
     Posts[postId] = {}

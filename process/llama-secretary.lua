@@ -1,7 +1,7 @@
 LLAMA_TOKEN_PROCESS = "jKEUaDrcqp_m8YolY4ie5YxVTYBS74Pg-1zM6Hczw5I"
 HOURLY_EMISSION_LIMIT = 1000000
 AOCREDITS_PROCESS = "Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc"
-GATHER_PROCESS = "CwPN-Sph-kc8YSaZgP4EULlrImeD1zX0PYVpcWQrLGM"
+GATHER_PROCESS = "IoKrjjVCSvz2MTyUrZlI5Q06c7Bk29QcL6xpQzxjSHg"
 
 MESSAGES_TO_SEND = {
     -- {
@@ -179,6 +179,7 @@ Handlers.add(
         removeMessageAndResetLlama(originalMessageId)
 
         local gatherMessage = {
+            worldId = 'LlamaFED',
             type = 'text',
             created = msg.Timestamp,
             dm = true,
