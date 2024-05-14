@@ -2,7 +2,7 @@ import React from "react";
 
 import { AoGatherProvider } from "@/features/ao/lib/ao-gather";
 
-import { createDataItemSigner, message } from "@permaweb/aoconnect";
+import { createDataItemSigner, dryrun, message } from "@permaweb/aoconnect";
 
 import "./styles.css";
 
@@ -16,12 +16,29 @@ type MessageType = {
 const SEND_PROCESS = "Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc";
 const SECRETARY = "_NaJSxuC_Zca_HcrKYc4E-dvteokk1iYm9INNhYuSOo";
 
+function getTagValue(
+  list: { [key: string]: any }[],
+  name: string
+): string | null {
+  for (let i = 0; i < list.length; i++) {
+    if (list[i]) {
+      if (list[i]!.name === name) {
+        return list[i]!.value as string;
+      }
+    }
+  }
+  return null;
+}
+
 export default function Petition() {
   const aoGather = new AoGatherProvider({});
 
   const [walletAddress, setWalletAddress] = React.useState<string | null>(null);
   const [text, setText] = React.useState<string>("");
-  const [amount, setAmount] = React.useState<number>(1);
+
+  const [feeAmount, setFeeAmount] = React.useState<number>(0);
+  const [amount, setAmount] = React.useState<number>(0);
+
   const [loading, setLoading] = React.useState<boolean>(false);
 
   // const [messageLog, setMessageLog] = React.useState<MessageType[]>([
@@ -61,6 +78,25 @@ export default function Petition() {
     return () => {
       window.removeEventListener("arweaveWalletLoaded", handleConnect);
     };
+  }, []);
+
+  React.useEffect(() => {
+    (async function () {
+      const response = await dryrun({
+        process: SECRETARY,
+        tags: [{ name: "Action", value: "Get-Priority-Fee" }],
+      });
+
+      if (response && response.Messages) {
+        let fee: any = getTagValue(response.Messages[0].Tags, "Current-Fee");
+
+        if (fee) {
+          fee = parseInt(fee) / 1000;
+          setFeeAmount(fee);
+          setAmount(fee);
+        }
+      }
+    })();
   }, []);
 
   React.useEffect(() => {
@@ -146,7 +182,7 @@ export default function Petition() {
           className={"prompt-input"}
         />
 
-        <span>{`Petition amount: ${amount} tokens`}</span>
+        <span>{`Current fee: ${feeAmount} ${feeAmount.toString() === "1" ? "token" : "tokens"}`}</span>
         <input
           type={"number"}
           value={amount}
@@ -155,8 +191,14 @@ export default function Petition() {
         />
 
         <div className={"submit-wrapper"}>
-          <button className="submit" onClick={handleSubmit} disabled={loading}>
-            {loading ? "Sending..." : `Send ${amount} tokens`}
+          <button
+            className="submit"
+            onClick={handleSubmit}
+            disabled={loading || amount <= 0 || amount < feeAmount}
+          >
+            {loading
+              ? "Sending..."
+              : `Send ${amount} ${amount.toString() === "1" ? "token" : "tokens"}`}
           </button>
         </div>
       </div>
