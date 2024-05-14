@@ -212,7 +212,7 @@ export const GatherChat = ({
           state={sidePanelState}
           onSelectState={setSidePanelState}
           activityFeed={
-            <div className="min-h-min h-auto flex flex-col gap-4 py-1">
+            <div className="min-h-min h-auto flex flex-col gap-1">
               <ul className="w-full min-h-0 max-h-full h-[calc(100vh-121px)] overflow-y-auto px-2 flex flex-col items-start gap-2.5">
                 {Object.keys(contractState.posts).map((postId) => {
                   const post = contractState.posts[postId];
@@ -282,7 +282,6 @@ export const GatherChat = ({
                   );
                 })}
               </ul>
-              <div>
                 <ChatBox
                   onSubmit={async (text) => {
                     await contractEvents.post({
@@ -293,7 +292,6 @@ export const GatherChat = ({
                     toast("Message sent!");
                   }}
                 />
-              </div>
             </div>
           }
           upload={<p>TODO</p>}
