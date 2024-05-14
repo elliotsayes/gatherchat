@@ -81,11 +81,11 @@ self.addEventListener("fetch", (e) => {
         
 
         const seed = url.searchParams.get("seed")!;
-        const index = parseInt(seed) % 4;
-        
+        let x = BigInt('0x' + seed);
+        const index = Number(x % BigInt(4));
         const assets = await retrieveAssets(llamaPaths);
         const baseTex = await responseToBitmap(assets[index]!);
-        const partTex = await responseToBitmap(assets[0]!); // unused
+        const partTex = await responseToBitmap(assets[3-index]!); // unused
         const spriteBlob = await buildLlamaGenerator(baseTex, partTex)(seed);
 
         return new Response(spriteBlob, {
