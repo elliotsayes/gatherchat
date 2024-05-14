@@ -163,7 +163,7 @@ export const GatherChat = ({
           <div className="absolute top-0 left-0 bg-red-100">
             {/* World dropdown */}
             <select
-              className=" text-xl px-2 py-1"
+              className="bg-gather text-xl px-2 py-1 outline-gatherstrong"
               onChange={(e) => {
                 onWorldChange(e.target.value);
               }}
