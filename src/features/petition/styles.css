@@ -6,7 +6,7 @@
 .messages-wrapper {
     width: 100%;
     margin: 0 auto;
-    max-height: 365px;
+    max-height: 290px;
     overflow-y: scroll;
     padding: 0 15px 0 0;
 }
@@ -39,13 +39,24 @@
     bottom: 20px;
 }
 
-.input {
+.prompt-input {
     height: 150px;
     width: 100%;
     resize: none;
     border: 1px solid #D3D3D3;
     border-radius: 10px;
     padding: 10px;
+    margin: 2.5px 0 20px 0;
+}
+
+.amount-input {
+    height: 40px;
+    width: 100%;
+    resize: none;
+    border: 1px solid #D3D3D3;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 2.5px 0 0 0;
 }
 
 .submit-wrapper {
