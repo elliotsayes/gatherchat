@@ -42,8 +42,8 @@ function Index() {
       <div className="z-10 absolute w-[100%] h-[100%] bg-gather/60 flex flex-col justify-center items-center">
 
         <div className="text-black bg-gather/90 border-solid border-2 border-gatherstrong p-10 pb-2 rounded-3xl flex flex-col items-center">
-          <img className="inline-block h-20 w-auto mb-4"
-               src="./assets/newheart.png"
+          <img className="inline-block h-40 w-auto mb-8"
+               src="./assets/gatherchat.svg"
                alt="Gather Chat logo" />
 
           <ol className="silkscreen-regular">

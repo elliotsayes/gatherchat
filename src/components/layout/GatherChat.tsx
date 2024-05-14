@@ -208,133 +208,153 @@ export const GatherChat = ({
       </ResizablePanel>
       <ResizableHandle withHandle />
      <ResizablePanel defaultSize={30} minSize={30} maxSize={50}>
-        <SidePanel
-          state={sidePanelState}
-          onSelectState={setSidePanelState}
-          activityFeed={
-            <div className="min-h-min h-auto flex flex-col gap-1">
-              <ul className="w-full min-h-0 max-h-full h-[calc(100vh-121px)] overflow-y-auto px-2 flex flex-col items-start gap-2.5">
-                {Object.keys(contractState.posts).map((postId) => {
-                  const post = contractState.posts[postId];
-                  const selectedPlayer = [
-                    renderEngineState.player,
-                    ...renderEngineState.otherPlayers,
-                  ].find((t) => t.id === post.author) as
-                    | RenderOtherPlayer
-                    | undefined;
-                  const isUser = renderEngineState.player.id === post.author;
-                  const isLink = !isUser && selectedPlayer;
-                  return (
-                    <li
-                      key={postId}
-                      className={`${
-                        selectedPlayer?.isFollowedByUser ? " " : ""
-                      } ${isUser ? "ml-auto pl-12 max-w-md" : "pr-12"} break-words flex flex-row`}
-                    >
-                        <div className={`${isUser ? "flex flex-col justify-items-end w-full max-w-[420px] leading-1.5 p-1 border-gray-200 text-gather bg-gatherstrong rounded-e-xl rounded-es-xl dark:bg-gray-700" : "flex flex-col w-full max-w-[420px] leading-1.5 p-1 border-gray-200 bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700"} `}>
-                            <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                                <div className="relative">
-                                    <button
-                                        className={"bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300"}
-                                        type="button"
-                                        onClick={
-                                            isLink
-                                                ? () => {
-                                                    selectAndAnimatePlayer(selectedPlayer);
-                                                    setSidePanelState("profile");
-                                                    }
-                                                    : undefined
-                                                    }
-                                                    >
-                                                    {" "}
-                                                {selectedPlayer?.profile.name ?? post.author}:{" "}
-                                    </button>
-                                    <span
-                                        className={`${
-                                            selectedPlayer?.isFollowedByUser ? "my-friend -top-2 -left-2 absolute z-20  w-4 h-4 bg-purple-700  dark:border-gray-800 rounded-full" : ""
-                                        } ${isUser ? " mb-1" : ""} break-words max-w-lg flex flex-row`}
-                                        ></span>
-                                </div>
-                                <span className="text-xs font-normal text-gray-500 dark:text-gray-400">
-                                    {" "}
-                                    {timeAgo.format(post.created)}
-                                </span>
-                            </div>
+         <SidePanel
+             state={sidePanelState}
+             onSelectState={setSidePanelState}
+             activityFeed={
+                 <div className="min-h-min h-auto flex flex-col gap-1">
+                     <ul className="w-full min-h-0 max-h-full h-[calc(100vh-121px)] overflow-y-auto px-2 flex flex-col items-start gap-2.5">
+                         {(() => {
+                             // Collect all posts into a single array
+                             const allPosts = Object.keys(contractState.posts).map((postId) => {
+                                 const post = contractState.posts[postId];
+                                 return { ...post, postId };
+                             });
 
-                            <div className="flex flex-col leading-1.5 p-1 border-gray-200 bg-gather bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700">
-                                <p className="text-sm font-normal text-gray-900 dark:text-white">
-                                    {post.type === "text" ? (
-                                        <span>{post.textOrTxId}</span>
-                                    ) : (
-                                        <a
-                                            href={`https://arweave.net/${post.textOrTxId}`}
-                                            target="_blank"
-                                            className="text-sm font-normal text-gray-900 dark:text-white"
-                                            rel="noreferrer"
-                                        >
-                                            ({post.type})
-                                        </a>
-                                    )}
-                                </p>
-                            </div>
-                        </div>
-                    </li>
-                  );
-                })}
-              </ul>
-                <ChatBox
-                  onSubmit={async (text) => {
-                    await contractEvents.post({
-                      type: "text",
-                      worldId: contractState.worldId,
-                      textOrTxId: text,
-                    });
-                    toast("Message sent!");
-                  }}
-                />
-            </div>
-          }
-          upload={<p>TODO</p>}
-          profile={
-            selectedPlayer ? (
-              <ProfileView
-                key={profileKey}
-                otherPlayer={selectedPlayer}
-                onChangeFollow={async (otherPlayer) => {
-                  if (otherPlayer.isFollowedByUser) {
-                    await contractEvents.unfollow({
-                      address: otherPlayer.id,
-                    });
-                    toast("Unfollowed!");
-                  } else {
-                    await contractEvents.follow({
-                      address: otherPlayer.id,
-                    });
-                    toast("Followed!");
-                  }
-                  setSelectedPlayer(undefined);
-                  setProileKey(Date.now());
-                }}
-                onClose={() => setSelectedPlayer(undefined)}
-              />
-            ) : (
-              <SetupForm
-                onSubmit={(s) => {
-                  contractEvents
-                    .updateUser({
-                      name: s.username,
-                      avatar: s.avatarSeed,
-                    })
-                    .then(() => {
-                      toast("Profile updated!");
-                    });
-                }}
-                initialUsername={renderEngineState.player.profile.name}
-                initialSeed={renderEngineState.player.profile.avatar}
-              />
-            )
-          }
-        />
+                             // Sort posts by the created timestamp
+                             allPosts.sort((a, b) => new Date(a.created) - new Date(b.created));
+
+                             return allPosts.map((post) => {
+                                 const selectedPlayer = [
+                                     renderEngineState.player,
+                                     ...renderEngineState.otherPlayers,
+                                 ].find((t) => t.id === post.author) as RenderOtherPlayer | undefined;
+                                 const isUser = renderEngineState.player.id === post.author;
+                                 const isLink = !isUser && selectedPlayer;
+
+                                 return (
+                                     <li
+                                         key={post.postId}
+                                         className={`${
+                                             selectedPlayer?.isFollowedByUser ? " " : ""
+                                         } ${isUser ? "ml-auto pl-12 max-w-md" : "pr-12"} break-words flex flex-row`}
+                                     >
+                                         <div
+                                             className={`${
+                                                 isUser
+                                                     ? "flex flex-col justify-items-end w-full max-w-[420px] leading-1.5 p-1 border-gray-200 text-gather bg-gatherstrong rounded-e-xl rounded-es-xl dark:bg-gray-700"
+                                                     : "flex flex-col w-full max-w-[420px] leading-1.5 p-1 border-gray-200 bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700"
+                                             }`}
+                                         >
+                                             <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                                 <div className="relative">
+                                                     <button
+                                                         className={
+                                                             "bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300"
+                                                         }
+                                                         type="button"
+                                                         onClick={
+                                                             isLink
+                                                                 ? () => {
+                                                                     selectAndAnimatePlayer(selectedPlayer);
+                                                                     setSidePanelState("profile");
+                                                                 }
+                                                                 : undefined
+                                                         }
+                                                     >
+                                                         {" "}
+                                                         {selectedPlayer?.profile.name ?? post.author}:{" "}
+                                                     </button>
+                                                     <span
+                                                         className={`${
+                                                             selectedPlayer?.isFollowedByUser
+                                                                 ? "my-friend -top-2 -left-2 absolute z-20  w-4 h-4 bg-purple-700  dark:border-gray-800 rounded-full"
+                                                                 : ""
+                                                         } ${isUser ? " mb-1" : ""} break-words max-w-lg flex flex-row`}
+                                                     ></span>
+                                                 </div>
+                                                 <span className="text-xs font-normal text-gray-500 dark:text-gray-400">
+                      {" "}
+                                                     {timeAgo.format(post.created)}
+                    </span>
+                                             </div>
+
+                                             <div className="flex flex-col leading-1.5 p-1 border-gray-200 bg-gather bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700">
+                                                 <p className="text-sm font-normal text-gray-900 dark:text-white">
+                                                     {post.type === "text" ? (
+                                                         <span>{post.textOrTxId}</span>
+                                                     ) : (
+                                                         <a
+                                                             href={`https://arweave.net/${post.textOrTxId}`}
+                                                             target="_blank"
+                                                             className="text-sm font-normal text-gray-900 dark:text-white"
+                                                             rel="noreferrer"
+                                                         >
+                                                             ({post.type})
+                                                         </a>
+                                                     )}
+                                                 </p>
+                                             </div>
+                                         </div>
+                                     </li>
+                                 );
+                             });
+                         })()}
+                     </ul>
+                     <ChatBox
+                         onSubmit={async (text) => {
+                             await contractEvents.post({
+                                 type: "text",
+                                 worldId: contractState.worldId,
+                                 textOrTxId: text,
+                             });
+                             toast("Message sent!");
+                         }}
+                     />
+                 </div>
+             }
+             upload={<p>TODO</p>}
+             profile={
+                 selectedPlayer ? (
+                     <ProfileView
+                         key={profileKey}
+                         otherPlayer={selectedPlayer}
+                         onChangeFollow={async (otherPlayer) => {
+                             if (otherPlayer.isFollowedByUser) {
+                                 await contractEvents.unfollow({
+                                     address: otherPlayer.id,
+                                 });
+                                 toast("Unfollowed!");
+                             } else {
+                                 await contractEvents.follow({
+                                     address: otherPlayer.id,
+                                 });
+                                 toast("Followed!");
+                             }
+                             setSelectedPlayer(undefined);
+                             setProileKey(Date.now());
+                         }}
+                         onClose={() => setSelectedPlayer(undefined)}
+                     />
+                 ) : (
+                     <SetupForm
+                         onSubmit={(s) => {
+                             contractEvents
+                                 .updateUser({
+                                     name: s.username,
+                                     avatar: s.avatarSeed,
+                                 })
+                                 .then(() => {
+                                     toast("Profile updated!");
+                                 });
+                         }}
+                         initialUsername={renderEngineState.player.profile.name}
+                         initialSeed={renderEngineState.player.profile.avatar}
+                     />
+                 )
+             }
+         />
+
      </ResizablePanel>
     </ResizablePanelGroup>
   );
