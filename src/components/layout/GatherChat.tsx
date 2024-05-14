@@ -160,10 +160,10 @@ export const GatherChat = ({
         }}
       >
         <div ref={containerRef} className="h-screen relative">
-          <div className="absolute top-0 left-0 bg-red-100">
+          <div className="absolute top-0 left-4 bg-red-100 rounded-b-xl">
             {/* World dropdown */}
             <select
-              className="bg-gather text-xl px-2 py-1 outline-gatherstrong"
+              className="bg-gatherstrong text-lg text-gather rounded-b-xl px-2 py-1 outline-gatherstrong"
               onChange={(e) => {
                 onWorldChange(e.target.value);
               }}
