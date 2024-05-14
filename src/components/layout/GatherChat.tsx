@@ -231,7 +231,7 @@ export const GatherChat = ({
                         selectedPlayer?.isFollowedByUser ? " " : ""
                       } ${isUser ? "ml-auto pl-12 max-w-md" : "pr-12"} break-words flex flex-row`}
                     >
-                        <div className={`${isUser ? "flex flex-col justify-items-end w-full max-w-[420px] leading-1.5 p-1 border-gray-200 bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700" : "flex flex-col w-full max-w-[420px] leading-1.5 p-1 border-gray-200 bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700"} `}>
+                        <div className={`${isUser ? "flex flex-col justify-items-end w-full max-w-[420px] leading-1.5 p-1 border-gray-200 text-gather bg-gatherstrong rounded-e-xl rounded-es-xl dark:bg-gray-700" : "flex flex-col w-full max-w-[420px] leading-1.5 p-1 border-gray-200 bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700"} `}>
                             <div className="flex items-center space-x-2 rtl:space-x-reverse">
                                 <div className="relative">
                                     <button
@@ -252,7 +252,7 @@ export const GatherChat = ({
                                     <span
                                         className={`${
                                             selectedPlayer?.isFollowedByUser ? "my-friend -top-2 -left-2 absolute z-20  w-4 h-4 bg-purple-700  dark:border-gray-800 rounded-full" : ""
-                                        } ${isUser ? " " : ""} break-words max-w-lg flex flex-row`}
+                                        } ${isUser ? " mb-1" : ""} break-words max-w-lg flex flex-row`}
                                         ></span>
                                 </div>
                                 <span className="text-xs font-normal text-gray-500 dark:text-gray-400">
