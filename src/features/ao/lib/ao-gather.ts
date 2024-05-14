@@ -4,8 +4,6 @@ import EventEmitter from "eventemitter3";
 import { AoProvider } from "./ao";
 import { defaultArweave } from "./arweave";
 
-// Current - jDS4zJhkJynXllgWFRArilTdTnmCmCTzqNqohDY8v1Q
-// New - AkVr1v3NUovqfaMgyQt5WKJeXsw4vEF7ElMhv_m_fB4
 export const aoGatherProcessId = "AkVr1v3NUovqfaMgyQt5WKJeXsw4vEF7ElMhv_m_fB4";
 
 export type ArweaveID = string;

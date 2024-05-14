@@ -18,7 +18,6 @@ Users = Users or {
 
 -- Key: World ID
 World = World or {
-  LlamaFED = {
     created = 1713833416559,
     lastActivity = 1713833416559,
     name = "LlamaFED",
@@ -27,8 +26,8 @@ World = World or {
       w = 21,
       h = 12,
     },
-    worldType = "decoratedRoom",
-    worldTheme = "llamaFED",
+    worldType = "clubbeach",
+    worldTheme = "beach1",
     spawnPosition = {
       x = 6,
       y = 6,
@@ -39,7 +38,6 @@ World = World or {
         y = 1,
       },
     }
-  }
 }
 
 -- Key: Message ID
