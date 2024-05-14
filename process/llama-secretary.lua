@@ -1,7 +1,7 @@
 LLAMA_TOKEN_PROCESS = "jKEUaDrcqp_m8YolY4ie5YxVTYBS74Pg-1zM6Hczw5I"
 HOURLY_EMISSION_LIMIT = 1000000
 AOCREDITS_PROCESS = "Sa0iBLPNyJQrwpTTG-tWLQU-1QeUAJA73DdxGGiKoJc"
-GATHER_PROCESS = "AkVr1v3NUovqfaMgyQt5WKJeXsw4vEF7ElMhv_m_fB4"
+GATHER_PROCESS = "CwPN-Sph-kc8YSaZgP4EULlrImeD1zX0PYVpcWQrLGM"
 
 MESSAGES_TO_SEND = {
     -- {
@@ -20,6 +20,8 @@ LLAMAS = {
 }
 
 EMISSIONS = {}
+
+JSON = require("json")
 
 function removeMessageAndResetLlama(messageId)
     for i, message in ipairs(MESSAGES_TO_SEND) do
@@ -50,7 +52,7 @@ function processCreditNotice(msg)
     local messageId = msg.Id
     local sender = msg.Sender
     local amount = msg.Quantity
-    local content = msg['X-Petition']
+    local content = msg['Petition']
     table.insert(MESSAGES_TO_SEND, {
         originalMessageId = messageId,
         sender = sender,
@@ -176,11 +178,19 @@ Handlers.add(
         sendLlamaToken(tokenAmount, recipient, msg.Timestamp)
         removeMessageAndResetLlama(originalMessageId)
 
+        local gatherMessage = {
+            type = 'text',
+            created = msg.Timestamp,
+            dm = true,
+            author = ao.id,
+            textOrTxId = 'You have been granted ' .. tokenAmount .. ' Llama tokens.'
+        }
+
         ao.send({
             Target = GATHER_PROCESS,
             Action = "CreatePost",
             DM = recipient,
-            Data = 'You have been granted ' .. tokenAmount .. ' Llama tokens.'
+            Data = JSON.encode(gatherMessage)
         })
         ao.send({
             Target = recipient,

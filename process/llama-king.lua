@@ -51,8 +51,9 @@ Handlers.add(
     function(msg)
         --local Grade, Reason = ProcessPetition(msg.Text)
         ao.send({
+            Target = msg.From,
             Action = "Llama-Response",
-            Grade = 10,
+            Grade = "10",
             Reason = "I like grass",
             ["Original-Sender"] = msg["Original-Sender"],
             ["Original-Message"] = msg["Original-Message"],
