@@ -15,7 +15,7 @@ import {
 } from "@/features/render/components/RenderEngine";
 import { createDecoratedRoom } from "@/features/worlds/DecoratedRoom";
 import { timeAgo } from "@/utils";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { throttle } from "throttle-debounce";
 import { ChatBox } from "../../features/post/components/ChatBox";
@@ -150,7 +150,35 @@ export const GatherChat = ({
     [],
   );
 
-  return (
+    const chatContainerRef = useRef(null);
+    const scrollToBottom = () => {
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+    };
+
+    const handleSubmit = async (text) => {
+        await contractEvents.post({
+            type: "text",
+            worldId: contractState.worldId,
+            textOrTxId: text,
+        });
+        toast("Message sent!");
+        setTimeout(() => {
+            scrollToBottom();
+        }, 4000);
+    };
+
+    useEffect(() => {
+        // Scroll the ul element to the bottom when the component mounts
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+    }, []); //
+
+
+
+    return (
     <ResizablePanelGroup direction="horizontal" className="h-screen">
       <ResizablePanel
         className="h-screen"
@@ -213,7 +241,8 @@ export const GatherChat = ({
              onSelectState={setSidePanelState}
              activityFeed={
                  <div className="min-h-min h-auto flex flex-col gap-1">
-                     <ul className="w-full min-h-0 max-h-full h-[calc(100vh-121px)] overflow-y-auto px-2 flex flex-col items-start gap-2.5">
+                     <ul ref={chatContainerRef}
+                         className="w-full min-h-0 max-h-full h-[calc(100vh-121px)] overflow-y-auto px-2 flex flex-col items-start gap-2.5">
                          {(() => {
                              // Collect all posts into a single array
                              const allPosts = Object.keys(contractState.posts).map((postId) => {
@@ -274,9 +303,8 @@ export const GatherChat = ({
                                                      ></span>
                                                  </div>
                                                  <span className="text-xs font-normal text-gray-500 dark:text-gray-400">
-                      {" "}
-                                                     {timeAgo.format(post.created)}
-                    </span>
+                                                  {" "} {timeAgo.format(post.created)}
+                                                </span>
                                              </div>
 
                                              <div className="flex flex-col leading-1.5 p-1 border-gray-200 bg-gather bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700">
@@ -301,16 +329,7 @@ export const GatherChat = ({
                              });
                          })()}
                      </ul>
-                     <ChatBox
-                         onSubmit={async (text) => {
-                             await contractEvents.post({
-                                 type: "text",
-                                 worldId: contractState.worldId,
-                                 textOrTxId: text,
-                             });
-                             toast("Message sent!");
-                         }}
-                     />
+                     <ChatBox onSubmit={handleSubmit} />
                  </div>
              }
              upload={<p>TODO</p>}
