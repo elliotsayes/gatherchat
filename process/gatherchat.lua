@@ -12,6 +12,7 @@ Users = Users or {
     avatar = "a1204030b070a01", -- pixel art seed
     status = "Hello, World!",
     currentWorldId = "WelcomeLobby",
+    hasUserWorld = true,
     following = {
       -- testUser2 = true,
     },
@@ -82,6 +83,23 @@ Worlds = Worlds or {
     },
     playerPositions = {}
   },
+  testUser1 = {
+    created = 1713833416559,
+    lastActivity = 1713833416559,
+    name = "testUser1's world",
+    description = "Just for fun!!",
+    worldSize = {
+      w = 5,
+      h = 5,
+    },
+    worldType = "decoratedRoom",
+    worldTheme = "room_dark",
+    spawnPosition = {
+      x = 2,
+      y = 2,
+    },
+    playerPositions = {}
+  },
 }
 
 -- Key: Message ID
@@ -139,6 +157,36 @@ Handlers.add(
 )
 
 Handlers.add(
+  "CreateUserWorld",
+  Handlers.utils.hasMatchingTag("Action", "CreateUserWorld"),
+  function(msg)
+    local address = msg.Owner;
+
+    local user = Users[address]
+
+    Worlds[address] = {}
+    Worlds[address].created = msg.Timestamp
+    Worlds[address].lastActivity = msg.Timestamp
+    Worlds[address].name = user.name .. "'s World"
+    Worlds[address].description = "A world of your own! (" .. address .. ")"
+    Worlds[address].spawnPosition = {
+      x = 3,
+      y = 3,
+    }
+    Worlds[address].playerPositions = {}
+
+    local data = json.decode(msg.Data)
+    Worlds[address].worldSize = data.worldSize
+    Worlds[address].worldType = data.worldType
+    Worlds[address].worldTheme = data.worldTheme
+
+    Users[address].hasUserWorld = true
+
+    ao.send({ Target = msg.From, Status = "OK", Data = json.encode(Worlds[address]) })
+  end
+)
+
+Handlers.add(
   "GetPosts",
   Handlers.utils.hasMatchingTag("Action", "GetPosts"),
   function(msg)
@@ -168,6 +216,7 @@ Handlers.add(
     Users[address].processId = msg.From
     Users[address].created = msg.Timestamp
     Users[address].lastSeen = msg.Timestamp
+    Users[address].hasUserWorld = false
     Users[address].following = {}
 
     local data = json.decode(msg.Data)

@@ -21,7 +21,7 @@ export type GatherContactEvents = {
   setWorldId: (worldId: string) => Promise<void>;
 } & Pick<
   AoGatherProvider,
-  "register" | "updateUser" | "updatePosition" | "post" | "follow" | "unfollow"
+  "register" | "updateUser" | "updatePosition" | "post" | "follow" | "unfollow" | "createWorld"
 >;
 
 const aoGather = new AoGatherProvider({});
@@ -126,6 +126,11 @@ export const GatherContractLoader = ({ children, initialWorldId }: Props) => {
     },
     updatePosition: async (args) => {
       await aoGather.updatePosition(args);
+      await refetchWorld();
+    },
+    createWorld: async (args) => {
+      await aoGather.createWorld(args);
+      await refetchUsers();
       await refetchWorld();
     },
     post: async (args) => {

@@ -7,12 +7,14 @@ import { AvatarStandalone } from "../../avatar/components/AvatarStandalone";
 interface ProfileViewProps {
   otherPlayer: RenderOtherPlayer;
   onChangeFollow: (otherPlayer: RenderOtherPlayer) => void;
+  onWarpToWorld: (worldId: string) => void;
   onClose: () => void;
 }
 
 export const ProfileView = ({
   otherPlayer,
   onChangeFollow,
+  onWarpToWorld,
   onClose,
 }: ProfileViewProps) => {
   return (
@@ -47,6 +49,13 @@ export const ProfileView = ({
             variant={otherPlayer.isFollowedByUser ? "destructive" : "default"}
           >
             {otherPlayer.isFollowedByUser ? "Unfollow" : "Follow"}
+          </Button>
+          <Button
+            type="button"
+            onClick={() => onWarpToWorld(otherPlayer.id)}
+            disabled={!otherPlayer.profile.hasUserWorld}
+          >
+            {otherPlayer.profile.hasUserWorld ? "Go to world" : "No world yet"}
           </Button>
         </div>
       </div>

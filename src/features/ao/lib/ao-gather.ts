@@ -4,7 +4,7 @@ import EventEmitter from "eventemitter3";
 import { AoProvider } from "./ao";
 import { defaultArweave } from "./arweave";
 
-export const aoGatherProcessId = "jDS4zJhkJynXllgWFRArilTdTnmCmCTzqNqohDY8v1Q";
+export const aoGatherProcessId = "pziyDyOcVMkSYAUi_oCuoXGdzxpwbT6I3lU-198Umf0";
 
 export type ArweaveID = string;
 export type ArweavePublicKey = string;
@@ -24,6 +24,7 @@ export type ContractUser = {
   avatar: string;
   status: string;
   currentWorldId: string;
+  hasUserWorld: boolean;
   following: {
     [address: string]: boolean;
   };
@@ -50,6 +51,11 @@ export type ContractWorld = {
   spawnPosition: ContractPosition;
   playerPositions: Record<ArweaveID, ContractPosition>;
 };
+
+export type ContractWorldWritable = Omit<
+  ContractWorld,
+  "created" | "lastActivity" | "name" | "description" | "playerPositions"
+>;
 
 export type ContractWorldIndex = Array<string>;
 
@@ -79,6 +85,7 @@ export interface AoGather {
     worldId: string;
     position: ContractPosition;
   }): Promise<void>;
+  createWorld(params: ContractWorldWritable): Promise<void>;
   post(params: ContractPostWritable): Promise<void>;
   follow(params: { address: string }): Promise<void>;
   unfollow(params: { address: string }): Promise<void>;
@@ -241,6 +248,16 @@ export class AoGatherProvider extends AoProvider implements AoGather {
         position,
       )} with id ${registrationId}`,
     );
+  }
+
+  async createWorld(world: ContractWorldWritable): Promise<void> {
+    const registrationId = await this.ao.message({
+      process: this.processId,
+      data: JSON.stringify(world),
+      tags: [{ name: "Action", value: "CreateUserWorld" }],
+      signer: createDataItemSigner(this.signer),
+    });
+    console.debug(`Created user world with id ${registrationId}`);
   }
 
   async post(post: ContractPostWritable): Promise<void> {

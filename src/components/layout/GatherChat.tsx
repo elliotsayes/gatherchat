@@ -26,6 +26,7 @@ import { createClubBeach } from "@/features/worlds/ClubBeach";
 import type { RoomTileSet } from "@/features/worlds/components/RoomLayout";
 import type { GenericTileSet } from "@/features/worlds/components/GenericLayout";
 import type { WorldType } from "@/features/worlds";
+import { Button } from "../ui/button";
 
 export type UploadInfo = Pick<ContractPost, "type" | "textOrTxId">;
 
@@ -309,23 +310,52 @@ export const GatherChat = ({
                   setSelectedPlayer(undefined);
                   setProileKey(Date.now());
                 }}
+                onWarpToWorld={(worldId) => contractEvents.setWorldId(worldId)}
                 onClose={() => setSelectedPlayer(undefined)}
               />
             ) : (
-              <SetupForm
-                onSubmit={(s) => {
-                  contractEvents
-                    .updateUser({
-                      name: s.username,
-                      avatar: s.avatarSeed,
-                    })
-                    .then(() => {
-                      toast("Profile updated!");
-                    });
-                }}
-                initialUsername={renderEngineState.player.profile.name}
-                initialSeed={renderEngineState.player.profile.avatar}
-              />
+              <>
+                <SetupForm
+                  onSubmit={(s) => {
+                    contractEvents
+                      .updateUser({
+                        name: s.username,
+                        avatar: s.avatarSeed,
+                      })
+                      .then(() => {
+                        toast("Profile updated!");
+                      });
+                  }}
+                  initialUsername={renderEngineState.player.profile.name}
+                  initialSeed={renderEngineState.player.profile.avatar}
+                />
+                <div className="py-2 flex flex-row gap-2">
+                  <Button
+                    type="button"
+                    onClick={() => contractEvents.createWorld({
+                      worldSize: {
+                        w: 10 + Math.floor(Math.random() * 10),
+                        h: 10 + Math.floor(Math.random() * 10),
+                      },
+                      worldType: "clubbeach",
+                      worldTheme: Math.random() > 0.5 ? "clubhouse1" : "beach1",
+                      spawnPosition: {
+                        x: 2,
+                        y: 2,
+                      }
+                    })}
+                  >
+                    {contractState.users[playerAddress].hasUserWorld ? "Remake your world" : "Make your world"}
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => contractEvents.setWorldId(playerAddress)}
+                    disabled={!contractState.users[playerAddress].hasUserWorld}
+                  >
+                    Go to your world
+                  </Button>
+                </div>
+              </>
             )
           }
         />
