@@ -128,6 +128,16 @@ const setupInstance = (instance: CompositeTilemap, props: Props) => {
       totalOffset.y * tileSizeBase.h,
     );
   }
+
+  // Draw robot
+  const robotOffset = { x: 10, y: 10 };
+  if (robotOffset.x < roomSizeTiles.w - 3 && robotOffset.y < roomSizeTiles.h - 4) {
+    instance.tile(
+      `${tileSet}_robot`,
+      robotOffset.x * tileSizeBase.w,
+      robotOffset.y * tileSizeBase.h,
+    );
+  }
 };
 
 export const GenericLayout = PixiComponent<Props, CompositeTilemap>("GenericLayout", {

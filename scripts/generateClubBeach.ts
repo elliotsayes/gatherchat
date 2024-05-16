@@ -92,6 +92,26 @@ const rugs: TileBox[] = sectionNames.flatMap((sectionName, s) =>
   })
 );
 
+const robotOffset = {
+  x: 9,
+  y: 15,
+};
+const robotSize = {
+  x: 3,
+  y: 4,
+};
+const robot: TileBox[] = sectionNames.flatMap((sectionName, s) => {
+    const name = `${sectionName}_robot`;
+    const rect = {
+      x: s * sectionSize.x + robotOffset.x,
+      y: robotOffset.y,
+      w: robotSize.x,
+      h: robotSize.y,
+    };
+    return { name, rect };
+  }
+);
+
 const segmentTileBoxes: TileBox[] = [
   ...floors,
   // TODO: Walls, etc
@@ -100,6 +120,7 @@ const segmentTileBoxes: TileBox[] = [
 const blockFrameSets: TileBox[] = [
   ...couches,
   ...rugs,
+  ...robot,
   // TODO: Plants, etc
 ];
 
