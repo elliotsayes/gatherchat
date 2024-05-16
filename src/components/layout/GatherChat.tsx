@@ -153,6 +153,7 @@ export const GatherChat = ({
     const chatContainerRef = useRef(null);
     const scrollToBottom = () => {
         if (chatContainerRef.current) {
+            // @ts-ignore
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
     };
@@ -166,12 +167,13 @@ export const GatherChat = ({
         toast("Message sent!");
         setTimeout(() => {
             scrollToBottom();
-        }, 4000);
+        }, 1000);
     };
 
     useEffect(() => {
         // Scroll the ul element to the bottom when the component mounts
         if (chatContainerRef.current) {
+            // @ts-ignore
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
     }, []); //
@@ -279,7 +281,7 @@ export const GatherChat = ({
                                                  <div className="relative">
                                                      <button
                                                          className={
-                                                             "bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300"
+                                                             "bg-yellow-100 font-sans text-yellow-800 text-xs font-bold px-1 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300"
                                                          }
                                                          type="button"
                                                          onClick={
@@ -302,13 +304,13 @@ export const GatherChat = ({
                                                          } ${isUser ? " mb-1" : ""} break-words max-w-lg flex flex-row`}
                                                      ></span>
                                                  </div>
-                                                 <span className="text-xs font-normal text-gray-500 dark:text-gray-400">
+                                                 <span className="text-xs font-mono font-normal text-gray-500 dark:text-gray-400">
                                                   {" "} {timeAgo.format(post.created)}
                                                 </span>
                                              </div>
 
                                              <div className="flex flex-col leading-1.5 p-1 border-gray-200 bg-gather bg-gather rounded-e-xl rounded-es-xl dark:bg-gray-700">
-                                                 <p className="text-sm font-normal text-gray-900 dark:text-white">
+                                                 <p className="text-sm font-normal font-sans text-gray-900 dark:text-white">
                                                      {post.type === "text" ? (
                                                          <span>{post.textOrTxId}</span>
                                                      ) : (
