@@ -302,7 +302,7 @@ export const GatherChat = ({
                                                          }
                                                      >
                                                          {" "}
-                                                         {selectedPlayer?.profile.name ?? post.author}:{" "}
+                                                         {selectedPlayer?.profile.name ?? post.author}
                                                      </button>
                                                      <span
                                                          className={`${
