@@ -39,6 +39,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "eventemitter3": "^5.0.1",
+    "fnv1a": "^1.1.1",
     "javascript-time-ago": "^2.5.10",
     "lucide-react": "^0.372.0",
     "next-themes": "^0.3.0",
