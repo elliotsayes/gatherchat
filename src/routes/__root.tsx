@@ -1,4 +1,5 @@
 import { Link, Outlet, createRootRoute } from "@tanstack/react-router";
+import { Toaster } from "sonner";
 // import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 // import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
@@ -28,6 +29,7 @@ export const Route = createRootRoute({
         </div>
       )} */}
       <Outlet />
+      <Toaster position="bottom-left" />
       {/* <ReactQueryDevtools /> */}
       {/* <TanStackRouterDevtools /> */}
     </>
