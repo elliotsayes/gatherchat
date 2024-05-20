@@ -28,13 +28,13 @@ export const SidePanel = ({
     >
       <TabsList className="flex w-[100%] silkscreen-regular">
         <TabsTrigger value="feed">Activity Feed</TabsTrigger>
-        <TabsTrigger value="upload">Upload</TabsTrigger>
+        {/* <TabsTrigger value="upload">Upload</TabsTrigger> */}
         <TabsTrigger value="profile">Profile</TabsTrigger>
         {/* <TabsTrigger value="video">Video</TabsTrigger> */}
       </TabsList>
       <div className="flex">
         <TabsContent value="feed">{activityFeed}</TabsContent>
-        <TabsContent value="upload" className="silkscreen-regular">{upload}</TabsContent>
+        {/* <TabsContent value="upload" className="silkscreen-regular">{upload}</TabsContent> */}
         <TabsContent value="profile" className="silkscreen-regular">{profile}</TabsContent>
         {/* <TabsContent value="video">{video}</TabsContent> */}
       </div>
