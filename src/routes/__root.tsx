@@ -5,7 +5,7 @@ import { Link, Outlet, createRootRoute } from "@tanstack/react-router";
 export const Route = createRootRoute({
   component: () => (
     <>
-      {import.meta.env.DEV && (
+        {/* {import.meta.env.DEV && (
         <div>
           <div className="fixed bottom-0 left-0 p-2 bg-black text-white z-50">
             <p className="font-bold text-xl">Running in Development Mode</p>
@@ -26,7 +26,7 @@ export const Route = createRootRoute({
             </div>
           </div>
         </div>
-      )}
+      )} */}
       <Outlet />
       {/* <ReactQueryDevtools /> */}
       {/* <TanStackRouterDevtools /> */}

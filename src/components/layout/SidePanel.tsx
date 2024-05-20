@@ -24,7 +24,7 @@ export const SidePanel = ({
     <Tabs
       value={state}
       onValueChange={(value) => onSelectState(value as SidePanelState)}
-      className="flex flex-col items-center h-screen"
+      className="flex flex-col items-center h-screen silkscreen-regular"
     >
       <TabsList className="flex w-[100%]">
         <TabsTrigger value="feed">Activity Feed</TabsTrigger>
