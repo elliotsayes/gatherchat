@@ -166,7 +166,7 @@ export const GatherChat = ({
         }
     };
 
-    const handleSubmit = async (text) => {
+    const handleSubmit = async (text: string) => {
         await contractEvents.post({
             type: "text",
             worldId: contractState.worldId,
@@ -261,7 +261,7 @@ export const GatherChat = ({
                              });
 
                              // Sort posts by the created timestamp
-                             allPosts.sort((a, b) => new Date(a.created) - new Date(b.created));
+                             allPosts.sort((a, b) => a.created - b.created);
 
                              return allPosts.map((post) => {
                                  const selectedPlayer = [
@@ -304,13 +304,6 @@ export const GatherChat = ({
                                                          {" "}
                                                          {selectedPlayer?.profile.name ?? post.author}
                                                      </button>
-                                                     <span
-                                                         className={`${
-                                                             selectedPlayer?.isFollowedByUser
-                                                                 ? "my-friend -top-2 -left-2 absolute z-20  w-4 h-4 bg-purple-700  dark:border-gray-800 rounded-full"
-                                                                 : ""
-                                                         } ${isUser ? " mb-1" : ""} break-words max-w-lg flex flex-row`}
-                                                     ></span>
                                                  </div>
                                                  <span className="text-xs font-mono font-normal text-gray-500 dark:text-gray-400">
                                                   {" "} {timeAgo.format(post.created)}
