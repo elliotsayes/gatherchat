@@ -16,15 +16,20 @@ const NamedAvatar: React.FC<NamedAvatarProps> = ({ name, x, y, ...props }) => {
         text={name}
         anchor={{ x: 0.5, y: 0.5 }}
         y={-35}
-        // style={{
-        // 	dropShadow: true,
-        // 	dropShadowColor: "white",
-        // 	dropShadowBlur: 2,
-        // 	dropShadowAngle: 45,
-        // 	dropShadowDistance: 2,
-        // 	fontSize: 18,
-        // 	fontWeight: "bold",
-        // }}
+        style={{
+            fontFamily: 'Press Start 2P, sans-serif', // Using a pixelated font
+            fontSize: 20,
+            fontWeight: "bold",
+            fill: "#ffffff", // White color for the text
+            stroke: "#000000", // Black outline
+            strokeThickness: 4,
+            letterSpacing: 1,
+            dropShadow: true,
+            dropShadowColor: "#000000",
+            dropShadowBlur: 0,
+            dropShadowAngle: Math.PI / 4,
+            dropShadowDistance: 3,
+        }}
       />
     </Container>
   );

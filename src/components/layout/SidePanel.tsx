@@ -26,7 +26,7 @@ export const SidePanel = ({
       onValueChange={(value) => onSelectState(value as SidePanelState)}
       className="flex flex-col items-center h-screen"
     >
-      <TabsList className="flex w-[100%]">
+      <TabsList className="flex w-[100%] silkscreen-regular">
         <TabsTrigger value="petition">Petition</TabsTrigger>
         <TabsTrigger value="feed">Activity Feed</TabsTrigger>
         <TabsTrigger value="profile">Profile</TabsTrigger>
@@ -35,7 +35,7 @@ export const SidePanel = ({
       <div className="flex panel-wrapper">
         <TabsContent value="petition">{petition}</TabsContent>
         <TabsContent value="feed">{activityFeed}</TabsContent>
-        <TabsContent value="profile">{profile}</TabsContent>
+        <TabsContent value="profile" className="silkscreen-regular">{profile}</TabsContent>
         {/* <TabsContent value="video">{video}</TabsContent> */}
       </div>
     </Tabs>

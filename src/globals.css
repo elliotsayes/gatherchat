@@ -86,3 +86,30 @@
       height: 100%;
     }
   }
+
+.silkscreen-regular {
+  font-family: "Silkscreen", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.silkscreen-bold {
+  font-family: "Silkscreen", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.two_chars {
+  font-family: "Silkscreen", sans-serif;
+  width: 2ch;
+  white-space: nowrap;
+  font-size: 1.5em;
+}
+
+.my-friend::before {
+  content: '🤝';
+  top: -5px;
+  left: 0;
+  font-size:16px;
+  position: absolute;
+}
