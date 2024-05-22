@@ -8,7 +8,7 @@
     "build": "npm run gen && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "deploy": "aos gcdev --load process/gatherchat.lua",
+    "deploy": "aos weaveworld --load process/gatherchat.lua",
     "gen": "npx tsx ./scripts/generateAll.ts",
     "format": "npx @biomejs/biome format --write ./src ./scripts",
     "lint": "npx @biomejs/biome lint --apply ./src ./scripts",
