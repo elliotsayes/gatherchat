@@ -4,7 +4,7 @@ import {
   type RenderPlayer,
   type RenderState,
 } from "@/features/render/components/RenderEngine";
-import { createDecoratedRoom } from "@/features/worlds/DecoratedRoom";
+import { createClubBeach } from "@/features/worlds/ClubBeach";
 import { useMemo } from "react";
 
 interface GatherChat2Props {
@@ -67,18 +67,13 @@ export const GatherChatDemo = ({
 
   const world = useMemo(
     () =>
-      createDecoratedRoom(
-        "room_default",
+      createClubBeach(
+        "beach1",
         {
           w: 21,
           h: 12,
         },
         () => {},
-        3,
-        {
-          w: 4,
-          h: 4,
-        },
       ),
     [],
   );
@@ -92,6 +87,7 @@ export const GatherChatDemo = ({
       events={{
         onPositionUpdate: () => {},
         onPlayerClick: () => {},
+        onSwitchTab: () => {},
       }}
       flags={{
         enableMovement: false,

@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const sidePanelState = ["feed", "profile", "video"] as const;
+const sidePanelState = ["petition", "feed", "profile"] as const;
 export type SidePanelState = (typeof sidePanelState)[number];
 
 interface SidePanelProps {

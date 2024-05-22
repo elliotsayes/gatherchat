@@ -22,6 +22,7 @@ import {
 import { useResizableStage } from "../hooks/useResizableStage";
 import { generateLlamaSpriteData } from "@/features/avatar/lib/renderLlama";
 import { generateSpriteData } from "@/features/avatar/lib/renderAvatar";
+import type { SidePanelState } from "@/components/layout/SidePanel";
 
 const veryTransparent = new AlphaFilter(0.3);
 const slightlyTransparent = new AlphaFilter(0.6);
@@ -79,6 +80,7 @@ export type RenderEngineEvents = {
     newDirection?: FaceDirection;
   }) => void;
   onPlayerClick: (player: RenderOtherPlayer) => void;
+  onSwitchTab: (tab: SidePanelState) => void;
 };
 
 export type RenderEngineFlags = {
@@ -229,15 +231,20 @@ export const RenderEngine = ({
                                   animationSpeed={
                                     otherPlayer.isActivated ? 0.3 : 0.1
                                   }
-                                  onclick={() => {
-                                    events.onPlayerClick(otherPlayer);
-                                  }}
                                   filters={
                                     otherPlayer.isInWorld
                                       ? []
                                       : [slightlyTransparent]
                                   }
-                                  generateSpriteData={otherPlayer.id === "LlamaSecretary" ? generateLlamaSpriteData : generateSpriteData}
+                                  onclick={() => {
+                                    otherPlayer.id === "LlamaSecretary"
+                                      ? events.onSwitchTab("petition")
+                                      : events.onPlayerClick(otherPlayer);
+                                  }}
+                                  generateSpriteData={
+                                    otherPlayer.id === "LlamaSecretary"
+                                      ? generateLlamaSpriteData
+                                      : generateSpriteData}
                                   {...props}
                                 />
                               )}

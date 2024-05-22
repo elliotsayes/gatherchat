@@ -235,6 +235,7 @@ export const GatherChat = ({
                 selectAndAnimatePlayer(player);
                 setSidePanelState("profile");
               },
+              onSwitchTab: setSidePanelState,
             }}
             flags={{
               enableMovement: true,
