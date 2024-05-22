@@ -2,6 +2,7 @@ import { AnimatedSprite } from "@pixi/react-animated";
 import { Matrix, SCALE_MODES, Spritesheet, Texture, Transform } from "pixi.js";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { type animationNames, generateSpriteData } from "../lib/render";
+import { generateLlamaSpriteData } from "../lib/renderLlama";
 
 interface Props extends React.ComponentProps<typeof AnimatedSprite> {
   seed: string;
@@ -37,8 +38,8 @@ export const Avatar = ({
     console.log("Updating spritesheet");
     (async () => {
       // Define sprite layout
-      const spriteData = generateSpriteData(
-        `/api/sprite/generate?seed=${seed}`,
+      const spriteData = generateLlamaSpriteData(
+        `/api/sprite/generate/llama?seed=${seed}`,
       );
 
       // Create the SpriteSheet from data and image

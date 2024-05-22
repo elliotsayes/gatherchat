@@ -73,4 +73,16 @@
     body {
       @apply bg-background text-foreground;
     }
+
+    .panel-wrapper {
+      height: 100%;
+      width: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .full-height {
+      height: 100%;
+    }
   }

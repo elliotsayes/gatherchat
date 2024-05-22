@@ -21,6 +21,7 @@ import { throttle } from "throttle-debounce";
 import { ChatBox } from "../../features/post/components/ChatBox";
 import { ProfileView } from "../../features/profile/components/ProfileView";
 import { SetupForm } from "../../features/profile/components/SetupForm";
+import { Petition } from "@/features/petition";
 import { SidePanel, type SidePanelState } from "./SidePanel";
 import { createClubBeach } from "@/features/worlds/ClubBeach";
 import type { RoomTileSet } from "@/features/worlds/components/RoomLayout";
@@ -84,6 +85,8 @@ export const GatherChat = ({
   // Convert raw GatherContractState to RenderEngineState
   const renderEngineState: RenderState = useMemo(() => {
     const player = contractState.users[playerAddress];
+
+    console.log(contractState);
 
     return {
       world: {
@@ -288,7 +291,7 @@ export const GatherChat = ({
               </div>
             </div>
           }
-          upload={<p>TODO</p>}
+          petition={<Petition />}
           profile={
             selectedPlayer ? (
               <ProfileView

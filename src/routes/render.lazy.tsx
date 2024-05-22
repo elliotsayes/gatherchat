@@ -221,7 +221,7 @@ function Render() {
           world={worldType === "decoratedRoom" ? roomWorld : clubbeachWorld}
           state={{
             world: {
-              id: "WelcomeLobby",
+              id: "LlamaFED",
               data: {
                 created: 0,
                 lastActivity: 0,

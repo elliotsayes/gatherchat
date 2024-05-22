@@ -14,8 +14,8 @@ export const Route = createLazyFileRoute("/")({
 });
 
 const defaultState: GatherContractState = {
-  worldIndex: ["WelcomeLobby"],
-  worldId: "WelcomeLobby",
+  worldIndex: ["LlamaFED"],
+  worldId: "LlamaFED",
   world: {
     created: 0,
     lastActivity: 0,

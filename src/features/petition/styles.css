@@ -1,0 +1,89 @@
+.petition-wrapper {
+    height: 100%;
+    position: relative;
+}
+
+.messages-wrapper {
+    width: 100%;
+    margin: 0 auto;
+    max-height: 290px;
+    overflow-y: scroll;
+    padding: 0 15px 0 0;
+}
+
+.message {
+    padding: 5.5px 16.5px;
+    border-radius: 25px;
+    width: fit-content;
+    margin: 0 0 17.5px 0;
+    max-width: 80%;
+}
+
+.received-message {
+    background: #3A3A3A;
+}
+
+.sent-message {
+    background: #2779DE;
+    margin: 0 0 17.5px auto;
+}
+
+.message-text {
+    color: white;
+    font-size: 14px;
+}
+
+.action-wrapper {
+    width: 100%;
+    position: absolute;
+    bottom: 20px;
+}
+
+.prompt-input {
+    height: 150px;
+    width: 100%;
+    resize: none;
+    border: 1px solid #D3D3D3;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 2.5px 0 20px 0;
+}
+
+.amount-input {
+    height: 40px;
+    width: 100%;
+    resize: none;
+    border: 1px solid #D3D3D3;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 2.5px 0 0 0;
+}
+
+.submit-wrapper {
+    width: 100%;
+}
+
+.submit-message {
+    color: black;
+    font-size: 14x;
+    margin: 5px 0;
+}
+
+.submit {
+    width: 100%;
+    margin: 20px 0 0 0;
+    background: #5858d9;
+    color: white;
+    padding: 15px;
+    border-radius: 15px;
+    font-weight: 500;
+    transition: all 100ms
+}
+
+.submit:hover {
+    background: #37379b
+}
+
+.submit:disabled {
+    background: #606060
+}

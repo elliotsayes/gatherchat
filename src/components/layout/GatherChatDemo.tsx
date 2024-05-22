@@ -1,12 +1,11 @@
 import type { GatherContractState } from "@/features/ao/components/GatherContractLoader";
-import { randomSeed } from "@/features/avatar/lib/edit";
 import {
   RenderEngine,
   type RenderPlayer,
   type RenderState,
 } from "@/features/render/components/RenderEngine";
 import { createDecoratedRoom } from "@/features/worlds/DecoratedRoom";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 interface GatherChat2Props {
   containerRef: React.RefObject<HTMLDivElement>;

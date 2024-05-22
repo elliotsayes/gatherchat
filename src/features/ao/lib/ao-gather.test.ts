@@ -56,10 +56,4 @@ describe.skip("AoGatherProvider", () => {
     expect(aoGatherProvider.getPosts()).resolves.toMatchSnapshot();
   });
 
-  it("should be able to get posts from a specific world", () => {
-    const aoGatherProvider = getTestInstance();
-    expect(
-      aoGatherProvider.getPosts({ worldId: "WelcomeLobby" }),
-    ).resolves.toMatchSnapshot();
-  });
 });
