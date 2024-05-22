@@ -92,10 +92,14 @@ const frames = Object.assign(
   ...animationNames.map((e, i) => generateFrames(animations[e], i)),
 );
 
-export function generateSpriteData(spriteSheetUrl: string): SpriteData {
+function generateSpriteSheetUrl(seed: string): string {
+  return `/api/sprite/generate/avatar?seed=${seed}`;
+}
+
+export function generateSpriteData(seed: string): SpriteData {
   return {
     meta: {
-      image: spriteSheetUrl,
+      image: generateSpriteSheetUrl(seed),
       format: "RGBA8888",
       size: spriteSize,
       scale: 1,

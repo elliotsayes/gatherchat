@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-import { buildGenerator } from "./features/avatar/lib/generate";
+import { buildGenerator } from "./features/avatar/lib/generateAvatar";
 import { buildLlamaGenerator } from "./features/avatar/lib/generateLlama";
 
 self.addEventListener(
@@ -78,7 +78,6 @@ self.addEventListener("fetch", (e) => {
 
       if (url.pathname.match(/^\/api\/sprite\/generate\/llama/)) {
         console.log("[Service Worker] Generating a llama sprite!");
-        
 
         const seed = url.searchParams.get("seed")!;
         let x = BigInt('0x' + seed);
@@ -93,7 +92,7 @@ self.addEventListener("fetch", (e) => {
             "Content-Type": "image/png",
           },
         });
-      } else if (url.pathname.match(/^\/api\/sprite\/generate/)) {
+      } else if (url.pathname.match(/^\/api\/sprite\/generate\/avatar/)) {
         console.log("[Service Worker] Generating sprite");
 
         const seed = url.searchParams.get("seed")!;

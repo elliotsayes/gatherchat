@@ -20,6 +20,8 @@ import {
   useMovement,
 } from "../hooks/useMovement";
 import { useResizableStage } from "../hooks/useResizableStage";
+import { generateLlamaSpriteData } from "@/features/avatar/lib/renderLlama";
+import { generateSpriteData } from "@/features/avatar/lib/renderAvatar";
 
 const veryTransparent = new AlphaFilter(0.3);
 const slightlyTransparent = new AlphaFilter(0.6);
@@ -235,6 +237,7 @@ export const RenderEngine = ({
                                       ? []
                                       : [slightlyTransparent]
                                   }
+                                  generateSpriteData={otherPlayer.id === "LlamaSecretary" ? generateLlamaSpriteData : generateSpriteData}
                                   {...props}
                                 />
                               )}

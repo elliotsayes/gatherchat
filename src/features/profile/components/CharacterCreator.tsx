@@ -3,7 +3,7 @@ import { toTitleCase } from "@/utils";
 import { useCallback, useMemo, useState } from "react";
 import { AvatarStandalone } from "../../avatar/components/AvatarStandalone";
 import { serialize } from "../../avatar/lib/edit";
-import { deserialize } from "../../avatar/lib/generate";
+import { deserialize } from "../../avatar/lib/generateAvatar";
 import {
   SHAPE_OPTIONS,
   colorCategories,

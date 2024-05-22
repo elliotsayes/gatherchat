@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { generateSpriteData } from "./render";
+import { generateSpriteData } from "./renderAvatar";
 
 describe("generateSpriteData", () => {
   it("should generate sprite data", () => {
